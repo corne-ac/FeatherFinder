@@ -5,34 +5,30 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
-import com.ryanblignaut.featherfinder.ui.map.NearbyBirding
+import com.ryanblignaut.featherfinder.ui.auth.Login
 
 
 class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
 //        val fragmentManager: FragmentManager = supportFragmentManager
 //        val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
-
-        val mapFragment = NearbyBirding()
-
+//        val mapFragment = NearbyBirding()
 //        fragmentTransaction.replace(R.id.fragmentContainer, mapFragment)
 //        fragmentTransaction.addToBackStack(null)
 //        fragmentTransaction.commit()
-        loadFragment(mapFragment)
+        val lo = Login()
+        loadFragment(lo)
 
     }
 
     fun loadFragment(fragment: Fragment) {
         val fragmentManager: FragmentManager = supportFragmentManager
         val transaction: FragmentTransaction = fragmentManager.beginTransaction()
-
         // Replace the content of the container with the new fragment
         transaction.replace(R.id.fragmentContainer, fragment)
         transaction.addToBackStack(null)
-
         transaction.commit()
     }
 

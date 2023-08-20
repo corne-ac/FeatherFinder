@@ -1,10 +1,28 @@
 <resources>
+    <string name="action_login">"Login"</string>
+    <string name="action_register">Register</string>
+    <string name="action_save_observation">save observation</string>
     <string name="app_name">FeatherFinder</string>
-    <string name="title_activity_settings">SettingsActivity</string>
-
-    <!-- Preference Titles -->
+    <string name="bird_species">Bird Species</string>
+    <string name="date">Date</string>
+    <string name="don_t_have_an_account">Don\'t have an account?</string>
+    <string name="feather_finder">Feather Finder</string>
+    <string name="feather_finder_icon">feather finder icon</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="have_an_account">Have an account?</string>
+    <string name="login">Login</string>
+    <string name="notes">other notes</string>
+    <string name="pos">Position(replace with map)</string>
     <string name="preference_header">Preference</string>
+    <string name="prompt_confirm_password">Confirm password</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="prompt_username">Username</string>
+    <string name="register">Register</string>
+    <string name="time">Time</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+    <string name="welcome_back">Welcome back</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-
 </resources>

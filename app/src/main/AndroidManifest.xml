@@ -22,6 +22,18 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="${MAPS_API_KEY}" />
 
+       <!-- <activity
+            android:name=".MainDrawerNav"
+            android:exported="true"
+            android:label="@string/title_activity_settings"
+            android:theme="@style/Theme.FeatherFinder.NoActionBar"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>-->
+
         <activity
             android:name=".SettingsActivity"
             android:exported="true"

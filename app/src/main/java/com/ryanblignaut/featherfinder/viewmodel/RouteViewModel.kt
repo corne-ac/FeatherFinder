@@ -5,8 +5,6 @@ import org.json.JSONObject
 
 class RouteViewModel : BaseViewModel<JSONObject>() {
     fun fetchRoute(startLon: Double, startLat: Double, endLon: Double, endLat: Double) =
-
-
         fetchInBackground { OpenRoutesApi().fetchRoute(startLat, startLon, endLon, endLat, -1).map(::JSONObject) }
 }
 

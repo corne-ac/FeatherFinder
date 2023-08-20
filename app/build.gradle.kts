@@ -60,13 +60,13 @@ dependencies {
     implementation(libs.recyclerview)
     implementation(libs.play.services.location)
     implementation(libs.firebase.auth.ktx)
-//    implementation("org.testng:testng:6.9.6")
-//    testImplementation(libs.testng)
-//    implementation(libs.jetbrains.kotlinx.coroutines.test)
-//    implementation(libs.junit)
-//    androidTestImplementation(libs.androidx.test.ext.junit)
-//    androidTestImplementation(libs.espresso.core)
+    implementation("androidx.navigation:navigation-fragment-ktx:2.6.0")
+    implementation("androidx.navigation:navigation-ui-ktx:2.4.1")
+
+    implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.lifecycle.livedata.ktx)
+    implementation(libs.lifecycle.viewmodel.ktx)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.junit)
     androidTestImplementation(libs.junit)
@@ -74,11 +74,6 @@ dependencies {
     implementation(libs.material)
     implementation(libs.gson)
     implementation(libs.android.maps.utils)
-
-
-//    testImplementation(libs.kotlinx.coroutines.test)
-//    testImplementation(libs.junit)
-//    implementation(libs.kotlinx.coroutines.android)
 
 
 }
