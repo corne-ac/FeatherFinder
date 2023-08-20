@@ -32,6 +32,7 @@ class SettingsActivity : AppCompatActivity() {
         transaction.commit()
     }
 
+
     /*   private lateinit var birdingHotspotViewModel: BirdingHotspotViewModel
        override fun onCreate(savedInstanceState: Bundle?) {
            super.onCreate(savedInstanceState)
