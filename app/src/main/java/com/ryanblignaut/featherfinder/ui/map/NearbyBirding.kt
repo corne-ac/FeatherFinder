@@ -70,7 +70,7 @@ class NearbyBirding : PreBindingFragment<FragmentMapBinding>(), OnMapReadyCallba
                 }
 
                 map.moveCamera(CameraUpdateFactory.newLatLng(p))
-                val circleOptions = CircleOptions().center(p).radius(1000.0) // Radius in meters
+                val circleOptions = CircleOptions().center(p).radius(10000.0) // Radius in meters
                     .strokeColor(Color.BLUE)
                 map.addCircle(circleOptions)
 

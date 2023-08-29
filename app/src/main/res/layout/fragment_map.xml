@@ -9,7 +9,7 @@
         android:layout_height="match_parent" />
 
     <!-- Add a LinearLayout for overlay -->
-    <LinearLayout
+  <!--  <LinearLayout
         android:id="@+id/overlayLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -18,8 +18,8 @@
         android:background="@android:color/white"
         android:padding="16dp">
 
-        <!-- Add TextViews or other views with important information -->
-        <TextView
+        &lt;!&ndash; Add TextViews or other views with important information &ndash;&gt;
+       &lt;!&ndash; <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Important Information 1"
@@ -29,11 +29,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Important Information 2"
-            android:textSize="16sp"/>
+            android:textSize="16sp"/>&ndash;&gt;
 
-        <!-- Add more views as needed -->
+        &lt;!&ndash; Add more views as needed &ndash;&gt;
 
-    </LinearLayout>
+    </LinearLayout>-->
 </FrameLayout>
 
     <!--

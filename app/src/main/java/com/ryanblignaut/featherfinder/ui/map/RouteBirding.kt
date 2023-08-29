@@ -61,7 +61,7 @@ class RouteBirding(private val positionIn: LatLng) : PreBindingFragment<Fragment
         }
         map.isMyLocationEnabled = true
 
-        try {
+      /*  try {
             // Customise the styling of the base map using a JSON object defined
             // in a raw resource file.
             val success: Boolean = map.setMapStyle(
@@ -74,7 +74,8 @@ class RouteBirding(private val positionIn: LatLng) : PreBindingFragment<Fragment
             }
         } catch (e: Resources.NotFoundException) {
             Log.e("a", "Can't find style. Error: ", e)
-        }
+        }*/
+        map.mapType = GoogleMap.MAP_TYPE_TERRAIN
 
         val fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
         fusedLocationClient.lastLocation.addOnSuccessListener { location ->
