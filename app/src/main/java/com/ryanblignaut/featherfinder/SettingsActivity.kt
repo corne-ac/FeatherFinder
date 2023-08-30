@@ -13,14 +13,14 @@ class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val fragmentManager: FragmentManager = supportFragmentManager
+   /*     val fragmentManager: FragmentManager = supportFragmentManager
         val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
         val mapFragment = NearbyBirding()
         fragmentTransaction.replace(R.id.fragmentContainer, mapFragment)
         fragmentTransaction.addToBackStack(null)
-        fragmentTransaction.commit()
-//        val lo = Login()
-//        loadFragment(lo)
+        fragmentTransaction.commit()*/
+        val lo = Login()
+        loadFragment(lo)
 
     }
 
