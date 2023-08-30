@@ -3,12 +3,9 @@ package com.ryanblignaut.featherfinder.ui.auth
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.navigation.fragment.findNavController
 import com.ryanblignaut.featherfinder.SettingsActivity
 import com.ryanblignaut.featherfinder.databinding.FragmentLoginBinding
-import com.ryanblignaut.featherfinder.ui.SettingsFragment
 import com.ryanblignaut.featherfinder.ui.helper.PreBindingFragment
-import com.ryanblignaut.featherfinder.ui.map.NearbyBirding
 import com.ryanblignaut.featherfinder.viewmodel.LoginViewModel
 
 /**
@@ -31,7 +28,9 @@ class Login : PreBindingFragment<FragmentLoginBinding>() {
 
         binding.login.setOnClickListener {
 //            (requireActivity() as SettingsActivity).loadFragment(SettingsFragment())
-            (requireActivity() as SettingsActivity).loadFragment(NearbyBirding())
+//            (requireActivity() as SettingsActivity).loadFragment(NearbyBirding())
+
+            // Move to the activity with the buttons on the bottom.
 
         }
 
@@ -40,7 +39,7 @@ class Login : PreBindingFragment<FragmentLoginBinding>() {
     override fun inflateBindingSelf(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        attachToRoot: Boolean
+        attachToRoot: Boolean,
     ): FragmentLoginBinding {
         return inflateBinding(inflater, container)
     }

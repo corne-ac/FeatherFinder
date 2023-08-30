@@ -70,6 +70,7 @@ class NearbyBirding : PreBindingFragment<FragmentMapBinding>(), OnMapReadyCallba
                 }
 
                 map.moveCamera(CameraUpdateFactory.newLatLng(p))
+                //TODO: Add a circle around the users current location
                 val circleOptions = CircleOptions().center(p).radius(10000.0) // Radius in meters
                     .strokeColor(Color.BLUE)
                 map.addCircle(circleOptions)

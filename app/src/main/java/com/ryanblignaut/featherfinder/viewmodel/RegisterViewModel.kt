@@ -14,12 +14,12 @@ class RegisterViewModel : BaseViewModel<FirebaseUser>() {
 
     // Data fields for registration
     var username: String = ""
-    var email: String = ""
+    //    var email: String = ""
     var password: String = ""
     var confirmPassword: String = ""
 
     // Function to perform validation
-    fun validateEmail() {
+    fun validateEmail(email: String) {
         val errors = _validationErrors.value ?: ValidationErrors()
         if (email.isBlank()) {
             errors.emailError = "Email is required"
@@ -44,6 +44,18 @@ class RegisterViewModel : BaseViewModel<FirebaseUser>() {
     }
 
 
+    fun validatePasswordConfirm(passwordConfirm: String, password: String) {
+        val errors = _validationErrors.value ?: ValidationErrors()
+        errors.passwordError = if (passwordConfirm.isBlank()) {
+            "Confirm password is required"
+        } else if (passwordConfirm == password) {
+            "Passwords do not match"
+        } else {
+            null
+        }
+        _validationErrors.value = errors
+    }
+
     fun registerUserInFirebase(email: String, password: String) = fetchInBackground {
         FireBase.registerUser(email, password)
     }
@@ -52,5 +64,6 @@ class RegisterViewModel : BaseViewModel<FirebaseUser>() {
 data class ValidationErrors(
     var usernameError: String? = null,
     var emailError: String? = null,
-    var passwordError: String? = null
+    var passwordError: String? = null,
+    var passwordConfigError: String? = null,
 )

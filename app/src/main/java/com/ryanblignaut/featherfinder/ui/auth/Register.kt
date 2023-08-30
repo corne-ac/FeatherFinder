@@ -19,8 +19,7 @@ class Register : PreBindingFragment<FragmentRegisterBinding>() {
     private val viewModel: RegisterViewModel by viewModels()
     override fun addContentToView(savedInstanceState: Bundle?) {
         binding.email.doAfterTextChanged {
-            viewModel.email = it.toString()
-            viewModel.validateEmail()
+            viewModel.validateEmail(it.toString())
             binding.email.error = viewModel.validationErrors.value?.emailError
         }
 
@@ -29,10 +28,16 @@ class Register : PreBindingFragment<FragmentRegisterBinding>() {
             viewModel.validatePassword()
             binding.password.error = viewModel.validationErrors.value?.passwordError
         }
+        binding.passwordConfirm.doAfterTextChanged {
+            viewModel.confirmPassword = it.toString()
+            viewModel.validatePasswordConfirm(it.toString(), binding.password.text.toString())
+            binding.passwordConfirm.error = viewModel.validationErrors.value?.passwordError
+        }
+
     }
 
     override fun inflateBindingSelf(
-        inflater: LayoutInflater, container: ViewGroup?, attachToRoot: Boolean
+        inflater: LayoutInflater, container: ViewGroup?, attachToRoot: Boolean,
     ): FragmentRegisterBinding {
         return inflateBinding(inflater, container)
     }
