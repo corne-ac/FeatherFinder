@@ -1,8 +1,13 @@
 package com.ryanblignaut.featherfinder.ui.auth
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.widget.doAfterTextChanged
+import androidx.fragment.app.viewModels
+import com.ryanblignaut.featherfinder.MainDrawerNav
+import com.ryanblignaut.featherfinder.MainMenuActivity
 import com.ryanblignaut.featherfinder.SettingsActivity
 import com.ryanblignaut.featherfinder.databinding.FragmentLoginBinding
 import com.ryanblignaut.featherfinder.ui.helper.PreBindingFragment
@@ -13,28 +18,56 @@ import com.ryanblignaut.featherfinder.viewmodel.LoginViewModel
  * Login include user information including username, email, password and confirm password.
  */
 class Login : PreBindingFragment<FragmentLoginBinding>() {
-    private lateinit var viewModel: LoginViewModel
+    private val formViewModel: LoginViewModel by viewModels()
 
     override fun addContentToView(savedInstanceState: Bundle?) {
-        binding.register.setOnClickListener {
-            // TODO: Navigate with findNavController and set up graph showing nav
-            (requireActivity() as SettingsActivity).loadFragment(Register())
+        // Create these variables to store the email and password.
+        // Assigned to null as they are not yet initialized and we don't want to immediately harass the user.
+        var email: String? = null
+        var password: String? = null
+
+        binding.email.doAfterTextChanged {
+            email = it.toString()
+            formViewModel.dataChanged(email, password)
         }
+        binding.password.doAfterTextChanged {
+            password = it.toString()
+            formViewModel.dataChanged(email, password)
+        }
+        formViewModel.loginFormState.observe(viewLifecycleOwner) {
+            binding.login.isEnabled = it.isDataValid
+            binding.emailInputLayout.error = it.emailError?.let { err -> getString(err) }
+            binding.passwordInputLayout.error = it.passwordError?.let { err -> getString(err) }
+        }
+
         binding.forgotPassword.setOnClickListener {
             (requireActivity() as SettingsActivity).loadFragment(ForgotPassword())
         }
 
-        binding.login.isEnabled = true
+        binding.register.setOnClickListener {
+            (requireActivity() as SettingsActivity).loadFragment(Register())
+        }
 
         binding.login.setOnClickListener {
-//            (requireActivity() as SettingsActivity).loadFragment(SettingsFragment())
-//            (requireActivity() as SettingsActivity).loadFragment(NearbyBirding())
+            formViewModel.login(email!!, password!!)
+        }
 
-            // Move to the activity with the buttons on the bottom.
+        formViewModel.live.observe(viewLifecycleOwner) {
+            if (it.isSuccess) {
+                // Open the main activity.
+                // This is the main activity that will be opened when the user logs in.
+                this.activity?.finish()
+                Intent(this.activity, MainMenuActivity::class.java).also { intent ->
+                    this.activity?.startActivity(intent)
+                }
+            } else {
+                // Display the error message to the user.
+            }
 
         }
 
     }
+
 
     override fun inflateBindingSelf(
         inflater: LayoutInflater,
