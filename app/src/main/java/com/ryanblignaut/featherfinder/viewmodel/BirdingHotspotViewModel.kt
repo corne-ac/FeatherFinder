@@ -1,7 +1,7 @@
 package com.ryanblignaut.featherfinder.viewmodel
 
 import com.ryanblignaut.featherfinder.api.EBirdApi
-import com.ryanblignaut.featherfinder.model.EBirdLocation
+import com.ryanblignaut.featherfinder.model.api.EBirdLocation
 import com.ryanblignaut.featherfinder.viewmodel.helper.BaseViewModel
 
 class BirdingHotspotViewModel : BaseViewModel<Array<EBirdLocation>>() {

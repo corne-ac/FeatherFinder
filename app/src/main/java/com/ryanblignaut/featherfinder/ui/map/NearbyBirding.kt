@@ -16,7 +16,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.ryanblignaut.featherfinder.SettingsActivity
 import com.ryanblignaut.featherfinder.databinding.FragmentMapBinding
-import com.ryanblignaut.featherfinder.model.EBirdLocation
+import com.ryanblignaut.featherfinder.model.api.EBirdLocation
 import com.ryanblignaut.featherfinder.ui.helper.PreBindingFragment
 import com.ryanblignaut.featherfinder.viewmodel.BirdingHotspotViewModel
 

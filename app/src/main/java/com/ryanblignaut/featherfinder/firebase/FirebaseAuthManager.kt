@@ -1,4 +1,4 @@
-package com.ryanblignaut.featherfinder.fire
+package com.ryanblignaut.featherfinder.firebase
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
@@ -6,11 +6,8 @@ import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.tasks.await
 
-object FirebaseManager {
+object FirebaseAuthManager {
     private val auth = FirebaseAuth.getInstance()
-
-
-
     // Get current User
     fun getCurrentUser(): FirebaseUser? {
         return auth.currentUser
@@ -43,5 +40,9 @@ object FirebaseManager {
     }
 
     class AuthException(message: String) : Exception(message)
+
+
+
+
 
 }

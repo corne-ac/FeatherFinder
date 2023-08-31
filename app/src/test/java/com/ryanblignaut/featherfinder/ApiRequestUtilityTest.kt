@@ -1,6 +1,6 @@
 package com.ryanblignaut.featherfinder
 
-import com.ryanblignaut.featherfinder.model.TestApi
+import com.ryanblignaut.featherfinder.model.api.TestApi
 import com.ryanblignaut.featherfinder.utils.ApiRequestUtility
 import org.junit.Assert
 import org.junit.Test
