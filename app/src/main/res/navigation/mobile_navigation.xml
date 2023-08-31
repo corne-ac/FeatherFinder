@@ -63,4 +63,16 @@
         tools:layout="@layout/fragment_observation_detail" />
 
 
+    <fragment
+        android:id="@+id/navigation_profile"
+        android:name="com.ryanblignaut.featherfinder.ui.ProfileFragment"
+        android:label="@string/home"
+        tools:layout="@layout/fragment_profile" />
+
+    <fragment
+        android:id="@+id/navigation_bird_info"
+        android:name="com.ryanblignaut.featherfinder.ui.BirdInfoFragment"
+        android:label="@string/home"
+        tools:layout="@layout/fragment_bird_info" />
+
 </navigation>

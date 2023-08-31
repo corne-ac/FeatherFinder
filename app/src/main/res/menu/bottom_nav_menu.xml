@@ -1,30 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
+
+    <item
+        android:id="@+id/navigation_bird_info"
+        android:icon="@drawable/bird_mint"
+        android:title="@string/bird_info" />
+
     <item
         android:id="@+id/navigation_home"
         android:icon="@drawable/home_mint"
         android:title="@string/home" />
 
-    <item
+<!--    <item
         android:id="@+id/navigation_all_goals"
         android:icon="@drawable/goal_mint"
-        android:title="@string/all_goals" />
+        android:title="@string/all_goals" />-->
+    <!-- <item
+     android:id="@+id/navigation_hotspot_info"
+     android:icon="@drawable/play_mint"
+     android:title="@string/all_goals" />-->
 
     <item
-        android:id="@+id/navigation_hotspot_info"
-        android:icon="@drawable/play_mint"
-        android:title="@string/all_goals" />
+        android:id="@+id/navigation_map"
+        android:icon="@drawable/goal_mint"
+        android:title="@string/map" />
 
     <item
         android:id="@+id/navigation_observation_list"
         android:icon="@drawable/bird_mint_02"
         android:title="@string/observation_list" />
 
-    <item
-        android:id="@+id/navigation_notifications"
-        android:icon="@drawable/user_mint"
-        android:title="@string/title_activity_settings" />
+ <!--   <item
+        android:id="@+id/navigation_obs"
+        android:icon="@drawable/note_mint"
+        android:title="@string/observations" />-->
 
+    <item
+        android:id="@+id/navigation_profile"
+        android:icon="@drawable/user_mint"
+        android:title="@string/profile" />
 
 </menu>

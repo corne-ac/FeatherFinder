@@ -60,4 +60,8 @@
     <string name="add_a_goal">Add a Goal</string>
 
 
+    <string name="profile">Profile</string>
+    <string name="observations">Observations</string>
+    <string name="map">Map</string>
+    <string name="bird_info">Bird Info</string>
 </resources>
