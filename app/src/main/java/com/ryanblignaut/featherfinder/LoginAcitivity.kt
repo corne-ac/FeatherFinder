@@ -1,6 +1,7 @@
 package com.ryanblignaut.featherfinder
 
 import android.os.Bundle
+import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -8,10 +9,8 @@ import androidx.fragment.app.FragmentTransaction
 import com.ryanblignaut.featherfinder.ui.auth.Login
 
 
-class SettingsActivity : AppCompatActivity() {
-
+class LoginAcitivity : AppCompatActivity() {
     private val firstFragment = Login()
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,6 +28,18 @@ class SettingsActivity : AppCompatActivity() {
              fragmentTransaction.addToBackStack(null)
              fragmentTransaction.commit()*/
         // TODO: this breaks the form saving... fix it
+   /*     val fragmentManager: FragmentManager = supportFragmentManager
+        val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
+        val mapFragment = NearbyBirding()
+        fragmentTransaction.replace(R.id.fragmentContainer, mapFragment)
+        fragmentTransaction.addToBackStack(null)
+        fragmentTransaction.commit()*/
+
+        val actionBar: ActionBar? = supportActionBar
+        actionBar!!.hide()
+
+        val lo = Login()
+        loadFragment(lo)
 
     }
 
