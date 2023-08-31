@@ -1,6 +1,7 @@
 package com.ryanblignaut.featherfinder.utils
 
 import android.util.Patterns
+import com.ryanblignaut.featherfinder.R
 
 object DataValidator {
 
@@ -18,6 +19,24 @@ object DataValidator {
 
     fun invalidUsername(username: String): Boolean {
         return username.length <= 8
+    }
+
+    fun emailValidation(it: String?): Int? {
+        return when {
+            it == null -> null
+            isEmpty(it) -> R.string.invalid_empty_email
+            invalidEmail(it) -> R.string.invalid_email
+            else -> null
+        }
+    }
+
+    fun passwordValidation(it: String?): Int? {
+        return when {
+            it == null -> null
+            isEmpty(it) -> R.string.invalid_empty_password
+            invalidPassword(it) -> R.string.invalid_password
+            else -> null
+        }
     }
 
 }

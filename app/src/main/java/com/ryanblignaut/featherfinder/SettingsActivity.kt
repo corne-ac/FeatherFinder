@@ -6,21 +6,29 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.ryanblignaut.featherfinder.ui.auth.Login
-import com.ryanblignaut.featherfinder.ui.map.NearbyBirding
 
 
 class SettingsActivity : AppCompatActivity() {
+
+    private val firstFragment = Login()
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-   /*     val fragmentManager: FragmentManager = supportFragmentManager
-        val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
-        val mapFragment = NearbyBirding()
-        fragmentTransaction.replace(R.id.fragmentContainer, mapFragment)
-        fragmentTransaction.addToBackStack(null)
-        fragmentTransaction.commit()*/
-        val lo = Login()
-        loadFragment(lo)
+        if (savedInstanceState == null) {
+          /*  supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, LoginFragment())
+                .commit()*/
+            loadFragment(firstFragment)
+        }
+        /*     val fragmentManager: FragmentManager = supportFragmentManager
+             val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
+             val mapFragment = NearbyBirding()
+             fragmentTransaction.replace(R.id.fragmentContainer, mapFragment)
+             fragmentTransaction.addToBackStack(null)
+             fragmentTransaction.commit()*/
+        // TODO: this breaks the form saving... fix it
 
     }
 

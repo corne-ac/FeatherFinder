@@ -29,6 +29,7 @@
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/feather_finder_icon"
                 android:src="@drawable/logo_round_mint"
+                app:errorEnabled="true"
                 app:layout_constraintBottom_toTopOf="@id/email_input_layout"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -61,6 +62,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="96dp"
                 android:hint="@string/prompt_email"
+                app:errorEnabled="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/imgLogo"
@@ -84,10 +86,10 @@
                 android:id="@+id/password_input_layout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:hint="@string/prompt_password"
                 app:endIconDrawable="@drawable/hide_mint"
                 app:endIconMode="password_toggle"
+                app:errorEnabled="true"
                 app:errorIconDrawable="@null"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -136,7 +138,7 @@
 
                         </TextView>-->
 
-            <ProgressBar
+      <!--      <ProgressBar
                 android:id="@+id/loading"
                 android:layout_width="43dp"
                 android:layout_height="47dp"
@@ -146,9 +148,9 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/password_input_layout"
-                app:layout_constraintVertical_bias="0.313" />
+                app:layout_constraintVertical_bias="0.313" />-->
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/login"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

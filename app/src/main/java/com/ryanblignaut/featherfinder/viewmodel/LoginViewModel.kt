@@ -12,6 +12,8 @@ class LoginViewModel : BaseViewModel<FirebaseUser>() {
 
     private val _loginForm = MutableLiveData<LoginFormState>()
     val loginFormState: LiveData<LoginFormState> = _loginForm
+
+
     fun login(email: String, password: String) = fetchInBackground {
         FireBase.signInWithEmailAndPassword(email, password)
     }
@@ -23,11 +25,6 @@ class LoginViewModel : BaseViewModel<FirebaseUser>() {
             DataValidator.invalidEmail(email) -> R.string.invalid_email
             else -> null
         }
-    /*    if (emailError != null) {
-            _loginForm.value = LoginFormState(emailError = emailError)
-            return
-        }*/
-
         val passwordError = when {
             password == null -> null
             DataValidator.isEmpty(password) -> R.string.invalid_empty_password
@@ -35,7 +32,8 @@ class LoginViewModel : BaseViewModel<FirebaseUser>() {
             else -> null
         }
         if (passwordError != null || emailError != null) {
-            _loginForm.value = LoginFormState(passwordError = passwordError, emailError = emailError)
+            _loginForm.value =
+                LoginFormState(passwordError = passwordError, emailError = emailError)
             return
         }
         _loginForm.value = LoginFormState(isDataValid = true)

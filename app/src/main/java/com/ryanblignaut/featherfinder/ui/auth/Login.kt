@@ -4,40 +4,57 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.widget.doAfterTextChanged
+import androidx.annotation.StyleRes
 import androidx.fragment.app.viewModels
-import com.ryanblignaut.featherfinder.MainDrawerNav
+import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.progressindicator.CircularProgressIndicatorSpec
+import com.google.android.material.progressindicator.IndeterminateDrawable
 import com.ryanblignaut.featherfinder.MainMenuActivity
 import com.ryanblignaut.featherfinder.SettingsActivity
 import com.ryanblignaut.featherfinder.databinding.FragmentLoginBinding
 import com.ryanblignaut.featherfinder.ui.helper.PreBindingFragment
-import com.ryanblignaut.featherfinder.viewmodel.LoginViewModel
+import com.ryanblignaut.featherfinder.utils.DataValidator
+import com.ryanblignaut.featherfinder.viewmodel.FormState
+import com.ryanblignaut.featherfinder.viewmodel.LoginView2Model
 
 /**
  * This class represents the user interface for a user to login.
  * Login include user information including username, email, password and confirm password.
  */
 class Login : PreBindingFragment<FragmentLoginBinding>() {
-    private val formViewModel: LoginViewModel by viewModels()
+    //    private val formViewModel: LoginView2Model by viewModels()
+//    private lateinit var formViewModel: LoginView2Model
+//    private val formViewModel: LoginView2Model by viewModels()
+    private val formViewModel: LoginView2Model by viewModels { ViewModelProvider.NewInstanceFactory() }
 
     override fun addContentToView(savedInstanceState: Bundle?) {
-        // Create these variables to store the email and password.
-        // Assigned to null as they are not yet initialized and we don't want to immediately harass the user.
-        var email: String? = null
-        var password: String? = null
+        // Build up the form state.
+        val formStates = listOf(
+            FormState(
+                binding.email,
+                binding.emailInputLayout,
+                DataValidator::emailValidation,
+                "email",
+                formViewModel
+            ),
+            FormState(
+                binding.password,
+                binding.passwordInputLayout,
+                DataValidator::passwordValidation,
+                "password",
+                formViewModel
+            ),
+        )
 
-        binding.email.doAfterTextChanged {
-            email = it.toString()
-            formViewModel.dataChanged(email, password)
-        }
-        binding.password.doAfterTextChanged {
-            password = it.toString()
-            formViewModel.dataChanged(email, password)
-        }
+        // Attach the listeners to the form states.
+        formStates.forEach(FormState::attachListener)
+
         formViewModel.loginFormState.observe(viewLifecycleOwner) {
-            binding.login.isEnabled = it.isDataValid
-            binding.emailInputLayout.error = it.emailError?.let { err -> getString(err) }
-            binding.passwordInputLayout.error = it.passwordError?.let { err -> getString(err) }
+            // Validate the form states.
+            formStates.forEach(FormState::validate)
+            // If all form states are valid, enable the login button.
+            binding.login.isEnabled = formStates.all(FormState::isValid)
         }
 
         binding.forgotPassword.setOnClickListener {
@@ -49,7 +66,25 @@ class Login : PreBindingFragment<FragmentLoginBinding>() {
         }
 
         binding.login.setOnClickListener {
-            formViewModel.login(email!!, password!!)
+            // TODO: put into a component.
+            val spec = CircularProgressIndicatorSpec(
+                requireContext(),  /*attrs=*/
+                null, 0, getSpecStyleResId()
+            )
+            val progressIndicatorDrawable = IndeterminateDrawable.createCircularDrawable(
+                requireContext(), spec
+            )
+            spec.indicatorColors = intArrayOf(
+                requireContext().getColor(android.R.color.holo_blue_light),
+                requireContext().getColor(android.R.color.holo_green_light),
+                requireContext().getColor(android.R.color.holo_orange_light),
+                requireContext().getColor(android.R.color.holo_red_light)
+            )
+            binding.login.icon = progressIndicatorDrawable
+            binding.login.iconGravity = MaterialButton.ICON_GRAVITY_TEXT_START
+            formViewModel.login(binding.email.text.toString(), binding.password.text.toString())
+            binding.login.text = ""
+            binding.login.isEnabled = false
         }
 
         formViewModel.live.observe(viewLifecycleOwner) {
@@ -57,17 +92,21 @@ class Login : PreBindingFragment<FragmentLoginBinding>() {
                 // Open the main activity.
                 // This is the main activity that will be opened when the user logs in.
                 this.activity?.finish()
-                Intent(this.activity, MainMenuActivity::class.java).also { intent ->
-                    this.activity?.startActivity(intent)
-                }
+                Intent(this.activity, MainMenuActivity::class.java).setAction(Intent.ACTION_VIEW)
+                    .also { intent ->
+                        this.activity?.startActivity(intent)
+                    }
             } else {
                 // Display the error message to the user.
             }
-
         }
-
     }
 
+
+    @StyleRes
+    private fun getSpecStyleResId(): Int {
+        return com.google.android.material.R.style.Widget_Material3_CircularProgressIndicator_ExtraSmall
+    }
 
     override fun inflateBindingSelf(
         inflater: LayoutInflater,
