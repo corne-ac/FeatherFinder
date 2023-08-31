@@ -9,35 +9,18 @@ import androidx.fragment.app.FragmentTransaction
 import com.ryanblignaut.featherfinder.ui.auth.Login
 
 
-class LoginAcitivity : AppCompatActivity() {
+class LoginActivity : AppCompatActivity() {
     private val firstFragment = Login()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        if (savedInstanceState == null) {
-          /*  supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, LoginFragment())
-                .commit()*/
-            loadFragment(firstFragment)
-        }
-        /*     val fragmentManager: FragmentManager = supportFragmentManager
-             val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
-             val mapFragment = NearbyBirding()
-             fragmentTransaction.replace(R.id.fragmentContainer, mapFragment)
-             fragmentTransaction.addToBackStack(null)
-             fragmentTransaction.commit()*/
-        // TODO: this breaks the form saving... fix it
-   /*     val fragmentManager: FragmentManager = supportFragmentManager
-        val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
-        val mapFragment = NearbyBirding()
-        fragmentTransaction.replace(R.id.fragmentContainer, mapFragment)
-        fragmentTransaction.addToBackStack(null)
-        fragmentTransaction.commit()*/
-
         val actionBar: ActionBar? = supportActionBar
         actionBar!!.hide()
-
+        if (savedInstanceState == null) {
+            // TODO: Not too sure that this is the best way to do this.
+            loadFragment(firstFragment)
+        }
         val lo = Login()
         loadFragment(lo)
 

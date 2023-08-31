@@ -35,7 +35,7 @@
         </activity>-->
 
         <activity
-            android:name=".LoginAcitivity"
+            android:name=".LoginActivity"
             android:exported="true"
             android:label="@string/title_activity_settings">
             <intent-filter>
