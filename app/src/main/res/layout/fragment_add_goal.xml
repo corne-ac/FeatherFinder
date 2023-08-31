@@ -25,11 +25,12 @@
 
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/name_input_layout"
+                android:id="@+id/goal_name_input_layout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="256dp"
-                android:hint="Goal name"
+                android:hint="@string/goal_name"
+                app:errorEnabled="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -37,10 +38,9 @@
                 app:startIconTint="@color/mint">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/name"
+                    android:id="@+id/goal_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:autofillHints="@string/prompt_email"
                     android:imeOptions="actionDone"
                     android:minHeight="48dp"
                     android:selectAllOnFocus="true" />
@@ -55,7 +55,7 @@
 
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/name_input_layout"
+                app:layout_constraintTop_toBottomOf="@id/goal_name_input_layout"
                 app:startIconDrawable="@drawable/time_mint"
                 app:startIconTint="@color/mint">
 
@@ -63,7 +63,6 @@
                     android:id="@+id/start"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:autofillHints="@string/prompt_email"
                     android:imeOptions="actionDone"
                     android:minHeight="48dp"
                     android:selectAllOnFocus="true" />
@@ -86,18 +85,17 @@
                     android:id="@+id/end"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:autofillHints="@string/prompt_email"
                     android:imeOptions="actionDone"
                     android:minHeight="48dp"
                     android:selectAllOnFocus="true" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/info_input_layout"
+                android:id="@+id/goal_info_input_layout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:hint="Goal info"
+                android:hint="@string/goal_info"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/end_input_layout"
@@ -105,17 +103,16 @@
                 app:startIconTint="@color/mint">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/info"
+                    android:id="@+id/goal_info"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:autofillHints="@string/prompt_email"
                     android:imeOptions="actionDone"
                     android:minHeight="96dp"
                     android:selectAllOnFocus="true" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <Button
-                android:id="@+id/login"
+                android:id="@+id/save_goal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"

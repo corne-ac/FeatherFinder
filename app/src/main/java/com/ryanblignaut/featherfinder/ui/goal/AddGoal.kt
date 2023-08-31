@@ -3,20 +3,63 @@ package com.ryanblignaut.featherfinder.ui.goal
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.ryanblignaut.featherfinder.databinding.FragmentRegisterBinding
+import androidx.fragment.app.viewModels
+import com.ryanblignaut.featherfinder.databinding.FragmentAddGoalBinding
 import com.ryanblignaut.featherfinder.ui.helper.PreBindingFragment
+import com.ryanblignaut.featherfinder.utils.DataValidator
+import com.ryanblignaut.featherfinder.viewmodel.goal.GoalViewModel
+import com.ryanblignaut.featherfinder.viewmodel.helper.FormState
 
 /**
  * This class represents the user interface for a user to register.
  * It provides functionality to record user details including username, email, password, confirm password.
  */
-class AddGoal : PreBindingFragment<FragmentRegisterBinding>() {
+class AddGoal : PreBindingFragment<FragmentAddGoalBinding>() {
+    private val formViewModel: GoalViewModel by viewModels()
     override fun addContentToView(savedInstanceState: Bundle?) {
+        val formStates = listOf(
+            goalNameState(),
+            goalInfoState(),
+        )
+        // Attach the listeners to the form states.
+        formStates.forEach(FormState::attachListener)
+        // Observe the form state.
+        formViewModel.formState.observe(viewLifecycleOwner, updateFormStates(formStates))
+
+    }
+
+    private fun updateFormStates(formStates: List<FormState>): (value: MutableMap<String, String?>) -> Unit {
+        return {
+            // Validate the form states.
+            formStates.forEach(FormState::validate)
+            // If all form states are valid, enable the login button.
+            binding.saveGoal.isEnabled = formStates.all(FormState::isValid)
+        }
+    }
+
+    private fun goalNameState(): FormState {
+        return FormState(
+            binding.goalName,
+            binding.goalNameInputLayout,
+            "goalName",
+            formViewModel,
+            DataValidator::goalNameValidation,
+        )
+    }
+
+    private fun goalInfoState(): FormState {
+        return FormState(
+            binding.goalName,
+            binding.goalNameInputLayout,
+            "goalInfo",
+            formViewModel,
+            DataValidator::goalNameValidation,
+        )
     }
 
     override fun inflateBindingSelf(
-        inflater: LayoutInflater, container: ViewGroup?, attachToRoot: Boolean
-    ): FragmentRegisterBinding {
+        inflater: LayoutInflater, container: ViewGroup?, attachToRoot: Boolean,
+    ): FragmentAddGoalBinding {
         return inflateBinding(inflater, container)
     }
 }

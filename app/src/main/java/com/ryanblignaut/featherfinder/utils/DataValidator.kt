@@ -21,8 +21,8 @@ object DataValidator {
         return username.length <= 8
     }
 
-    private fun invalidConfirmPassword(pass1: String, pass2: String): Boolean {
-        return pass1 != pass2
+    private fun invalidConfirmPassword(password: String, confirmPassword: String): Boolean {
+        return password != confirmPassword
     }
 
     fun usernameValidation(it: String?): Int? {
@@ -61,4 +61,13 @@ object DataValidator {
             else -> null
         }
     }
+
+    fun goalNameValidation(it: String?): Int? {
+        return when {
+            it == null -> null
+            isEmpty(it) -> R.string.invalid_empty_goal_name
+            else -> null
+        }
+    }
+
 }

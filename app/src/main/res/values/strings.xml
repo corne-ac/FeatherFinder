@@ -44,4 +44,7 @@
     <string name="invalid_password">Password must be 6 long</string>
     <string name="invalid_username">Username must be at least 8 long</string>
     <string name="invalid_confirm_password">Passwords do not match</string>
+    <string name="goal_name">Goal name</string>
+    <string name="invalid_empty_goal_name">Goal name can\'t be empty</string>
+    <string name="goal_info">Goal info</string>
 </resources>

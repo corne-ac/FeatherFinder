@@ -6,26 +6,15 @@ import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.tasks.await
 
-object FireBase {
+object FirebaseManager {
     private val auth = FirebaseAuth.getInstance()
 
-    // Suspend functions can only be called from other suspend functions or from a coroutine
-    // This is a suspend function because it calls await()
-    /* suspend fun createUserWithEmailAndPassword(email: String, password: String): Result<FirebaseUser> {
-         return try {
-             val result = auth.createUserWithEmailAndPassword(email, password).await()
-             val user = result.user
-             if (user != null) {
-                 Result.success(user)
-             } else {
-                 Result.failure(AuthException("Create user failed: User is null"))
-             }
-         } catch (e: FirebaseAuthInvalidCredentialsException) {
-             Result.failure(AuthException("Create user failed: Invalid credentials"))
-         } catch (e: Exception) {
-             Result.failure(AuthException("Create user failed: ${e.message}"))
-         }
-     }*/
+
+
+    // Get current User
+    fun getCurrentUser(): FirebaseUser? {
+        return auth.currentUser
+    }
 
     suspend fun registerUser(email: String, password: String): Result<FirebaseUser> {
         return try {
