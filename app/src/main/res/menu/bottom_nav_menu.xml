@@ -1,19 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
+
+    <item
+        android:id="@+id/navigation_bird_info"
+        android:icon="@drawable/bird_mint"
+        android:title="@string/bird_info" />
+
     <item
         android:id="@+id/navigation_home"
         android:icon="@drawable/home_mint"
         android:title="@string/home" />
 
     <item
-        android:id="@+id/navigation_dashboard"
-        android:icon="@drawable/logo_mint"
-        android:title="@string/app_name" />
+        android:id="@+id/navigation_map"
+        android:icon="@drawable/goal_mint"
+        android:title="@string/map" />
 
     <item
-        android:id="@+id/navigation_notifications"
+        android:id="@+id/navigation_obs"
+        android:icon="@drawable/note_mint"
+        android:title="@string/observations" />
+
+    <item
+        android:id="@+id/navigation_profile"
         android:icon="@drawable/user_mint"
-        android:title="@string/app_name" />
+        android:title="@string/profile" />
 
 </menu>

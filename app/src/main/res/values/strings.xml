@@ -47,4 +47,8 @@
     <string name="goal_name">Goal name</string>
     <string name="invalid_empty_goal_name">Goal name can\'t be empty</string>
     <string name="goal_info">Goal info</string>
+    <string name="profile">Profile</string>
+    <string name="observations">Observations</string>
+    <string name="map">Map</string>
+    <string name="bird_info">Bird Info</string>
 </resources>

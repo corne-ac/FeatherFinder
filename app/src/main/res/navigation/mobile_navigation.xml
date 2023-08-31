@@ -11,71 +11,92 @@
         android:name="com.ryanblignaut.featherfinder.ui.auth.Login"
         android:label="@string/login"
         tools:layout="@layout/fragment_login" />
-    <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.ryanblignaut.featherfinder.ui.auth.Register"
-        android:label="@string/register"
-        tools:layout="@layout/fragment_register" />
+
     <fragment
         android:id="@+id/navigation_home"
         android:name="com.ryanblignaut.featherfinder.ui.home.Home"
         android:label="@string/home"
         tools:layout="@layout/fragment_home" />
 
-   <!-- <fragment
-        android:id="@+id/nav_categories"
-        android:name="com.ryanblignaut.timepulseflow.ui.category.CategoriesViewList"
-        android:label="@string/menu_category_list"
-        tools:layout="@layout/fragment_categories_list" />
     <fragment
-        android:id="@+id/nav_timesheet_create"
-        android:name="com.ryanblignaut.timepulseflow.ui.timesheet.TimesheetCreate"
-        android:label="@string/menu_timesheet"
-        tools:layout="@layout/fragment_timesheet_create" />
+        android:id="@+id/navigation_profile"
+        android:name="com.ryanblignaut.featherfinder.ui.ProfileFragment"
+        android:label="@string/home"
+        tools:layout="@layout/fragment_profile" />
 
     <fragment
-        android:id="@+id/nav_all_timesheet"
-        android:name="com.ryanblignaut.timepulseflow.ui.timesheet.TimesheetItemFragment"
-        android:label="@string/menu_all_timesheet"
-        tools:layout="@layout/fragment_timesheet_item_list">
-        <action
-            android:id="@+id/action_nav_all_timesheet_to_nav_timesheet_detail"
-            app:destination="@id/nav_timesheet_detail" />
-    </fragment>
-    <fragment
-        android:id="@+id/nav_goals"
-        android:name="com.ryanblignaut.timepulseflow.ui.goal.GoalCreate"
-        android:label="@string/menu_goals"
-        tools:layout="@layout/fragment_goal_create" />
+        android:id="@+id/navigation_obs"
+        android:name="com.ryanblignaut.featherfinder.ui.observation.ObsFragment"
+        android:label="@string/home"
+        tools:layout="@layout/fragment_obs" />
 
     <fragment
-        android:id="@+id/nav_total_hours_worked_graph"
-        android:name="com.ryanblignaut.timepulseflow.ui.totalHoursWorked.TotalHoursWorkedGraph"
-        android:label="@string/menu_total_hours_worked_graph"
-        tools:layout="@layout/fragment_total_hours_graph" />
+        android:id="@+id/navigation_map"
+        android:name="com.ryanblignaut.featherfinder.ui.map.NearbyBirding"
+        android:label="@string/home"
+        tools:layout="@layout/fragment_map" />
 
     <fragment
-        android:id="@+id/nav_timesheet_detail"
-        android:name="com.ryanblignaut.timepulseflow.ui.timesheet.TimesheetDetails"
-        android:label="@string/menu_timesheet_detail"
-        tools:layout="@layout/fragment_timesheet_details" />
+        android:id="@+id/navigation_bird_info"
+        android:name="com.ryanblignaut.featherfinder.ui.BirdInfoFragment"
+        android:label="@string/home"
+        tools:layout="@layout/fragment_bird_info" />
 
 
-    <fragment
-        android:id="@+id/nav_monthly_goal_progress_tracker"
-        android:name="com.ryanblignaut.timepulseflow.ui.monthlyGoalProgressTracker.MonthlyGoalProgressTracker"
-        android:label="@string/menu_monthly_goal_progress_tracker"
-        tools:layout="@layout/fragment_monthly_goal_progress_tracker" />
+    <!-- <fragment
+         android:id="@+id/nav_categories"
+         android:name="com.ryanblignaut.timepulseflow.ui.category.CategoriesViewList"
+         android:label="@string/menu_category_list"
+         tools:layout="@layout/fragment_categories_list" />
+     <fragment
+         android:id="@+id/nav_timesheet_create"
+         android:name="com.ryanblignaut.timepulseflow.ui.timesheet.TimesheetCreate"
+         android:label="@string/menu_timesheet"
+         tools:layout="@layout/fragment_timesheet_create" />
 
-    <fragment
-        android:id="@+id/nav_category_create"
-        android:name="com.ryanblignaut.timepulseflow.ui.category.CategoryCreate"
-        android:label="@string/menu_category_create"
-        tools:layout="@layout/fragment_category_create" />
-    <fragment
-        android:id="@+id/nav_category_details"
-        android:name="com.ryanblignaut.timepulseflow.ui.category.CategoryDetails"
-        android:label="@string/menu_category_details"
-        tools:layout="@layout/fragment_category_create" />
--->
+     <fragment
+         android:id="@+id/nav_all_timesheet"
+         android:name="com.ryanblignaut.timepulseflow.ui.timesheet.TimesheetItemFragment"
+         android:label="@string/menu_all_timesheet"
+         tools:layout="@layout/fragment_timesheet_item_list">
+         <action
+             android:id="@+id/action_nav_all_timesheet_to_nav_timesheet_detail"
+             app:destination="@id/nav_timesheet_detail" />
+     </fragment>
+     <fragment
+         android:id="@+id/nav_goals"
+         android:name="com.ryanblignaut.timepulseflow.ui.goal.GoalCreate"
+         android:label="@string/menu_goals"
+         tools:layout="@layout/fragment_goal_create" />
+
+     <fragment
+         android:id="@+id/nav_total_hours_worked_graph"
+         android:name="com.ryanblignaut.timepulseflow.ui.totalHoursWorked.TotalHoursWorkedGraph"
+         android:label="@string/menu_total_hours_worked_graph"
+         tools:layout="@layout/fragment_total_hours_graph" />
+
+     <fragment
+         android:id="@+id/nav_timesheet_detail"
+         android:name="com.ryanblignaut.timepulseflow.ui.timesheet.TimesheetDetails"
+         android:label="@string/menu_timesheet_detail"
+         tools:layout="@layout/fragment_timesheet_details" />
+
+
+     <fragment
+         android:id="@+id/nav_monthly_goal_progress_tracker"
+         android:name="com.ryanblignaut.timepulseflow.ui.monthlyGoalProgressTracker.MonthlyGoalProgressTracker"
+         android:label="@string/menu_monthly_goal_progress_tracker"
+         tools:layout="@layout/fragment_monthly_goal_progress_tracker" />
+
+     <fragment
+         android:id="@+id/nav_category_create"
+         android:name="com.ryanblignaut.timepulseflow.ui.category.CategoryCreate"
+         android:label="@string/menu_category_create"
+         tools:layout="@layout/fragment_category_create" />
+     <fragment
+         android:id="@+id/nav_category_details"
+         android:name="com.ryanblignaut.timepulseflow.ui.category.CategoryDetails"
+         android:label="@string/menu_category_details"
+         tools:layout="@layout/fragment_category_create" />
+ -->
 </navigation>
