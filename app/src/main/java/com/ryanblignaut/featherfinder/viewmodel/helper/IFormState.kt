@@ -1,6 +1,6 @@
-package com.ryanblignaut.featherfinder.viewmodel
+package com.ryanblignaut.featherfinder.viewmodel.helper
 
-interface Mappable {
+interface IFormState {
     fun dataChanged(key: String, value: String)
     fun getData(key: String): String?
 }

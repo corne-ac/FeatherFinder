@@ -1,6 +1,7 @@
 package com.ryanblignaut.featherfinder.viewmodel
 
 import com.ryanblignaut.featherfinder.api.OpenRoutesApi
+import com.ryanblignaut.featherfinder.viewmodel.helper.BaseViewModel
 import org.json.JSONObject
 
 class RouteViewModel : BaseViewModel<JSONObject>() {

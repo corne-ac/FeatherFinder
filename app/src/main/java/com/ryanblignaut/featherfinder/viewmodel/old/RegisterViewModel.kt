@@ -1,3 +1,4 @@
+/*
 package com.ryanblignaut.featherfinder.viewmodel
 
 import androidx.lifecycle.LiveData
@@ -61,7 +62,8 @@ class RegisterViewModel : BaseViewModel<FirebaseUser>() {
         _registerForm.value = RegisterScreenState(isDataValid = true)
     }
 
-    /*  fun dataChanged(
+    */
+/*  fun dataChanged(
           username: String?,
           email: String?,
           password: String?,
@@ -110,6 +112,7 @@ class RegisterViewModel : BaseViewModel<FirebaseUser>() {
               return
           }
           _registerForm.value = RegisterScreenState(isDataValid = true)
-      }*/
+      }*//*
 
-}
+
+}*/

@@ -1,3 +1,4 @@
+/*
 package com.ryanblignaut.featherfinder.viewmodel
 
 import androidx.lifecycle.LiveData
@@ -39,3 +40,4 @@ class LoginViewModel : BaseViewModel<FirebaseUser>() {
         _loginForm.value = LoginFormState(isDataValid = true)
     }
 }
+*/

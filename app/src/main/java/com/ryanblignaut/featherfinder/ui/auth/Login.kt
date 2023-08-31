@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.StyleRes
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.progressindicator.CircularProgressIndicatorSpec
 import com.google.android.material.progressindicator.IndeterminateDrawable
@@ -15,47 +14,27 @@ import com.ryanblignaut.featherfinder.SettingsActivity
 import com.ryanblignaut.featherfinder.databinding.FragmentLoginBinding
 import com.ryanblignaut.featherfinder.ui.helper.PreBindingFragment
 import com.ryanblignaut.featherfinder.utils.DataValidator
-import com.ryanblignaut.featherfinder.viewmodel.FormState
-import com.ryanblignaut.featherfinder.viewmodel.LoginView2Model
+import com.ryanblignaut.featherfinder.viewmodel.auth.LoginViewModel
+import com.ryanblignaut.featherfinder.viewmodel.helper.FormState
 
 /**
  * This class represents the user interface for a user to login.
  * Login include user information including username, email, password and confirm password.
  */
 class Login : PreBindingFragment<FragmentLoginBinding>() {
-    //    private val formViewModel: LoginView2Model by viewModels()
-//    private lateinit var formViewModel: LoginView2Model
-//    private val formViewModel: LoginView2Model by viewModels()
-    private val formViewModel: LoginView2Model by viewModels { ViewModelProvider.NewInstanceFactory() }
+    private val formViewModel: LoginViewModel by viewModels()
 
     override fun addContentToView(savedInstanceState: Bundle?) {
         // Build up the form state.
         val formStates = listOf(
-            FormState(
-                binding.email,
-                binding.emailInputLayout,
-                DataValidator::emailValidation,
-                "email",
-                formViewModel
-            ),
-            FormState(
-                binding.password,
-                binding.passwordInputLayout,
-                DataValidator::passwordValidation,
-                "password",
-                formViewModel
-            ),
+            emailState(),
+            passwordState(),
         )
 
         // Attach the listeners to the form states.
         formStates.forEach(FormState::attachListener)
+        formViewModel.formState.observe(viewLifecycleOwner, updateFormStates(formStates))
 
-        formViewModel.loginFormState.observe(viewLifecycleOwner) {
-            // Validate the form states.
-            formStates.forEach(FormState::validate)
-            // If all form states are valid, enable the login button.
-            binding.login.isEnabled = formStates.all(FormState::isValid)
-        }
 
         binding.forgotPassword.setOnClickListener {
             (requireActivity() as SettingsActivity).loadFragment(ForgotPassword())
@@ -102,6 +81,34 @@ class Login : PreBindingFragment<FragmentLoginBinding>() {
         }
     }
 
+    private fun updateFormStates(formStates: List<FormState>): (value: MutableMap<String, String?>) -> Unit {
+        return {
+            // Validate the form states.
+            formStates.forEach(FormState::validate)
+            // If all form states are valid, enable the login button.
+            binding.login.isEnabled = formStates.all(FormState::isValid)
+        }
+    }
+
+    private fun emailState(): FormState {
+        return FormState(
+            binding.email,
+            binding.emailInputLayout,
+            "email",
+            formViewModel,
+            DataValidator::emailValidation,
+        )
+    }
+
+    private fun passwordState(): FormState {
+        return FormState(
+            binding.password,
+            binding.passwordInputLayout,
+            "password",
+            formViewModel,
+            DataValidator::passwordValidation,
+        )
+    }
 
     @StyleRes
     private fun getSpecStyleResId(): Int {

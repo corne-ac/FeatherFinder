@@ -1,4 +1,4 @@
-package com.ryanblignaut.featherfinder.viewmodel
+package com.ryanblignaut.featherfinder.viewmodel.helper
 
 import androidx.core.widget.doAfterTextChanged
 import com.google.android.material.textfield.TextInputEditText
@@ -7,9 +7,9 @@ import com.google.android.material.textfield.TextInputLayout
 class FormState(
     private val valueField: TextInputEditText,
     private val errorField: TextInputLayout,
-    val predicate: (String?) -> Int?,
     private val key: String,
-    val map: Mappable,
+    val map: IFormState,
+    val predicate: (String?) -> Int?,
 ) {
     var isValid: Boolean = false
     fun validate() {

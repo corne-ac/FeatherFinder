@@ -1,4 +1,4 @@
-package com.ryanblignaut.featherfinder.viewmodel
+package com.ryanblignaut.featherfinder.viewmodel.helper
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

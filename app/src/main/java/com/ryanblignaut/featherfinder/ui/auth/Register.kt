@@ -1,15 +1,14 @@
 package com.ryanblignaut.featherfinder.ui.auth
 
 import android.os.Bundle
-import android.text.Editable
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
-import com.ryanblignaut.featherfinder.SettingsActivity
 import com.ryanblignaut.featherfinder.databinding.FragmentRegisterBinding
 import com.ryanblignaut.featherfinder.ui.helper.PreBindingFragment
-import com.ryanblignaut.featherfinder.viewmodel.RegisterViewModel
+import com.ryanblignaut.featherfinder.utils.DataValidator
+import com.ryanblignaut.featherfinder.viewmodel.auth.RegisterViewModel
+import com.ryanblignaut.featherfinder.viewmodel.helper.FormState
 
 /**
  * This class represents the user interface for a user to register.
@@ -17,52 +16,68 @@ import com.ryanblignaut.featherfinder.viewmodel.RegisterViewModel
  */
 class Register : PreBindingFragment<FragmentRegisterBinding>() {
 
-
     // Nice by viewModels automatically creates the view model for us at the right time with the right context.
     private val formViewModel: RegisterViewModel by viewModels()
     override fun addContentToView(savedInstanceState: Bundle?) {
-        // Create these variables to store the username, email, password and confirm password.
-        // Assigned to null as they are not yet initialized and we don't want to immediately harass the user.
-        var username: String? = null
-        var email: String? = null
-        var password: String? = null
-        var confirmPassword: String? = null
+        // Build up the form state with the fields we have on the page.
+        val formStates = listOf(
+            usernameState(),
+            emailState(),
+            passwordState(),
+            confirmPasswordState(),
+        )
+        // Attach the listeners to the form states.
+        formStates.forEach(FormState::attachListener)
+        // Observe the form state.
+        formViewModel.formState.observe(viewLifecycleOwner, updateFormStates(formStates))
+    }
 
-        binding.username.doAfterTextChanged {
-            username = it.toString()
-            formViewModel.dataChanged(username, email, password, confirmPassword)
+    private fun updateFormStates(formStates: List<FormState>): (value: MutableMap<String, String?>) -> Unit {
+        return {
+            // Validate the form states.
+            formStates.forEach(FormState::validate)
+            // If all form states are valid, enable the register button.
+            binding.register.isEnabled = formStates.all(FormState::isValid)
         }
+    }
 
-        binding.email.doAfterTextChanged {
-            email = it.toString()
-            formViewModel.dataChanged(username, email, password, confirmPassword)
-        }
+    private fun usernameState(): FormState {
+        return FormState(
+            binding.username,
+            binding.usernameInputLayout,
+            "username",
+            formViewModel,
+            DataValidator::usernameValidation,
+        )
+    }
 
-        binding.password.doAfterTextChanged {
-            password = it.toString()
-            formViewModel.dataChanged(username, email, password, confirmPassword)
-        }
-        val action: (text: Editable?) -> Unit = {
-            confirmPassword = it.toString()
-            formViewModel.dataChanged(username, email, password, confirmPassword)
-        }
-        binding.passwordConfirm.doAfterTextChanged(action)
-        formViewModel.registerFormState.observe(viewLifecycleOwner) {
-            binding.register.isEnabled = it.isDataValid
-            binding.usernameInputLayout.error = it.usernameError?.let { err -> getString(err) }
-            binding.emailInputLayout.error = it.emailError?.let { err -> getString(err) }
-            binding.passwordInputLayout.error = it.passwordError?.let { err -> getString(err) }
-            binding.passwordConfirmInputLayout.error =
-                it.confirmPasswordError?.let { err -> getString(err) }
-        }
+    private fun emailState(): FormState {
+        return FormState(
+            binding.email,
+            binding.emailInputLayout,
+            "email",
+            formViewModel,
+            DataValidator::emailValidation,
+        )
+    }
 
-        binding.login.setOnClickListener {
-            (requireActivity() as SettingsActivity).loadFragment(Login())
-        }
+    private fun passwordState(): FormState {
+        return FormState(
+            binding.password,
+            binding.passwordInputLayout,
+            "password",
+            formViewModel,
+            DataValidator::passwordValidation,
+        )
+    }
 
-        binding.register.setOnClickListener {
-            formViewModel.registerUserInFirebase(email!!, password!!)
-        }
+    private fun confirmPasswordState(): FormState {
+        return FormState(
+            binding.passwordConfirm,
+            binding.passwordConfirmInputLayout,
+            "confirmPassword",
+            formViewModel,
+        ) { DataValidator.confirmPasswordValidation(it, binding.password.text.toString()) }
     }
 
     override fun inflateBindingSelf(
