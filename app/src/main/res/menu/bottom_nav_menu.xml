@@ -12,29 +12,15 @@
         android:icon="@drawable/home_mint"
         android:title="@string/home" />
 
-<!--    <item
-        android:id="@+id/navigation_all_goals"
-        android:icon="@drawable/goal_mint"
-        android:title="@string/all_goals" />-->
-    <!-- <item
-     android:id="@+id/navigation_hotspot_info"
-     android:icon="@drawable/play_mint"
-     android:title="@string/all_goals" />-->
-
     <item
-        android:id="@+id/navigation_map"
-        android:icon="@drawable/goal_mint"
+        android:id="@+id/navigation_nearby_hotspots"
+        android:icon="@drawable/map_mint"
         android:title="@string/map" />
 
     <item
         android:id="@+id/navigation_observation_list"
-        android:icon="@drawable/bird_mint_02"
-        android:title="@string/observation_list" />
-
- <!--   <item
-        android:id="@+id/navigation_obs"
         android:icon="@drawable/note_mint"
-        android:title="@string/observations" />-->
+        android:title="@string/observation_list" />
 
     <item
         android:id="@+id/navigation_profile"

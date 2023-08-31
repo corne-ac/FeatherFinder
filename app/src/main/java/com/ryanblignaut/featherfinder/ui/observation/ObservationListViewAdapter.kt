@@ -12,7 +12,7 @@ import com.ryanblignaut.featherfinder.model.BirdObservation
  * TODO: Replace the implementation with code for your data type.
  */
 class ObservationListViewAdapter(
-    private val values: MutableList<BirdObservation>,
+    private val values: List<BirdObservation>,
     private val onClick: (BirdObservation) -> Unit,
 ) : RecyclerView.Adapter<ObservationListViewAdapter.ViewHolder>() {
 

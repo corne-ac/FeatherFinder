@@ -23,6 +23,7 @@ class AllGoals : PreBindingFragment<FragmentAllGoalsBinding>() {
         binding.loader.visibility = ViewGroup.VISIBLE
         model.live.observe(viewLifecycleOwner, ::populateGoalList)
         model.getGoals()
+        binding.addGoalAction.setOnClickListener { findNavController().navigate(R.id.navigation_add_goal) }
     }
 
     private fun populateGoalList(it: Result<List<Goal>>) {
@@ -39,8 +40,6 @@ class AllGoals : PreBindingFragment<FragmentAllGoalsBinding>() {
             binding.noGoalsText.visibility = ViewGroup.VISIBLE
         }
         binding.goalsRecyclerView.adapter = GoalAdapter(values, ::onGoalClick)
-
-        binding.addGoalAction.setOnClickListener { findNavController().navigate(R.id.navigation_add_goal) }
     }
 
     private fun onGoalClick(goal: Goal) {

@@ -6,6 +6,7 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.ryanblignaut.featherfinder.model.Achievement
+import com.ryanblignaut.featherfinder.model.BirdObservation
 import com.ryanblignaut.featherfinder.model.Goal
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
@@ -26,7 +27,12 @@ object FirebaseDataManager {
         val userAchRef = usersRef.child(currentUser!!.uid).child("achievements")
         return fetchListDataFromFirebase(userAchRef)
     }
-
+    suspend fun getAllObservations(): List<BirdObservation> {
+        // Get the current user and their goals
+        val currentUser = FirebaseAuthManager.getCurrentUser()
+        val userGoalsRef = usersRef.child(currentUser!!.uid).child("observations")
+        return fetchListDataFromFirebase(userGoalsRef)
+    }
 
     suspend fun getAllGoals(): List<Goal> {
         // Get the current user and their goals

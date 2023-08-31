@@ -43,10 +43,8 @@ class NearbyBirding : PreBindingFragment<FragmentMapBinding>(), OnMapReadyCallba
         return inflateBinding(inflater, container)
     }
 
-
-    @SuppressLint("MissingPermission")
-    override fun onMapReady(map: GoogleMap) {
-        // Check if the user has given permission to use their location.
+/*
+    private val registerForActivityResult =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
             var permissionGranted = true
             permissions.entries.forEach {
@@ -58,7 +56,14 @@ class NearbyBirding : PreBindingFragment<FragmentMapBinding>(), OnMapReadyCallba
             } else {
                 map.isMyLocationEnabled = true
             }
-        }.launch(PERMISSIONS_REQUIRED)
+        }
+*/
+
+    @SuppressLint("MissingPermission")
+    override fun onMapReady(map: GoogleMap) {
+        // Check if the user has given permission to use their location.
+
+//        registerForActivityResult.launch(PERMISSIONS_REQUIRED)
 
 
         birdingHotspotViewModel = ViewModelProvider(this)[BirdingHotspotViewModel::class.java]
