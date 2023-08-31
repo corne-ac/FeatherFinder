@@ -17,25 +17,24 @@ class AllGoals : PreBindingFragment<FragmentAllGoalsBinding>() {
     private val model: AllGoalsViewModel by viewModels()
 
     override fun addContentToView(savedInstanceState: Bundle?) {
+        // Start the loading animation
+        binding.loader.visibility = ViewGroup.VISIBLE
+
+
         model.live.observe(viewLifecycleOwner, ::populateGoalList)
         model.getGoals()
+
     }
 
     private fun populateGoalList(it: Result<List<Goal>>) {
+        binding.loader.visibility = ViewGroup.GONE
         if (it.isFailure) {
             // TODO: Show error message
             println("We have no goals")
             println(it.exceptionOrNull())
             return
         }
-
-        // TODO: Remove this
-        println("We have goals")
-        it.getOrNull()?.forEach(::println)
-
-        // TODO: Put this on the UI binding.xxx.
-        GoalAdapter(it.getOrNull()!!, ::onGoalClick)
-
+        binding.goalsRecyclerView.adapter = GoalAdapter(it.getOrNull()!!, ::onGoalClick)
     }
 
     private fun onGoalClick(goal: Goal) {
