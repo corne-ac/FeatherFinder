@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.ryanblignaut.featherfinder.databinding.FragmentObservationItemBinding
+import com.ryanblignaut.featherfinder.databinding.FragmentGoalItemBinding
 import com.ryanblignaut.featherfinder.model.Goal
 
 class GoalAdapter(
@@ -16,7 +16,7 @@ class GoalAdapter(
         viewType: Int,
     ): ViewHolder {
         return ViewHolder(
-            FragmentObservationItemBinding.inflate(
+            FragmentGoalItemBinding.inflate(
                 LayoutInflater.from(parent.context), parent, false
             )
         )
@@ -31,7 +31,7 @@ class GoalAdapter(
         holder.contentView.setOnClickListener { onClick(item) }
     }
 
-    inner class ViewHolder(binding: FragmentObservationItemBinding) :
+    inner class ViewHolder(binding: FragmentGoalItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         val idView: TextView = binding.itemNumber
         val contentView: TextView = binding.content

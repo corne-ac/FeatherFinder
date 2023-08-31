@@ -16,6 +16,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 
+
+
 class LocationFragment : Fragment() {
     private val locationPermissionRequestCode = 100
     private lateinit var locationManager: LocationManager
