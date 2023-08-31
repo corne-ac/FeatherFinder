@@ -1,15 +1,15 @@
 package com.ryanblignaut.featherfinder
 
 import android.os.Bundle
+import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.ryanblignaut.featherfinder.ui.auth.Login
-import com.ryanblignaut.featherfinder.ui.map.NearbyBirding
 
 
-class SettingsActivity : AppCompatActivity() {
+class LoginAcitivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -19,6 +19,10 @@ class SettingsActivity : AppCompatActivity() {
         fragmentTransaction.replace(R.id.fragmentContainer, mapFragment)
         fragmentTransaction.addToBackStack(null)
         fragmentTransaction.commit()*/
+
+        val actionBar: ActionBar? = supportActionBar
+        actionBar!!.hide()
+
         val lo = Login()
         loadFragment(lo)
 

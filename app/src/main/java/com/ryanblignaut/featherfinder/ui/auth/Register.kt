@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
-import com.ryanblignaut.featherfinder.SettingsActivity
+import com.ryanblignaut.featherfinder.LoginAcitivity
 import com.ryanblignaut.featherfinder.databinding.FragmentRegisterBinding
 import com.ryanblignaut.featherfinder.ui.helper.PreBindingFragment
 import com.ryanblignaut.featherfinder.viewmodel.RegisterViewModel
@@ -51,13 +51,13 @@ class Register : PreBindingFragment<FragmentRegisterBinding>() {
             binding.register.isEnabled = it.isDataValid
             binding.usernameInputLayout.error = it.usernameError?.let { err -> getString(err) }
             binding.emailInputLayout.error = it.emailError?.let { err -> getString(err) }
-            binding.passwordInputLayout.error = it.passwordError?.let { err -> getString(err) }
+            binding.passwordInputLayout.error = it.passwordError?.let { err -> getString(err) } //Complains even though password is 6 long
             binding.passwordConfirmInputLayout.error =
                 it.confirmPasswordError?.let { err -> getString(err) }
         }
 
         binding.login.setOnClickListener {
-            (requireActivity() as SettingsActivity).loadFragment(Login())
+            (requireActivity() as LoginAcitivity).loadFragment(Login())
         }
 
         binding.register.setOnClickListener {

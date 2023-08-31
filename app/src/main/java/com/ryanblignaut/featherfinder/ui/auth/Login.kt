@@ -6,9 +6,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
-import com.ryanblignaut.featherfinder.MainDrawerNav
-import com.ryanblignaut.featherfinder.MainMenuActivity
-import com.ryanblignaut.featherfinder.SettingsActivity
+import com.ryanblignaut.featherfinder.MainActivity
+import com.ryanblignaut.featherfinder.LoginAcitivity
 import com.ryanblignaut.featherfinder.databinding.FragmentLoginBinding
 import com.ryanblignaut.featherfinder.ui.helper.PreBindingFragment
 import com.ryanblignaut.featherfinder.viewmodel.LoginViewModel
@@ -41,11 +40,11 @@ class Login : PreBindingFragment<FragmentLoginBinding>() {
         }
 
         binding.forgotPassword.setOnClickListener {
-            (requireActivity() as SettingsActivity).loadFragment(ForgotPassword())
+            (requireActivity() as LoginAcitivity).loadFragment(ForgotPassword())
         }
 
         binding.register.setOnClickListener {
-            (requireActivity() as SettingsActivity).loadFragment(Register())
+            (requireActivity() as LoginAcitivity).loadFragment(Register())
         }
 
         binding.login.setOnClickListener {
@@ -57,7 +56,7 @@ class Login : PreBindingFragment<FragmentLoginBinding>() {
                 // Open the main activity.
                 // This is the main activity that will be opened when the user logs in.
                 this.activity?.finish()
-                Intent(this.activity, MainMenuActivity::class.java).also { intent ->
+                Intent(this.activity, MainActivity::class.java).also { intent ->
                     this.activity?.startActivity(intent)
                 }
             } else {
