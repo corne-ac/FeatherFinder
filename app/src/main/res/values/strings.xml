@@ -46,5 +46,18 @@
     <string name="invalid_confirm_password">Passwords do not match</string>
     <string name="goal_name">Goal name</string>
     <string name="invalid_empty_goal_name">Goal name can\'t be empty</string>
+
     <string name="goal_info">Goal info</string>
+    <string name="all_goals">All goals</string>
+    <string name="add_goal">Add goal</string>
+    <string name="hotspot_info">Hotspot info</string>
+    <string name="route">Route</string>
+    <string name="nearby_hotspots">Nearby hotspots</string>
+    <string name="observation_list">Observation list</string>
+    <string name="add_observation">Add observation</string>
+    <string name="observation_detail">Observation details</string>
+    <string name="goal_list_empty">Goal list is empty create a goal below</string>
+    <string name="add_a_goal">Add a Goal</string>
+
+
 </resources>

@@ -17,7 +17,6 @@ class HotspotInfo(private val hotspotID: String) : PreBindingFragment<FragmentMa
         hotspotInfoViewModel.live.observe(viewLifecycleOwner) {
 
 
-
         }
         hotspotInfoViewModel.fetchHotspotInfo(hotspotID)
 
@@ -25,7 +24,7 @@ class HotspotInfo(private val hotspotID: String) : PreBindingFragment<FragmentMa
     }
 
     override fun inflateBindingSelf(
-        inflater: LayoutInflater, container: ViewGroup?, attachToRoot: Boolean
+        inflater: LayoutInflater, container: ViewGroup?, attachToRoot: Boolean,
     ): FragmentMapBinding {
         return inflateBinding(inflater, container)
     }

@@ -1,10 +1,13 @@
 package com.ryanblignaut.featherfinder.ui.map
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -20,6 +23,8 @@ import com.ryanblignaut.featherfinder.model.api.EBirdLocation
 import com.ryanblignaut.featherfinder.ui.helper.PreBindingFragment
 import com.ryanblignaut.featherfinder.viewmodel.BirdingHotspotViewModel
 
+private var PERMISSIONS_REQUIRED =
+    arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)
 
 class NearbyBirding : PreBindingFragment<FragmentMapBinding>(), OnMapReadyCallback {
     private lateinit var birdingHotspotViewModel: BirdingHotspotViewModel
@@ -33,13 +38,29 @@ class NearbyBirding : PreBindingFragment<FragmentMapBinding>(), OnMapReadyCallba
     }
 
     override fun inflateBindingSelf(
-        inflater: LayoutInflater, container: ViewGroup?, attachToRoot: Boolean
+        inflater: LayoutInflater, container: ViewGroup?, attachToRoot: Boolean,
     ): FragmentMapBinding {
         return inflateBinding(inflater, container)
     }
 
 
+    @SuppressLint("MissingPermission")
     override fun onMapReady(map: GoogleMap) {
+        // Check if the user has given permission to use their location.
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
+            var permissionGranted = true
+            permissions.entries.forEach {
+                if (it.key in PERMISSIONS_REQUIRED && !it.value) permissionGranted = false
+            }
+
+            if (!permissionGranted) {
+                Toast.makeText(context, "Permission request denied", Toast.LENGTH_LONG).show()
+            } else {
+                map.isMyLocationEnabled = true
+            }
+        }.launch(PERMISSIONS_REQUIRED)
+
+
         birdingHotspotViewModel = ViewModelProvider(this)[BirdingHotspotViewModel::class.java]
         val convertBirdLocationOntoMap = function(map)
         birdingHotspotViewModel.live.observe(viewLifecycleOwner, convertBirdLocationOntoMap)
@@ -50,10 +71,10 @@ class NearbyBirding : PreBindingFragment<FragmentMapBinding>(), OnMapReadyCallba
     @SuppressLint("PotentialBehaviorOverride")
     private fun function(map: GoogleMap): (Result<Array<EBirdLocation>>) -> Unit {
         return {
+
+
             var p = LatLng(40.730610, -73.935242);
             map.clear()
-
-
 //                .fillColor(Color.parseColor("#220000FF"))
 
 

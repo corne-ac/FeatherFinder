@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import com.ryanblignaut.featherfinder.R
 import com.ryanblignaut.featherfinder.databinding.FragmentAllGoalsBinding
 import com.ryanblignaut.featherfinder.model.Goal
 import com.ryanblignaut.featherfinder.ui.helper.PreBindingFragment
@@ -17,25 +19,28 @@ class AllGoals : PreBindingFragment<FragmentAllGoalsBinding>() {
     private val model: AllGoalsViewModel by viewModels()
 
     override fun addContentToView(savedInstanceState: Bundle?) {
+        // Start the loader.
+        binding.loader.visibility = ViewGroup.VISIBLE
         model.live.observe(viewLifecycleOwner, ::populateGoalList)
         model.getGoals()
     }
 
     private fun populateGoalList(it: Result<List<Goal>>) {
+        // Stop the loading animation
+        binding.loader.visibility = ViewGroup.GONE
         if (it.isFailure) {
             // TODO: Show error message
             println("We have no goals")
             println(it.exceptionOrNull())
             return
         }
+        val values = it.getOrNull()!!
+        if (values.isEmpty()) {
+            binding.noGoalsText.visibility = ViewGroup.VISIBLE
+        }
+        binding.goalsRecyclerView.adapter = GoalAdapter(values, ::onGoalClick)
 
-        // TODO: Remove this
-        println("We have goals")
-        it.getOrNull()?.forEach(::println)
-
-        // TODO: Put this on the UI binding.xxx.
-        GoalAdapter(it.getOrNull()!!, ::onGoalClick)
-
+        binding.addGoalAction.setOnClickListener { findNavController().navigate(R.id.navigation_add_goal) }
     }
 
     private fun onGoalClick(goal: Goal) {

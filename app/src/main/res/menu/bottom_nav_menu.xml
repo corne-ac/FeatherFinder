@@ -7,13 +7,24 @@
         android:title="@string/home" />
 
     <item
-        android:id="@+id/navigation_dashboard"
-        android:icon="@drawable/logo_mint"
-        android:title="@string/app_name" />
+        android:id="@+id/navigation_all_goals"
+        android:icon="@drawable/goal_mint"
+        android:title="@string/all_goals" />
+
+    <item
+        android:id="@+id/navigation_hotspot_info"
+        android:icon="@drawable/play_mint"
+        android:title="@string/all_goals" />
+
+    <item
+        android:id="@+id/navigation_observation_list"
+        android:icon="@drawable/bird_mint_02"
+        android:title="@string/observation_list" />
 
     <item
         android:id="@+id/navigation_notifications"
         android:icon="@drawable/user_mint"
-        android:title="@string/app_name" />
+        android:title="@string/title_activity_settings" />
+
 
 </menu>
