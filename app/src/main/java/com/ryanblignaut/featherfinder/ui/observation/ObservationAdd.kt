@@ -22,11 +22,13 @@ class ObservationAdd : PreBindingFragment<FragmentObservationAddBinding>() {
     private val formViewModel: AddObservationViewModel by viewModels()
 
     override fun addContentToView(savedInstanceState: Bundle?) {
+        binding.saveObservationAction.setOnClickListener { saveObservation() }
+        formViewModel.live.observe(viewLifecycleOwner, ::onSaveObservationResult)
+    }
 
-        if (savedInstanceState != null) {
-            return
-        }
-
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        // Do all the form state stuff here to prevent ghost calls.
         val formStates = listOf(
             speciesNameState(),
             dateState(),
@@ -37,9 +39,6 @@ class ObservationAdd : PreBindingFragment<FragmentObservationAddBinding>() {
         formStates.forEach(FormState::attachListener)
         // Observe the form state.
         formViewModel.formState.observe(viewLifecycleOwner, updateFormStates(formStates))
-        binding.saveObservationAction.setOnClickListener { saveObservation() }
-        formViewModel.live.observe(viewLifecycleOwner, ::onSaveObservationResult)
-
     }
 
     private fun onSaveObservationResult(result: Result<BirdObservation>) {
@@ -50,7 +49,7 @@ class ObservationAdd : PreBindingFragment<FragmentObservationAddBinding>() {
         findNavController().navigate(R.id.navigation_observation_list)
     }
 
-    private fun updateFormStates(formStates: List<FormState>): (value: MutableMap<String, String?>) -> Unit {
+    private fun updateFormStates(formStates: List<FormState>): (MutableMap<String, String?>) -> Unit {
         return {
             // Validate the form states.
             formStates.forEach(FormState::validate)

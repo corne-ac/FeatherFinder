@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.google.firebase.auth.FirebaseUser
+import com.ryanblignaut.featherfinder.LoginActivity
 import com.ryanblignaut.featherfinder.MainActivity
 import com.ryanblignaut.featherfinder.databinding.FragmentRegisterBinding
 import com.ryanblignaut.featherfinder.ui.helper.PreBindingFragment
@@ -22,6 +23,30 @@ class Register : PreBindingFragment<FragmentRegisterBinding>() {
     // Nice by viewModels automatically creates the view model for us at the right time with the right context.
     private val formViewModel: RegisterViewModel by viewModels()
     override fun addContentToView(savedInstanceState: Bundle?) {
+
+        // Click listener to register the user.
+        binding.register.setOnClickListener {
+            // Register the user.
+            formViewModel.register(
+                binding.username.text.toString(),
+                binding.email.text.toString(),
+                binding.password.text.toString(),
+            )
+        }
+
+        // When the user has clicked on register button formViewModel will start process, this listens for when this process is done.
+        formViewModel.live.observe(viewLifecycleOwner, ::onRegisterResult)
+
+        // Click listener to navigate back to the Login page.
+        binding.loginAction.setOnClickListener {
+            (requireActivity() as LoginActivity).loadFragment(Login())
+        }
+    }
+
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        // Do all the form state stuff here to prevent ghost calls.
         // Build up the form state with the fields we have on the page.
         val formStates = listOf(
             usernameState(),
@@ -33,18 +58,8 @@ class Register : PreBindingFragment<FragmentRegisterBinding>() {
         formStates.forEach(FormState::attachListener)
         // Observe the form state.
         formViewModel.formState.observe(viewLifecycleOwner, updateFormStates(formStates))
-
-        binding.register.setOnClickListener {
-            formViewModel.register(
-                binding.username.text.toString(),
-                binding.email.text.toString(),
-                binding.password.text.toString(),
-            )
-        }
-
-        formViewModel.live.observe(viewLifecycleOwner, ::onRegisterResult)
-
     }
+
 
     private fun onRegisterResult(result: Result<FirebaseUser>) {
         if (result.isFailure) {

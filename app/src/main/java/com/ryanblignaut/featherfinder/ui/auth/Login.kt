@@ -32,15 +32,6 @@ class Login : PreBindingFragment<FragmentLoginBinding>() {
             moveToMain()
         }
 
-        // Build up the form state.
-        val formStates = listOf(
-            emailState(),
-            passwordState(),
-        )
-
-        // Attach the listeners to the form states.
-        formStates.forEach(FormState::attachListener)
-        formViewModel.formState.observe(viewLifecycleOwner, updateFormStates(formStates))
 
 
         binding.forgotPassword.setOnClickListener {
@@ -75,6 +66,21 @@ class Login : PreBindingFragment<FragmentLoginBinding>() {
 
         formViewModel.live.observe(viewLifecycleOwner, ::onLoginResult)
     }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        // Build up the form state.
+        val formStates = listOf(
+            emailState(),
+            passwordState(),
+        )
+
+        // Attach the listeners to the form states.
+        formStates.forEach(FormState::attachListener)
+        formViewModel.formState.observe(viewLifecycleOwner, updateFormStates(formStates))
+
+    }
+
 
     private fun onLoginResult(result: Result<FirebaseUser>) {
         if (result.isFailure) {

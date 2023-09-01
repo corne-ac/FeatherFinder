@@ -18,6 +18,12 @@ import com.ryanblignaut.featherfinder.viewmodel.helper.FormState
 class AddGoal : PreBindingFragment<FragmentAddGoalBinding>() {
     private val formViewModel: GoalViewModel by viewModels()
     override fun addContentToView(savedInstanceState: Bundle?) {
+        binding.saveGoal.setOnClickListener { saveGoal() }
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        // Do all the form state stuff here to prevent ghost calls.
         val formStates = listOf(
             goalNameState(),
         )
@@ -25,7 +31,6 @@ class AddGoal : PreBindingFragment<FragmentAddGoalBinding>() {
         formStates.forEach(FormState::attachListener)
         // Observe the form state.
         formViewModel.formState.observe(viewLifecycleOwner, updateFormStates(formStates))
-        binding.saveGoal.setOnClickListener { saveGoal() }
     }
 
     private fun saveGoal() {
