@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
     <style name="Theme.FeatherFinder" parent="Theme.MaterialComponents.DayNight">
         <!-- Primary brand color. -->
@@ -12,12 +12,17 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+
+<!--        <item name="cardBackgroundOnCard">?attr/cardBackgroundOnCard</item>-->
+<!--        <item name="cardBackgroundColor">@color/cardBackgroundColorNight</item>-->
+        <item name="cardBackgroundOnCard">@color/cardBackgroundColor</item>
     </style>
 
     <style name="Theme.FeatherFinder.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+
     <style name="Theme.FeatherFinder.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
 </resources>

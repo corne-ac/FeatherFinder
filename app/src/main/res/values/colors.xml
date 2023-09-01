@@ -7,4 +7,10 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- Default color -->
+    <color name="cardBackgroundColor">#F2F2F2</color>
+    <!-- Color for night mode -->
+    <color name="onCardBackgroundColorNight">#2b2d30</color>
+    <color name="cardBackgroundColorNight">#1e1f22</color>
 </resources>

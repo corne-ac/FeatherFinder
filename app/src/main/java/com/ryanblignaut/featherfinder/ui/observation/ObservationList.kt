@@ -34,23 +34,6 @@ class ObservationList : PreBindingFragment<FragmentObservationItemListBinding>()
                 else -> androidx.recyclerview.widget.GridLayoutManager(context, columnCount)
             }
         }
-        /*   // When the recycler view is ready, set the layout manager.
-           with(recyclerView) {
-               layoutManager = when {
-                   columnCount <= 1 -> androidx.recyclerview.widget.LinearLayoutManager(context)
-                   else -> androidx.recyclerview.widget.GridLayoutManager(context, columnCount)
-               }
-
-               // Populate the on click listener for the recycler view items.
-               fun openObservationDetails(it: String) {
-
-               }
-
-               // TODO: get the items from local storage or from db.
-               adapter = ObservationListViewAdapter(ObservationPlaceholderData.ITEMS) {
-                   openObservationDetails(it.id)
-               }
-           }*/
     }
 
     private fun populateObservationList(result: Result<List<BirdObservation>>) {
