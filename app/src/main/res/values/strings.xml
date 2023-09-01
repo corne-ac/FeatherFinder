@@ -34,7 +34,7 @@
     <string name="ui">UI</string>
     <string name="dark_mode">Dark Mode</string>
     <string name="dark_mode_def_value">MODE_NIGHT_FOLLOW_SYSTEM</string>
-    <string name="app_info">Some info about the app and how to use ir</string>
+    <string name="app_info">Some info about the app and how to use it</string>
     <string name="home">Home</string>
     <string name="invalid_empty_email">Email can\'t be empty</string>
     <string name="invalid_empty_password">Password can\'t be empty</string>

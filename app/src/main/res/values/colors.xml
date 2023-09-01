@@ -8,9 +8,12 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <!-- Default color -->
+    <color name="onCardBackgroundColorNight">#2B2D30</color>
+    <color name="cardBackgroundColorNight">#1E1F22</color>
+
+    <color name="light_card">#DAD8D8</color>
     <color name="cardBackgroundColor">#F2F2F2</color>
-    <!-- Color for night mode -->
-    <color name="onCardBackgroundColorNight">#2b2d30</color>
-    <color name="cardBackgroundColorNight">#1e1f22</color>
+    <!--<color name="cardBackgroundColor">#DAD8D8</color>-->
+<!--    <color name="light_card">#F2F2F2</color>-->
+
 </resources>

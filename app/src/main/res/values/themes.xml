@@ -13,9 +13,17 @@
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
 
-<!--        <item name="cardBackgroundOnCard">?attr/cardBackgroundOnCard</item>-->
-<!--        <item name="cardBackgroundColor">@color/cardBackgroundColorNight</item>-->
+        <!--        <item name="cardBackgroundOnCard">?attr/cardBackgroundOnCard</item>-->
+        <!--        <item name="cardBackgroundColor">@color/cardBackgroundColorNight</item>-->
         <item name="cardBackgroundOnCard">@color/cardBackgroundColor</item>
+        <item name="materialCardViewStyle">@style/MyCardViewStyle</item>
+
+
+    </style>
+
+    <style name="MyCardViewStyle" parent="Widget.MaterialComponents.CardView">
+        <item name="cardBackgroundColor">@color/light_card</item>
+        <!-- Add more customizations as needed -->
     </style>
 
     <style name="Theme.FeatherFinder.NoActionBar">
