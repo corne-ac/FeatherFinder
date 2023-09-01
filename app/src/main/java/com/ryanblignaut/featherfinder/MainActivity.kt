@@ -19,7 +19,6 @@ class MainActivity : AppCompatActivity() {
 
         val actionBar: ActionBar? = supportActionBar
         actionBar!!.hide()
-
         binding = ActivityMainMenuBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -34,7 +33,8 @@ class MainActivity : AppCompatActivity() {
                 R.id.navigation_home,
                 R.id.navigation_nearby_hotspots,
                 R.id.navigation_observation_list,
-                R.id.navigation_profile
+                R.id.navigation_profile,
+                R.id.navigation_add_observation
             )
         )
         setupActionBarWithNavController(navController, appBarConfiguration)

@@ -2,6 +2,7 @@ package com.ryanblignaut.featherfinder.firebase
 
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseException
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
@@ -27,6 +28,7 @@ object FirebaseDataManager {
         val userAchRef = usersRef.child(currentUser!!.uid).child("achievements")
         return fetchListDataFromFirebase(userAchRef)
     }
+
     suspend fun getAllObservations(): List<BirdObservation> {
         // Get the current user and their goals
         val currentUser = FirebaseAuthManager.getCurrentUser()
@@ -54,16 +56,41 @@ object FirebaseDataManager {
         return Result.success(goal)
     }
 
-    private suspend inline fun <reified T> fetchSingularDataFromFirebase(databaseReference: DatabaseReference): Result<T> {
+    suspend fun addUser(uid: String, username: String): Result<Boolean> {
+        return saveDataToFirebase(usersRef.child(uid).child("username"), username)
+    }
 
+    private suspend inline fun <reified T> saveDataToFirebase(
+        databaseReference: DatabaseReference,
+        data: T,
+    ): Result<Boolean> {
+        return suspendCancellableCoroutine { continuation ->
+            databaseReference.setValue(data).addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    continuation.resume(Result.success(true))
+                } else {
+                    val errorMessage = task.exception?.message ?: "Unknown error"
+                    continuation.resume(Result.failure(Exception(errorMessage)))
+                }
+            }
+        }
+    }
+
+
+    private suspend inline fun <reified T> fetchSingularDataFromFirebase(databaseReference: DatabaseReference): Result<T> {
         return suspendCancellableCoroutine { continuation ->
             databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    val data = snapshot.getValue(T::class.java)
-                    data.let {
-                        Result.success(data)
+                    try {
+                        val data = snapshot.getValue(T::class.java)
+                        data?.let {
+                            continuation.resume(Result.success(data))
+                        } ?: run {
+                            continuation.resume(Result.failure(Exception("Unable to get data for: ")))
+                        }
+                    } catch (e: DatabaseException) {
+                        continuation.resumeWith(Result.failure(e))
                     }
-                    continuation.resume(Result.failure(Exception("Unable to get data for: ")))
                 }
 
                 override fun onCancelled(error: DatabaseError) {
@@ -129,5 +156,6 @@ object FirebaseDataManager {
             })
         }
     }
+
 
 }

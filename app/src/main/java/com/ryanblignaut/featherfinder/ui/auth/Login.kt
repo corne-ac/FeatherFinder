@@ -9,9 +9,11 @@ import androidx.fragment.app.viewModels
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.progressindicator.CircularProgressIndicatorSpec
 import com.google.android.material.progressindicator.IndeterminateDrawable
+import com.google.firebase.auth.FirebaseUser
 import com.ryanblignaut.featherfinder.LoginActivity
 import com.ryanblignaut.featherfinder.MainActivity
 import com.ryanblignaut.featherfinder.databinding.FragmentLoginBinding
+import com.ryanblignaut.featherfinder.firebase.FirebaseAuthManager
 import com.ryanblignaut.featherfinder.ui.helper.PreBindingFragment
 import com.ryanblignaut.featherfinder.utils.DataValidator
 import com.ryanblignaut.featherfinder.viewmodel.auth.LoginViewModel
@@ -25,6 +27,11 @@ class Login : PreBindingFragment<FragmentLoginBinding>() {
     private val formViewModel: LoginViewModel by viewModels()
 
     override fun addContentToView(savedInstanceState: Bundle?) {
+        // Firebase Seems to keep sessions so we can check if the user is already logged in.
+        FirebaseAuthManager.getCurrentUser()?.let {
+            moveToMain()
+        }
+
         // Build up the form state.
         val formStates = listOf(
             emailState(),
@@ -66,19 +73,22 @@ class Login : PreBindingFragment<FragmentLoginBinding>() {
             binding.login.isEnabled = false
         }
 
-        formViewModel.live.observe(viewLifecycleOwner) {
-            if (it.isSuccess) {
-                // Open the main activity.
-                // This is the main activity that will be opened when the user logs in.
-                this.activity?.finish()
-                Intent(this.activity, MainActivity::class.java).setAction(Intent.ACTION_VIEW)
-                    .also { intent ->
-                        this.activity?.startActivity(intent)
-                    }
-            } else {
-                // Display the error message to the user.
-            }
+        formViewModel.live.observe(viewLifecycleOwner, ::onLoginResult)
+    }
+
+    private fun onLoginResult(result: Result<FirebaseUser>) {
+        if (result.isFailure) {
+            TODO("Error this out " + result.exceptionOrNull()!!.message)
         }
+        moveToMain()
+    }
+
+    private fun moveToMain() {
+        this.activity?.finish()
+        Intent(this.activity, MainActivity::class.java).setAction(Intent.ACTION_VIEW)
+            .also { intent ->
+                this.activity?.startActivity(intent)
+            }
     }
 
     private fun updateFormStates(formStates: List<FormState>): (value: MutableMap<String, String?>) -> Unit {

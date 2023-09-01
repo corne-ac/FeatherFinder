@@ -61,6 +61,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="96dp"
                 android:hint="@string/prompt_username"
+                app:errorEnabled="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/imgLogo"
@@ -82,8 +83,8 @@
                 android:id="@+id/email_input_layout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:hint="@string/prompt_email"
+                app:errorEnabled="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/username_input_layout"
@@ -108,10 +109,10 @@
                 android:id="@+id/password_input_layout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:hint="@string/prompt_password"
                 app:endIconDrawable="@drawable/hide_mint"
                 app:endIconMode="password_toggle"
+                app:errorEnabled="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/email_input_layout"
@@ -134,10 +135,10 @@
                 android:id="@+id/password_confirm_input_layout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:hint="@string/prompt_confirm_password"
                 app:endIconDrawable="@drawable/hide_mint"
                 app:endIconMode="password_toggle"
+                app:errorEnabled="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/password_input_layout"
@@ -155,75 +156,48 @@
                     android:selectAllOnFocus="true" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!--
-                        <TextView
-                            android:id="@+id/errorMessage"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/login_failed"
-                            android:textColor="@color/aurora_2"
-                            app:layout_constraintBottom_toTopOf="@+id/loading"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/password_input_layout"
-                            app:layout_constraintVertical_bias="0.166">
-
-                        </TextView>-->
-
-            <ProgressBar
-                android:id="@+id/loading"
-                android:layout_width="43dp"
-                android:layout_height="47dp"
-                android:layout_gravity="center"
-                android:visibility="invisible"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/password_input_layout"
-                app:layout_constraintVertical_bias="0.313" />
-
-            <Button
-                android:id="@+id/register"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="64dp"
-                android:enabled="false"
-                android:text="@string/action_register"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/password_input_layout"
-                app:layout_constraintVertical_bias="0.812" />
-
             <LinearLayout
-                android:id="@+id/linearLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:gravity="center"
-                app:layout_constraintTop_toBottomOf="@id/register"
-                tools:layout_editor_absoluteX="16dp">
+                android:layout_marginBottom="16dp"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/register"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/have_an_account"
-                    app:layout_constraintStart_toStartOf="parent" />
+                    android:enabled="false"
+                    android:text="@string/action_register" />
 
-                <TextView
-                    android:id="@+id/login"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:id="@+id/linearLayout"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:text="@string/login"
-                    android:textColor="@color/mint"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="parent" />
+                    android:gravity="center"
+                    app:layout_constraintTop_toBottomOf="@id/register"
+                    tools:layout_editor_absoluteX="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/have_an_account"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                    <TextView
+                        android:id="@+id/login"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:text="@string/login"
+                        android:textColor="@color/mint"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent" />
+                </LinearLayout>
+
             </LinearLayout>
-
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

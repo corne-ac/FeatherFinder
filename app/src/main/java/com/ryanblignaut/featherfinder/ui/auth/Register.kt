@@ -1,9 +1,12 @@
 package com.ryanblignaut.featherfinder.ui.auth
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import com.google.firebase.auth.FirebaseUser
+import com.ryanblignaut.featherfinder.MainActivity
 import com.ryanblignaut.featherfinder.databinding.FragmentRegisterBinding
 import com.ryanblignaut.featherfinder.ui.helper.PreBindingFragment
 import com.ryanblignaut.featherfinder.utils.DataValidator
@@ -30,6 +33,29 @@ class Register : PreBindingFragment<FragmentRegisterBinding>() {
         formStates.forEach(FormState::attachListener)
         // Observe the form state.
         formViewModel.formState.observe(viewLifecycleOwner, updateFormStates(formStates))
+
+        binding.register.setOnClickListener {
+            formViewModel.register(
+                binding.username.text.toString(),
+                binding.email.text.toString(),
+                binding.password.text.toString(),
+            )
+        }
+
+        formViewModel.live.observe(viewLifecycleOwner, ::onRegisterResult)
+
+    }
+
+    private fun onRegisterResult(result: Result<FirebaseUser>) {
+        if (result.isFailure) {
+            TODO("Error this out " + result.exceptionOrNull()!!.message)
+        }
+        this.activity?.finish()
+        Intent(this.activity, MainActivity::class.java).setAction(Intent.ACTION_VIEW)
+            .also { intent ->
+                this.activity?.startActivity(intent)
+            }
+
     }
 
     private fun updateFormStates(formStates: List<FormState>): (value: MutableMap<String, String?>) -> Unit {
@@ -77,7 +103,7 @@ class Register : PreBindingFragment<FragmentRegisterBinding>() {
             binding.passwordConfirmInputLayout,
             "confirmPassword",
             formViewModel,
-        ) { DataValidator.confirmPasswordValidation(it, binding.password.text.toString()) }
+        ) { DataValidator.confirmPasswordValidation(it, binding.password.text?.toString()) }
     }
 
     override fun inflateBindingSelf(
