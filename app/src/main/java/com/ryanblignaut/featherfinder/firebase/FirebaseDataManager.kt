@@ -6,10 +6,12 @@ import com.google.firebase.database.DatabaseException
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.getValue
 import com.ryanblignaut.featherfinder.model.Achievement
 import com.ryanblignaut.featherfinder.model.BirdObservation
 import com.ryanblignaut.featherfinder.model.Goal
 import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.tasks.await
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
@@ -23,20 +25,21 @@ object FirebaseDataManager {
         return fetchMapDataFromFirebase(achRef)
     }
 
-    suspend fun getUserAchievements(): List<Achievement> {
+    suspend fun getUserAchievements(): Result<List<Achievement>> {
         val currentUser = FirebaseAuthManager.getCurrentUser()
         val userAchRef = usersRef.child(currentUser!!.uid).child("achievements")
         return fetchListDataFromFirebase(userAchRef)
     }
 
-    suspend fun getAllObservations(): List<BirdObservation> {
+    suspend fun getAllObservations(): Result<List<BirdObservation>> {
         // Get the current user and their goals
         val currentUser = FirebaseAuthManager.getCurrentUser()
-        val userGoalsRef = usersRef.child(currentUser!!.uid).child("observations")
-        return fetchListDataFromFirebase(userGoalsRef)
+        val userObservationsRef = usersRef.child(currentUser!!.uid).child("observations")
+        return getItems(userObservationsRef)
     }
 
-    suspend fun getAllGoals(): List<Goal> {
+
+    suspend fun getAllGoals(): Result<List<Goal>> {
         // Get the current user and their goals
         val currentUser = FirebaseAuthManager.getCurrentUser()
         val userGoalsRef = usersRef.child(currentUser!!.uid).child("goals")
@@ -56,18 +59,25 @@ object FirebaseDataManager {
         return Result.success(goal)
     }
 
-    suspend fun addUser(uid: String, username: String): Result<Boolean> {
+    suspend fun saveObservation(observation: BirdObservation): Result<BirdObservation> {
+        val currentUser = FirebaseAuthManager.getCurrentUser()!!
+        return saveDataToFirebase(
+            usersRef.child(currentUser.uid).child("observations").child(observation.id), observation
+        )
+    }
+
+    suspend fun addUser(uid: String, username: String): Result<String> {
         return saveDataToFirebase(usersRef.child(uid).child("username"), username)
     }
 
     private suspend inline fun <reified T> saveDataToFirebase(
         databaseReference: DatabaseReference,
         data: T,
-    ): Result<Boolean> {
+    ): Result<T> {
         return suspendCancellableCoroutine { continuation ->
             databaseReference.setValue(data).addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    continuation.resume(Result.success(true))
+                    continuation.resume(Result.success(data))
                 } else {
                     val errorMessage = task.exception?.message ?: "Unknown error"
                     continuation.resume(Result.failure(Exception(errorMessage)))
@@ -76,6 +86,29 @@ object FirebaseDataManager {
         }
     }
 
+
+    private suspend inline fun <reified T> getItems(ref: DatabaseReference): Result<List<T>> {
+        return try {
+            // Refer to https://stackoverflow.com/questions/66072471/what-is-the-difference-between-get-and-addlistenerforsinglevalueevent
+            // Why do you recommend using get() when addListenerForSingleValueEvent is mentioned so much more?
+            // Basically the addlistenerforsinglevalueevent was the old way of doing things and get() is the new way of doing things.
+
+            val dataSnapshot = ref.get().await()
+            if (dataSnapshot.exists()) {
+                val items = mutableListOf<T>()
+                for (itemSnapshot in dataSnapshot.children) {
+                    val item = itemSnapshot.getValue<T>()
+                    item?.let { items.add(it) }
+                }
+                Result.success(items)
+            } else {
+                Result.failure(ItemNotFoundExceptionFirebase())
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+    class ItemNotFoundExceptionFirebase : Exception("No items found in the database")
 
     private suspend inline fun <reified T> fetchSingularDataFromFirebase(databaseReference: DatabaseReference): Result<T> {
         return suspendCancellableCoroutine { continuation ->
@@ -102,30 +135,37 @@ object FirebaseDataManager {
 
 
     // Define a generic function to fetch data from Firebase Realtime Database
-    private suspend inline fun <reified T> fetchListDataFromFirebase(databaseReference: DatabaseReference): List<T> {
+    private suspend inline fun <reified T> fetchListDataFromFirebase(databaseReference: DatabaseReference): Result<List<T>> {
         // Create a mutable list to store retrieved data
         val dataList = mutableListOf<T>()
 
         // Use suspendCancellableCoroutine to handle asynchronous operation in a suspend function
-        return suspendCancellableCoroutine { continuation ->
-            databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    // Loop through the snapshot of data
-                    for (dataSnapshot in snapshot.children) {
-                        // Deserialize each data snapshot into an object of type T
-                        val data = dataSnapshot.getValue(T::class.java)
-                        data?.let { dataList.add(it) }
-                    }
-                    // Acts like a complete.
-                    continuation.resume(dataList)
-                }
+        try {
+            val suspendCancellableCoroutine =
+                suspendCancellableCoroutine<Result<List<T>>> { continuation ->
+                    databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            // Loop through the snapshot of data
+                            for (dataSnapshot in snapshot.children) {
+                                // Deserialize each data snapshot into an object of type T
+                                val data = dataSnapshot.getValue<T>()
+                                data?.let { dataList.add(it) }
+                            }
+                            // Acts like a complete.
+                            continuation.resume(Result.success(dataList))
 
-                override fun onCancelled(error: DatabaseError) {
-                    // If an error occurs, resume the coroutine with an exception
-                    continuation.resumeWithException(error.toException())
+                        }
+
+                        override fun onCancelled(error: DatabaseError) {
+                            // If an error occurs, resume the coroutine with an exception
+                            continuation.resumeWithException(error.toException())
 //                    continuation.resumeWith(Result.failure(error.toException()))
+                        }
+                    })
                 }
-            })
+            return suspendCancellableCoroutine
+        } catch (e: Exception) {
+            return Result.failure(e)
         }
     }
 

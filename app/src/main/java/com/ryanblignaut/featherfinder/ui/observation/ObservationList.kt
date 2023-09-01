@@ -7,6 +7,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.ryanblignaut.featherfinder.R
 import com.ryanblignaut.featherfinder.databinding.FragmentObservationItemListBinding
+import com.ryanblignaut.featherfinder.firebase.FirebaseDataManager
 import com.ryanblignaut.featherfinder.model.BirdObservation
 import com.ryanblignaut.featherfinder.ui.helper.PreBindingFragment
 import com.ryanblignaut.featherfinder.viewmodel.observation.AllObservationsViewModel
@@ -27,7 +28,12 @@ class ObservationList : PreBindingFragment<FragmentObservationItemListBinding>()
         model.getObservations()
         binding.addObservationAction.setOnClickListener { findNavController().navigate(R.id.navigation_add_observation) }
 
-
+        with(binding.observationsRecyclerView) {
+            layoutManager = when {
+                columnCount <= 1 -> androidx.recyclerview.widget.LinearLayoutManager(context)
+                else -> androidx.recyclerview.widget.GridLayoutManager(context, columnCount)
+            }
+        }
         /*   // When the recycler view is ready, set the layout manager.
            with(recyclerView) {
                layoutManager = when {
@@ -49,18 +55,25 @@ class ObservationList : PreBindingFragment<FragmentObservationItemListBinding>()
 
     private fun populateObservationList(result: Result<List<BirdObservation>>) {
         binding.loader.visibility = ViewGroup.GONE
+
         if (result.isFailure) {
+            val throwable = result.exceptionOrNull()!!
+            if (throwable is FirebaseDataManager.ItemNotFoundExceptionFirebase) {
+                binding.noObservationsText.visibility = ViewGroup.VISIBLE
+                return
+            }
+            throwable.printStackTrace()
             TODO("Show error message")
+            return
         }
-        val observations = result.getOrNull()!!
-        if (observations.isEmpty()) binding.noObservationsText.visibility = ViewGroup.VISIBLE
+        val values = result.getOrNull()!!
         binding.observationsRecyclerView.adapter =
-            ObservationListViewAdapter(observations, ::onObservationClick)
+            ObservationListViewAdapter(values, ::onObservationClick)
 
     }
 
     private fun onObservationClick(observation: BirdObservation) {
-        println("Clicked on goal")
+        println("Clicked on observation")
         println(observation.id)
         TODO("On click of observation, open observation details")
     }

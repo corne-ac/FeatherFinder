@@ -6,6 +6,6 @@ import com.ryanblignaut.featherfinder.viewmodel.helper.BaseViewModel
 
 class AllGoalsViewModel : BaseViewModel<List<Goal>>() {
     fun getGoals() = fetchInBackground {
-        Result.success(FirebaseDataManager.getAllGoals())
+        FirebaseDataManager.getAllGoals()
     }
 }

@@ -46,6 +46,11 @@
     <string name="invalid_confirm_password">Passwords do not match</string>
     <string name="goal_name">Goal name</string>
     <string name="invalid_empty_goal_name">Goal name can\'t be empty</string>
+    <string name="invalid_empty_species_name">Species name can\'t be empty</string>
+    <string name="invalid_empty_date">Date name can\'t be empty</string>
+    <string name="invalid_empty_time">Time name can\'t be empty</string>
+    <string name="invalid_empty_position">Position name can\'t be empty</string>
+
 
     <string name="goal_info">Goal info</string>
     <string name="all_goals">All goals</string>

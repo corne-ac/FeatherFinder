@@ -51,7 +51,7 @@ class Login : PreBindingFragment<FragmentLoginBinding>() {
             (requireActivity() as LoginActivity).loadFragment(Register())
         }
 
-        binding.login.setOnClickListener {
+        binding.loginAction.setOnClickListener {
             // TODO: put into a component.
             val spec = CircularProgressIndicatorSpec(
                 requireContext(),  /*attrs=*/
@@ -66,11 +66,11 @@ class Login : PreBindingFragment<FragmentLoginBinding>() {
                 requireContext().getColor(android.R.color.holo_orange_light),
                 requireContext().getColor(android.R.color.holo_red_light)
             )
-            binding.login.icon = progressIndicatorDrawable
-            binding.login.iconGravity = MaterialButton.ICON_GRAVITY_TEXT_START
+            binding.loginAction.icon = progressIndicatorDrawable
+            binding.loginAction.iconGravity = MaterialButton.ICON_GRAVITY_TEXT_START
             formViewModel.login(binding.email.text.toString(), binding.password.text.toString())
-            binding.login.text = ""
-            binding.login.isEnabled = false
+            binding.loginAction.text = ""
+            binding.loginAction.isEnabled = false
         }
 
         formViewModel.live.observe(viewLifecycleOwner, ::onLoginResult)
@@ -96,7 +96,7 @@ class Login : PreBindingFragment<FragmentLoginBinding>() {
             // Validate the form states.
             formStates.forEach(FormState::validate)
             // If all form states are valid, enable the login button.
-            binding.login.isEnabled = formStates.all(FormState::isValid)
+            binding.loginAction.isEnabled = formStates.all(FormState::isValid)
         }
     }
 

@@ -36,7 +36,7 @@ object ObservationPlaceholderData {
 
     private fun createPlaceholderItem(position: Int): BirdObservation {
         return BirdObservation(
-            position.toString(), "Item $position", "Loc 1 ", "", makeDetails(position)
+            position.toString(), "Item $position", "", "Loc 1 ", makeDetails(position)
         )
     }
 

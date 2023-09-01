@@ -70,4 +70,36 @@ object DataValidator {
         }
     }
 
+
+    fun speciesNameValidation(it: String?): Int? {
+        return when {
+            it == null -> null
+            isEmpty(it) -> R.string.invalid_empty_species_name
+            else -> null
+        }
+    }
+
+    fun dateValidation(it: String?): Int? {
+        return when {
+            it == null -> null
+            isEmpty(it) -> R.string.invalid_empty_date
+            else -> null
+        }
+    }
+
+    fun timeValidation(it: String?): Int? {
+        return when {
+            it == null -> null
+            isEmpty(it) -> R.string.invalid_empty_time
+            else -> null
+        }
+    }
+
+    fun positionValidation(it: String?): Int? {
+        return when {
+            it == null -> null
+            isEmpty(it) -> R.string.invalid_empty_position
+            else -> null
+        }
+    }
 }

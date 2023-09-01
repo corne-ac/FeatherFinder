@@ -6,6 +6,6 @@ import com.ryanblignaut.featherfinder.viewmodel.helper.BaseViewModel
 
 class AllObservationsViewModel : BaseViewModel<List<BirdObservation>>() {
     fun getObservations() = fetchInBackground {
-        Result.success(FirebaseDataManager.getAllObservations())
+        FirebaseDataManager.getAllObservations()
     }
 }

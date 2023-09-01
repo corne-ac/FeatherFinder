@@ -1,10 +1,11 @@
 package com.ryanblignaut.featherfinder.viewmodel.helper
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 
 open class FormViewModel<T> : BaseViewModel<T>(), IFormState {
     private var _formState = MutableLiveData<MutableMap<String, String?>>()
-    val formState: MutableLiveData<MutableMap<String, String?>> = _formState
+    val formState: LiveData<MutableMap<String, String?>> = _formState
 
     init {
         _formState.value = mutableMapOf()
