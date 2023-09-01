@@ -1,9 +1,11 @@
 package com.ryanblignaut.featherfinder.model
 
+import java.util.UUID
+
 data class Goal(
-    val id: String,
-    val birdSpecies: String,
-    val location: String,
-    val date: String,
-    val notes: String
+    val id: String = UUID.randomUUID().toString(),
+    val name: String,
+    val startTime: String,
+    val endTime: String,
+    val description: String,
 )

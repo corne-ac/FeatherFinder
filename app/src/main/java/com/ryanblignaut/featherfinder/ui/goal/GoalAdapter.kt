@@ -27,7 +27,7 @@ class GoalAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = values[position]
         holder.idView.text = item.id
-        holder.contentView.text = item.birdSpecies
+        holder.contentView.text = item.description
         holder.contentView.setOnClickListener { onClick(item) }
     }
 

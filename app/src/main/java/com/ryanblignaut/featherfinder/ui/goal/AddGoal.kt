@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.ryanblignaut.featherfinder.databinding.FragmentAddGoalBinding
+import com.ryanblignaut.featherfinder.model.Goal
 import com.ryanblignaut.featherfinder.ui.helper.PreBindingFragment
 import com.ryanblignaut.featherfinder.utils.DataValidator
 import com.ryanblignaut.featherfinder.viewmodel.goal.GoalViewModel
@@ -19,13 +20,23 @@ class AddGoal : PreBindingFragment<FragmentAddGoalBinding>() {
     override fun addContentToView(savedInstanceState: Bundle?) {
         val formStates = listOf(
             goalNameState(),
-            goalInfoState(),
         )
         // Attach the listeners to the form states.
         formStates.forEach(FormState::attachListener)
         // Observe the form state.
         formViewModel.formState.observe(viewLifecycleOwner, updateFormStates(formStates))
+        binding.saveGoal.setOnClickListener { saveGoal() }
+    }
 
+    private fun saveGoal() {
+        formViewModel.saveGoal(
+            Goal(
+                name = binding.goalName.text.toString(),
+                startTime = binding.start.text.toString(),
+                endTime = binding.end.text.toString(),
+                description = binding.goalInfo.text.toString(),
+            )
+        )
     }
 
     private fun updateFormStates(formStates: List<FormState>): (value: MutableMap<String, String?>) -> Unit {
@@ -47,15 +58,6 @@ class AddGoal : PreBindingFragment<FragmentAddGoalBinding>() {
         )
     }
 
-    private fun goalInfoState(): FormState {
-        return FormState(
-            binding.goalName,
-            binding.goalNameInputLayout,
-            "goalInfo",
-            formViewModel,
-            DataValidator::goalNameValidation,
-        )
-    }
 
     override fun inflateBindingSelf(
         inflater: LayoutInflater, container: ViewGroup?, attachToRoot: Boolean,
