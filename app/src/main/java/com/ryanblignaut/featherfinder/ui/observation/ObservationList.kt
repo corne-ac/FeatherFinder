@@ -18,7 +18,7 @@ import com.ryanblignaut.featherfinder.viewmodel.observation.AllObservationsViewM
  * The list items will be able to be clicked in order to show more details of the sighting.
  */
 class ObservationList : PreBindingFragment<FragmentObservationItemListBinding>() {
-    private var columnCount = 1
+    //    private var columnCount = 1
     private val model: AllObservationsViewModel by viewModels()
 
 
@@ -27,13 +27,12 @@ class ObservationList : PreBindingFragment<FragmentObservationItemListBinding>()
         model.live.observe(viewLifecycleOwner, ::populateObservationList)
         model.getObservations()
         binding.addObservationAction.setOnClickListener { findNavController().navigate(R.id.navigation_add_observation) }
-
-        with(binding.observationsRecyclerView) {
-            layoutManager = when {
-                columnCount <= 1 -> androidx.recyclerview.widget.LinearLayoutManager(context)
-                else -> androidx.recyclerview.widget.GridLayoutManager(context, columnCount)
-            }
-        }
+        /*with(binding.observationsRecyclerView) {
+                    layoutManager = when {
+                        columnCount <= 1 -> androidx.recyclerview.widget.LinearLayoutManager(context)
+                        else -> androidx.recyclerview.widget.GridLayoutManager(context, columnCount)
+                    }
+                }*/
     }
 
     private fun populateObservationList(result: Result<List<BirdObservation>>) {

@@ -1,5 +1,6 @@
 package com.ryanblignaut.featherfinder.api
 
+import android.net.Uri
 import com.ryanblignaut.featherfinder.model.api.EBirdHotspotData
 import com.ryanblignaut.featherfinder.model.api.EBirdLocation
 import com.ryanblignaut.featherfinder.utils.ApiRequestUtility
@@ -11,12 +12,14 @@ object EBirdApi {
     private const val version = "/v2"
     private const val hotspots = "/ref/hotspot"
 
+    private val builder = Uri.parse("$baseUrl$version$hotspots")
+
     // Key https://ebird.org/api/request
     private const val key = "k1j2h3g4f5d6s7a8"
 
 
     suspend fun fetchNearbyHotspots(
-        lat: Double, lng: Double, distance: Int
+        lat: Double, lng: Double, distance: Int,
     ): Result<Array<EBirdLocation>> {
 
         // TODO: Validation
@@ -27,23 +30,36 @@ object EBirdApi {
         //lat	-90 - 90		    Required. Latitude to 2 decimal places.
         //lng	-180 - 180		    Required. Longitude to 2 decimal places.
 
+        // This is the same as the above
+        /*val uri = builder.buildUpon().appendPath("geo").appendQueryParameter("lat", lat.toString())
+            .appendQueryParameter("lng", lng.toString())
+            .appendQueryParameter("dist", distance.toString()).appendQueryParameter("fmt", "json")
+            .build()*/
+
         val url = "$baseUrl$version$hotspots/geo?lat=$lat&lng=$lng&dist=$distance&fmt=json"
         return ApiRequestUtility.makeRequestJson(url)
     }
 
     suspend fun fetchHotspotInfo(
-        hotspotId: String
+        hotspotId: String,
     ): Result<EBirdHotspotData> {
-        val url = "$baseUrl$version$hotspots/info/$hotspotId?&fmt=json"
+
+     /*   val uri =
+            builder.buildUpon().appendPath("info").appendPath(hotspotId)
+                .appendQueryParameter("fmt", "json")
+                .build()*/
+
         val headers = mapOf("X-eBirdApiToken" to key)
+        val url = "$baseUrl$version$hotspots/info/$hotspotId?&fmt=json"
         return ApiRequestUtility.makeRequestJson(url, headers = headers)
     }
 
     suspend fun fetchHotspotsInRegion(
-        code: String
+        code: String,
     ): Result<Array<EBirdLocation>> {
         // Code: The country, subnational1 or subnational2 code.
 
+//        val uri = builder.buildUpon().appendPath(code).appendQueryParameter("fmt", "json").build()
         val url = "$baseUrl$version$hotspots/$code?&fmt=json"
         return ApiRequestUtility.makeRequestJson(url)
     }

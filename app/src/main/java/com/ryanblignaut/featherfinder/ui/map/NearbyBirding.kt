@@ -6,8 +6,6 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -30,11 +28,16 @@ class NearbyBirding : PreBindingFragment<FragmentMapBinding>(), OnMapReadyCallba
     private lateinit var birdingHotspotViewModel: BirdingHotspotViewModel
 
     override fun addContentToView(savedInstanceState: Bundle?) {
+
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
         val googleMap =
             childFragmentManager.findFragmentById(com.ryanblignaut.featherfinder.R.id.map) as SupportMapFragment?
 //        val googleMap = binding.mapView
         googleMap?.onCreate(savedInstanceState)
-        googleMap?.getMapAsync(this);
+        googleMap?.getMapAsync(this)
     }
 
     override fun inflateBindingSelf(
@@ -43,21 +46,21 @@ class NearbyBirding : PreBindingFragment<FragmentMapBinding>(), OnMapReadyCallba
         return inflateBinding(inflater, container)
     }
 
-/*
-    private val registerForActivityResult =
-        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
-            var permissionGranted = true
-            permissions.entries.forEach {
-                if (it.key in PERMISSIONS_REQUIRED && !it.value) permissionGranted = false
-            }
+    /*
+        private val registerForActivityResult =
+            registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
+                var permissionGranted = true
+                permissions.entries.forEach {
+                    if (it.key in PERMISSIONS_REQUIRED && !it.value) permissionGranted = false
+                }
 
-            if (!permissionGranted) {
-                Toast.makeText(context, "Permission request denied", Toast.LENGTH_LONG).show()
-            } else {
-                map.isMyLocationEnabled = true
+                if (!permissionGranted) {
+                    Toast.makeText(context, "Permission request denied", Toast.LENGTH_LONG).show()
+                } else {
+                    map.isMyLocationEnabled = true
+                }
             }
-        }
-*/
+    */
 
     @SuppressLint("MissingPermission")
     override fun onMapReady(map: GoogleMap) {

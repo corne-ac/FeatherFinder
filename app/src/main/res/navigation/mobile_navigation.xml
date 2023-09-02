@@ -62,6 +62,11 @@
         android:label="@string/observation_detail"
         tools:layout="@layout/fragment_observation_detail" />
 
+    <fragment
+        android:id="@+id/navigation_bird_info"
+        android:name="com.ryanblignaut.featherfinder.ui.education.BirdInfoFragment"
+        android:label="@string/bird_info"
+        tools:layout="@layout/fragment_bird_info" />
 
     <fragment
         android:id="@+id/navigation_profile"
@@ -69,16 +74,22 @@
         android:label="@string/profile"
         tools:layout="@layout/fragment_profile" />
 
-  <!--  <fragment
-        android:id="@+id/navigation_profile"
-        android:name="com.ryanblignaut.featherfinder.ui.ProfileFragment"
-        android:label="@string/home"
-        tools:layout="@layout/fragment_profile" />
-
     <fragment
-        android:id="@+id/navigation_bird_info"
-        android:name="com.ryanblignaut.featherfinder.ui.BirdInfoFragment"
-        android:label="@string/home"
-        tools:layout="@layout/fragment_bird_info" />-->
+        android:id="@+id/navigation_achievement"
+        android:name="com.ryanblignaut.featherfinder.ui.achievement.ViewAchievements"
+        android:label="@string/achievements"
+        tools:layout="@layout/fragment_all_achievements" />
+
+    <!--  <fragment
+          android:id="@+id/navigation_profile"
+          android:name="com.ryanblignaut.featherfinder.ui.ProfileFragment"
+          android:label="@string/home"
+          tools:layout="@layout/fragment_profile" />
+
+      <fragment
+          android:id="@+id/navigation_bird_info"
+          android:name="com.ryanblignaut.featherfinder.ui.education.BirdInfoFragment"
+          android:label="@string/home"
+          tools:layout="@layout/fragment_bird_info" />-->
 
 </navigation>

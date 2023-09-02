@@ -14,7 +14,7 @@ class ViewAchievements : PreBindingFragment<FragmentRegisterBinding>() {
 
     override fun addContentToView(savedInstanceState: Bundle?) {
         model.live.observe(viewLifecycleOwner, ::populateAchievementsList)
-        model.getAchievements()
+//        model.getAchievements()
     }
 
     private fun populateAchievementsList(result: Result<List<Achievement>>) {

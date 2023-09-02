@@ -27,8 +27,8 @@ class OpenRoutesApi {
         "Accept" to "application/json, application/geo+json, application/gpx+xml, img/png; charset=utf-8"
     )
 
-    fun fetchRoute(
-        startLat: Double, startLon: Double, endLon: Double, endLat: Double, distance: Int
+    suspend fun fetchRoute(
+        startLat: Double, startLon: Double, endLon: Double, endLat: Double, distance: Int,
     ): Result<String> {
         val start = "$startLon,$startLat"
         val end = "$endLon,$endLat"
@@ -39,16 +39,8 @@ class OpenRoutesApi {
             val end = "28.16059,-25.890457"
         */
 
-        println(start)
-        println(end)
         val url = "$baseUrl${vType.type}?api_key=$tokenKey&start=$end&end=$start"
-
         return ApiRequestUtility.makeRequestString(url, headers = geoJsonHeaders)
-//        return ApiRequestUtility.makeRequestJson<String>(
-//            url,
-//            headers = geoJsonHeaders,
-//        )
-
     }
 
 

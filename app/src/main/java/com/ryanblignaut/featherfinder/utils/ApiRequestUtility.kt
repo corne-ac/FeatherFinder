@@ -1,8 +1,11 @@
 package com.ryanblignaut.featherfinder.utils
 
+import android.net.Uri
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonSyntaxException
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.net.HttpURLConnection
 import java.net.URL
 
@@ -24,11 +27,11 @@ object ApiRequestUtility {
         }
     }
 
-    inline fun <reified T> makeRequestJson(
+    suspend inline fun <reified T> makeRequestJson(
         apiUrl: String,
         method: RequestMethod = RequestMethod.GET,
         body: String? = null,
-        headers: Map<String, String>? = null
+        headers: Map<String, String>? = null,
     ): Result<T> {
         val stringResult = makeRequestString(apiUrl, method, body, headers)
         // If the stringResult is a failure, return the failure else deserialize the JSON string into an object of type Result<T>.
@@ -38,15 +41,34 @@ object ApiRequestUtility {
 //        return stringResult.getOrElse { return Result.failure(it) }.run { fromJson<T>(this) }
     }
 
-    fun makeRequestString(
+    suspend fun makeRequestString(
         apiUrl: String,
         method: RequestMethod = RequestMethod.GET,
         body: String? = null,
-        headers: Map<String, String>? = null
+        headers: Map<String, String>? = null,
+    ): Result<String> {
+        return withContext(Dispatchers.IO) {
+            makeRequestStringInternal(
+
+                apiUrl,
+                method,
+                body,
+                headers
+            )
+        }
+    }
+
+    // This function makes a request to the given API url and returns the response as a string.
+    // This function is private because it is only used internally from a different thread.
+    private fun makeRequestStringInternal(
+        apiUrl: String,
+        method: RequestMethod = RequestMethod.GET,
+        body: String? = null,
+        headers: Map<String, String>? = null,
     ): Result<String> {
         var connection: HttpURLConnection? = null
         try {
-            val url = URL(apiUrl)
+            val url = URL(apiUrl.toString())
             connection = url.openConnection() as HttpURLConnection
             connection.requestMethod = method.name
             connection.connectTimeout = 5000
@@ -78,7 +100,7 @@ object ApiRequestUtility {
             return if (connection.responseCode == HttpURLConnection.HTTP_OK) {
                 Result.success(content)
             } else {
-                Result.failure(Exception("Error: server responded with ${connection.responseCode} - $content"))
+                Result.failure(Exception("Error: $apiUrl\n server responded with ${connection.responseCode} - $content"))
             }
         } catch (ex: Exception) {
             return Result.failure(ex)

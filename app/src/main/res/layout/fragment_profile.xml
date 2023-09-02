@@ -40,7 +40,7 @@
                 app:cardBackgroundColor="?attr/cardBackgroundColor">
 
                 <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/name_input_layout"
+                    android:id="@+id/settings_action"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:cardBackgroundColor="?attr/cardBackgroundOnCard"
@@ -88,12 +88,12 @@
 
 
                 <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/goals_action"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="16dp"
                     app:cardBackgroundColor="?attr/cardBackgroundOnCard"
                     app:cardCornerRadius="12dp">
-                    <!--                    android:backgroundTint="@color/material_dynamic_neutral90"-->
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -138,6 +138,7 @@
                 </com.google.android.material.card.MaterialCardView>
 
                 <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/achievement_action"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:cardBackgroundColor="?attr/cardBackgroundOnCard"
