@@ -1,6 +1,7 @@
 package com.ryanblignaut.featherfinder
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
@@ -37,6 +38,17 @@ class MainActivity : AppCompatActivity() {
                 R.id.navigation_add_observation
             )
         )
+
+        //Hide bottom nav on certain screens
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            val id = destination.id
+            if(id == R.id.navigation_add_goal || id == R.id.navigation_add_observation) {
+                binding.navView.visibility = View.GONE
+            } else {
+                binding.navView.visibility = View.VISIBLE
+            }
+        }
+
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
     }

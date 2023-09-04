@@ -48,7 +48,7 @@ class AddGoal : PreBindingFragment<FragmentAddGoalBinding>() {
         return {
             // Validate the form states.
             formStates.forEach(FormState::validate)
-            // If all form states are valid, enable the login button.
+            // If all form states are valid, enable the Save Goal button.
             binding.saveGoal.isEnabled = formStates.all(FormState::isValid)
         }
     }
