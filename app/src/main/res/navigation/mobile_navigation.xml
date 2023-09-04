@@ -11,13 +11,13 @@
         android:id="@+id/navigation_all_goals"
         android:name="com.ryanblignaut.featherfinder.ui.goal.AllGoals"
         android:label="@string/all_goals"
-        tools:layout="@layout/fragment_all_goals" />
+        tools:layout="@layout/fragment_goal_list" />
 
     <fragment
         android:id="@+id/navigation_add_goal"
         android:name="com.ryanblignaut.featherfinder.ui.goal.AddGoal"
         android:label="@string/add_goal"
-        tools:layout="@layout/fragment_add_goal" />
+        tools:layout="@layout/fragment_goal_add" />
 
     <!--Home-->
     <fragment
@@ -56,7 +56,7 @@
         android:id="@+id/navigation_observation_list"
         android:name="com.ryanblignaut.featherfinder.ui.observation.ObservationList"
         android:label="@string/observation_list"
-        tools:layout="@layout/fragment_observation_item_list" />
+        tools:layout="@layout/fragment_observation_list" />
     <fragment
         android:id="@+id/navigation_observation_detail"
         android:name="com.ryanblignaut.featherfinder.ui.observation.ObservationDetail"
@@ -67,7 +67,7 @@
         android:id="@+id/navigation_bird_info"
         android:name="com.ryanblignaut.featherfinder.ui.education.BirdInfoFragment"
         android:label="@string/bird_info"
-        tools:layout="@layout/fragment_bird_info" />
+        tools:layout="@layout/fragment_bird_info_list" />
 
     <fragment
         android:id="@+id/navigation_profile"

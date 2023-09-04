@@ -5,13 +5,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import com.ryanblignaut.featherfinder.databinding.FragmentBirdInfoBinding
+import com.ryanblignaut.featherfinder.databinding.FragmentBirdInfoListBinding
 import com.ryanblignaut.featherfinder.model.api.XenoRecording
 import com.ryanblignaut.featherfinder.model.api.XenoResponse
 import com.ryanblignaut.featherfinder.ui.helper.PreBindingFragment
 import com.ryanblignaut.featherfinder.viewmodel.BirdInfoViewModel
 
-class BirdInfoFragment : PreBindingFragment<FragmentBirdInfoBinding>() {
+class BirdInfoFragment : PreBindingFragment<FragmentBirdInfoListBinding>() {
 
     private val viewModel: BirdInfoViewModel by viewModels()
     private var mediaPair: Pair<MediaPlayer, InfoAdapter.ViewHolder>? = null
@@ -89,7 +89,7 @@ class BirdInfoFragment : PreBindingFragment<FragmentBirdInfoBinding>() {
 
     override fun inflateBindingSelf(
         inflater: LayoutInflater, container: ViewGroup?, attachToRoot: Boolean,
-    ): FragmentBirdInfoBinding {
+    ): FragmentBirdInfoListBinding {
         return inflateBinding(inflater, container)
     }
 

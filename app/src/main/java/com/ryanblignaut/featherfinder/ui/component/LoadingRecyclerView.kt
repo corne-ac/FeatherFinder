@@ -41,9 +41,11 @@ class LoadingRecyclerView(
         if (!loadingText.isNullOrEmpty()) {
             loadingTextView.text = loadingText
         }
-        val listItemLayout = attributes.getString(R.styleable.LoadingRecyclerView_listItemLayout)
-        if (listItemLayout != null) {
-            recyclerView.tag = "tools:listitem=$listItemLayout";
+        val listItemLayout =
+            attributes.getResourceId(R.styleable.LoadingRecyclerView_listItemLayout, -1)
+        if (listItemLayout != -1) {
+//            recyclerView.tag = "tools:listitem=$listItemLayout";
+            recyclerView.tag = R.layout.fragment_bird_info_item;
         }
 
         val contextAttr = attributes.getString(R.styleable.LoadingRecyclerView_context)
