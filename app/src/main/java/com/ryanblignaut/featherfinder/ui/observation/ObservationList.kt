@@ -41,7 +41,7 @@ class ObservationList : PreBindingFragment<FragmentObservationItemListBinding>()
         if (result.isFailure) {
             val throwable = result.exceptionOrNull()!!
             if (throwable is FirebaseDataManager.ItemNotFoundExceptionFirebase) {
-                binding.noObservationsText.visibility = ViewGroup.VISIBLE
+                binding.noItemsFound.visibility = ViewGroup.VISIBLE
                 return
             }
             throwable.printStackTrace()

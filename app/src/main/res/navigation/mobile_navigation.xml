@@ -31,7 +31,8 @@
         android:id="@+id/navigation_hotspot_info"
         android:name="com.ryanblignaut.featherfinder.ui.map.HotspotInfo"
         android:label="@string/hotspot_info"
-        tools:layout="@layout/fragment_map" />
+        tools:layout="@layout/fragment_map">
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_route"

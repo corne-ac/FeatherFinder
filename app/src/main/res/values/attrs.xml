@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="LoadingRecyclerView">
+        <attr name="emptyText" format="string" />
+        <attr name="loadingText" format="string" />
+        <attr name="listItemLayout" format="reference" />
+        <attr name="context" format="string" />
+    </declare-styleable>
+    <declare-styleable name="ButtonCardView">
+        <attr name="label" format="string" />
+        <attr name="src_img" format="reference" />
+    </declare-styleable>
+
+</resources>

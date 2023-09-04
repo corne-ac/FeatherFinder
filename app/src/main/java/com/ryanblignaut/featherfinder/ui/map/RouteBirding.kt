@@ -2,6 +2,7 @@ package com.ryanblignaut.featherfinder.ui.map
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.content.res.Resources
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -14,6 +15,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.maps.android.data.geojson.GeoJsonLayer
@@ -22,11 +24,18 @@ import com.ryanblignaut.featherfinder.ui.helper.PreBindingFragment
 import com.ryanblignaut.featherfinder.viewmodel.RouteViewModel
 
 
-class RouteBirding(private val positionIn: LatLng) : PreBindingFragment<FragmentMapBinding>(),
+class RouteBirding : PreBindingFragment<FragmentMapBinding>(),
+
     OnMapReadyCallback {
     private lateinit var routeViewModel: RouteViewModel
-
+    private var positionIn = LatLng(0.0, 0.0)
     override fun addContentToView(savedInstanceState: Bundle?) {
+
+
+        positionIn = LatLng(
+            arguments?.getDouble("lat") ?: 0.0,
+            arguments?.getDouble("lng") ?: 0.0
+        )
         routeViewModel = ViewModelProvider(this)[RouteViewModel::class.java]
 
         val googleMap =
@@ -59,21 +68,21 @@ class RouteBirding(private val positionIn: LatLng) : PreBindingFragment<Fragment
         }
         map.isMyLocationEnabled = true
 
-        /*  try {
-              // Customise the styling of the base map using a JSON object defined
-              // in a raw resource file.
-              val success: Boolean = map.setMapStyle(
-                  MapStyleOptions.loadRawResourceStyle(
-                      requireContext(), com.ryanblignaut.featherfinder.R.raw.style_json
-                  )
-              )
-              if (!success) {
-                  Log.e("e", "Style parsing failed.")
-              }
-          } catch (e: Resources.NotFoundException) {
-              Log.e("a", "Can't find style. Error: ", e)
-          }*/
-        map.mapType = GoogleMap.MAP_TYPE_TERRAIN
+        try {
+            // Customise the styling of the base map using a JSON object defined
+            // in a raw resource file.
+            val success: Boolean = map.setMapStyle(
+                MapStyleOptions.loadRawResourceStyle(
+                    requireContext(), com.ryanblignaut.featherfinder.R.raw.style_json
+                )
+            )
+            if (!success) {
+                Log.e("e", "Style parsing failed.")
+            }
+        } catch (e: Resources.NotFoundException) {
+            Log.e("a", "Can't find style. Error: ", e)
+        }
+//        map.mapType = GoogleMap.MAP_TYPE_TERRAIN
 
         val fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
         fusedLocationClient.lastLocation.addOnSuccessListener { location ->

@@ -7,7 +7,8 @@
     android:layout_height="match_parent"
     android:layout_margin="16dp"
     android:padding="16dp"
-    app:cardCornerRadius="8dp">
+    app:cardCornerRadius="8dp"
+    app:cardElevation="8dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -36,158 +37,186 @@
                 android:layout_height="0dp"
                 android:gravity="center"
                 android:orientation="vertical"
-                android:padding="16dp"
                 app:cardBackgroundColor="?attr/cardBackgroundColor">
 
-                <com.google.android.material.card.MaterialCardView
+                <com.ryanblignaut.featherfinder.ui.component.ButtonCardView
                     android:id="@+id/settings_action"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
                     app:cardBackgroundColor="?attr/cardBackgroundOnCard"
-                    app:cardCornerRadius="12dp">
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="8dp"
+                    app:label="@string/settings"
+                    app:src_img="@drawable/settings_mint" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:orientation="horizontal"
-                        android:padding="6dp">
-
-                        <androidx.cardview.widget.CardView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            app:cardCornerRadius="32dp">
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:contentDescription="bird"
-                                android:padding="5dp"
-                                android:src="@drawable/settings_mint" />
-                        </androidx.cardview.widget.CardView>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:padding="5dp">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:hint="Settings"
-                                android:textSize="32dp"
-                                app:startIconDrawable="@drawable/settings_mint"
-                                app:startIconTint="@color/mint" />
-                        </LinearLayout>
-                    </LinearLayout>
-
-
-                </com.google.android.material.card.MaterialCardView>
-
-
-                <com.google.android.material.card.MaterialCardView
+                <com.ryanblignaut.featherfinder.ui.component.ButtonCardView
                     android:id="@+id/goals_action"
+
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginVertical="16dp"
+                    android:layout_margin="16dp"
                     app:cardBackgroundColor="?attr/cardBackgroundOnCard"
-                    app:cardCornerRadius="12dp">
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="8dp"
+                    app:label="@string/goals"
+                    app:src_img="@drawable/goal_mint" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:orientation="horizontal"
-                        android:padding="6dp">
+                <com.ryanblignaut.featherfinder.ui.component.ButtonCardView
+                    android:id="@+id/achievements_action"
 
-                        <androidx.cardview.widget.CardView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            app:cardCornerRadius="32dp"
-
-                            >
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:contentDescription="bird"
-                                android:padding="5dp"
-                                android:src="@drawable/goal_mint" />
-                        </androidx.cardview.widget.CardView>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:padding="5dp">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:hint="Goals"
-                                android:textSize="32dp"
-                                app:startIconDrawable="@drawable/settings_mint"
-                                app:startIconTint="@color/mint" />
-                        </LinearLayout>
-                    </LinearLayout>
-
-
-                </com.google.android.material.card.MaterialCardView>
-
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    app:cardBackgroundColor="?attr/cardBackgroundOnCard"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="8dp"
+                    app:label="@string/achievements"
+                    app:src_img="@drawable/achievement_mint" />
+                <!--
                 <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/achievement_action"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:cardBackgroundColor="?attr/cardBackgroundOnCard"
-                    app:cardCornerRadius="12dp">
+                                    android:id="@+id/settings_action"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="16dp"
+                                    app:cardBackgroundColor="?attr/cardBackgroundOnCard"
+                                    app:cardCornerRadius="12dp"
+                                    app:cardElevation="8dp">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:orientation="horizontal"
-                        android:padding="6dp">
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:layout_gravity="center"
+                                        android:layout_margin="5dp"
+                                        android:gravity="center"
+                                        android:orientation="horizontal">
 
-                        <androidx.cardview.widget.CardView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            app:cardCornerRadius="32dp"
+                                        <androidx.cardview.widget.CardView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_margin="5dp"
+                                            app:cardCornerRadius="32dp">
 
-                            >
+                                            <ImageView
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_margin="5dp"
+                                                android:contentDescription="@string/gear_icon_descr"
+                                                android:src="@drawable/settings_mint" />
+                                        </androidx.cardview.widget.CardView>
 
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:contentDescription="bird"
-                                android:padding="5dp"
-                                android:src="@drawable/achievement_mint" />
-                        </androidx.cardview.widget.CardView>
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_margin="5dp"
+                                            android:hint="@string/settings"
+                                            android:textSize="32sp"
+                                            app:startIconDrawable="@drawable/settings_mint"
+                                            app:startIconTint="@color/mint" />
+                                    </LinearLayout>
+                                </com.google.android.material.card.MaterialCardView>
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:padding="5dp">
+                                <com.google.android.material.card.MaterialCardView
+                                    android:id="@+id/goals_action"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="16dp"
+                                    android:layout_marginVertical="16dp"
+                                    app:cardBackgroundColor="?attr/cardBackgroundOnCard"
+                                    app:cardCornerRadius="12dp"
+                                    app:cardElevation="8dp">
 
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:hint="Achievements"
-                                android:textSize="32dp"
-                                app:startIconDrawable="@drawable/settings_mint"
-                                app:startIconTint="@color/mint" />
-                        </LinearLayout>
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:layout_gravity="center"
+                                        android:gravity="center"
+                                        android:orientation="horizontal"
+                                        android:padding="6dp">
+
+                                        <androidx.cardview.widget.CardView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            app:cardCornerRadius="32dp"
+
+                                            >
+
+                                            <ImageView
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:contentDescription="bird"
+                                                android:padding="5dp"
+                                                android:src="@drawable/goal_mint" />
+                                        </androidx.cardview.widget.CardView>
+
+                                        <LinearLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:orientation="vertical"
+                                            android:padding="5dp">
+
+                                            <TextView
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:hint="Goals"
+                                                android:textSize="32dp"
+                                                app:startIconTint="@color/mint" />
+                                        </LinearLayout>
+                                    </LinearLayout>
+
+
+                                </com.google.android.material.card.MaterialCardView>
+
+                                <com.google.android.material.card.MaterialCardView
+                                    android:id="@+id/achievement_action"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="16dp"
+                                    app:cardBackgroundColor="?attr/cardBackgroundOnCard"
+                                    app:cardCornerRadius="12dp"
+                                    app:cardElevation="8dp">
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:layout_gravity="center"
+                                        android:gravity="center"
+                                        android:orientation="horizontal">
+
+                                        <androidx.cardview.widget.CardView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            app:cardCornerRadius="32dp"
+
+                                            >
+
+                                            <ImageView
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:contentDescription="bird"
+                                                android:padding="5dp"
+                                                android:src="@drawable/achievement_mint" />
+                                        </androidx.cardview.widget.CardView>
+
+                                        <LinearLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:orientation="vertical"
+                                            android:padding="5dp">
+
+                                            <TextView
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:hint="Achievements"
+                                                android:textSize="32dp"
+                                                app:startIconDrawable="@drawable/settings_mint"
+                                                app:startIconTint="@color/mint" />
+                                        </LinearLayout>
+                                    </LinearLayout>
+                                </com.google.android.material.card.MaterialCardView>-->
             </LinearLayout>
         </ScrollView>
 
-        <!--     app:backgroundTint="?attr/cardBackgroundOnCard"
-            android:textColor="?attr/colorOnBackground"-->
 
         <com.google.android.material.button.MaterialButton
             android:layout_width="match_parent"

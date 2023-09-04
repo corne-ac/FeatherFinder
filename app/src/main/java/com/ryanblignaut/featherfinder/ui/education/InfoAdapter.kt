@@ -10,7 +10,7 @@ import com.ryanblignaut.featherfinder.model.api.XenoRecording
 
 class InfoAdapter(
     private val values: List<XenoRecording>,
-    private val onClick: (XenoRecording) -> Unit,
+    private val onClick: (ViewHolder, XenoRecording) -> Unit,
 ) : RecyclerView.Adapter<InfoAdapter.ViewHolder>() {
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -28,7 +28,7 @@ class InfoAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = values[position]
         holder.heading.text = item.en
-        holder.playButton.setOnClickListener { onClick(item) }
+        holder.playButton.setOnClickListener { onClick(holder, item) }
     }
 
     inner class ViewHolder(binding: FragmentBirdInfoItemBinding) :
