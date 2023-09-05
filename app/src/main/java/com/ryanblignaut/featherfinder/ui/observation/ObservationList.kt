@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.ryanblignaut.featherfinder.R
-import com.ryanblignaut.featherfinder.databinding.FragmentObservationItemListBinding
+import com.ryanblignaut.featherfinder.databinding.FragmentObservationListBinding
 import com.ryanblignaut.featherfinder.firebase.FirebaseDataManager
 import com.ryanblignaut.featherfinder.model.BirdObservation
 import com.ryanblignaut.featherfinder.ui.helper.PreBindingFragment
@@ -17,7 +17,7 @@ import com.ryanblignaut.featherfinder.viewmodel.observation.AllObservationsViewM
  * It provides functionality by providing a list of bird sighting made by a user.
  * The list items will be able to be clicked in order to show more details of the sighting.
  */
-class ObservationList : PreBindingFragment<FragmentObservationItemListBinding>() {
+class ObservationList : PreBindingFragment<FragmentObservationListBinding>() {
     //    private var columnCount = 1
     private val model: AllObservationsViewModel by viewModels()
 
@@ -41,7 +41,7 @@ class ObservationList : PreBindingFragment<FragmentObservationItemListBinding>()
         if (result.isFailure) {
             val throwable = result.exceptionOrNull()!!
             if (throwable is FirebaseDataManager.ItemNotFoundExceptionFirebase) {
-                binding.noObservationsText.visibility = ViewGroup.VISIBLE
+                binding.noItemsFound.visibility = ViewGroup.VISIBLE
                 return
             }
             throwable.printStackTrace()
@@ -62,7 +62,7 @@ class ObservationList : PreBindingFragment<FragmentObservationItemListBinding>()
 
     override fun inflateBindingSelf(
         inflater: LayoutInflater, container: ViewGroup?, attachToRoot: Boolean,
-    ): FragmentObservationItemListBinding {
+    ): FragmentObservationListBinding {
         return inflateBinding(inflater, container)
     }
 

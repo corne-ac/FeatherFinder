@@ -19,7 +19,7 @@ class ProfileFragment : PreBindingFragment<FragmentProfileBinding>() {
         binding.goalsAction.setOnClickListener {
             findNavController().navigate(R.id.navigation_all_goals)
         }
-        binding.achievementAction.setOnClickListener {
+        binding.achievementsAction.setOnClickListener {
             findNavController().navigate(R.id.navigation_achievement)
         }
     }

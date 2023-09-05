@@ -16,14 +16,21 @@
         <!--        <item name="cardBackgroundOnCard">?attr/cardBackgroundOnCard</item>-->
         <!--        <item name="cardBackgroundColor">@color/cardBackgroundColorNight</item>-->
         <item name="cardBackgroundOnCard">@color/cardBackgroundColor</item>
-        <item name="materialCardViewStyle">@style/MyCardViewStyle</item>
+  <!--              <item name="materialCardViewStyle">@style/MyCardViewStyle</item>-->
+        <!--        <item name="textInputStyle">@style/CustomTextInputLayer</item>-->
 
 
     </style>
 
-    <style name="MyCardViewStyle" parent="Widget.MaterialComponents.CardView">
-        <item name="cardBackgroundColor">@color/light_card</item>
-        <!-- Add more customizations as needed -->
+  <!--  <style name="MyCardViewStyle" parent="Widget.MaterialComponents.CardView">
+&lt;!&ndash;        <item name="cardBackgroundColor">@color/light_card</item>&ndash;&gt;
+        <item name="cardElevation">8dp</item>
+
+        &lt;!&ndash; Add more customizations as needed &ndash;&gt;
+    </style>-->
+
+    <style name="CustomTextInputLayer" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
+        <item name="boxBackgroundColor">@color/cardBackgroundColor</item>
     </style>
 
     <style name="Theme.FeatherFinder.NoActionBar">

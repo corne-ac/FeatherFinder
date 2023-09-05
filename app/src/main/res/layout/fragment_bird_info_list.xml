@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="16dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="8dp">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/headingTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:text="@string/bird_info"
+            android:textAlignment="center"
+            android:textSize="32sp" />
+
+        <com.ryanblignaut.featherfinder.ui.component.LoadingRecyclerView
+            android:id="@+id/loadingRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            app:context=".ui.education.BirdInfoFragment"
+            app:emptyText="@string/bird_info_empty"
+            app:listItemLayout="@layout/fragment_bird_info_item"
+            app:loadingText="@string/bird_info_load"
+            tools:listitem="@layout/fragment_bird_info_item" />
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

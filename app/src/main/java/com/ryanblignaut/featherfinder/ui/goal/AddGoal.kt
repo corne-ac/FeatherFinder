@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import com.ryanblignaut.featherfinder.databinding.FragmentAddGoalBinding
+import com.ryanblignaut.featherfinder.databinding.FragmentGoalAddBinding
 import com.ryanblignaut.featherfinder.model.Goal
 import com.ryanblignaut.featherfinder.ui.helper.PreBindingFragment
 import com.ryanblignaut.featherfinder.utils.DataValidator
@@ -15,10 +15,10 @@ import com.ryanblignaut.featherfinder.viewmodel.helper.FormState
  * This class represents the user interface for a user to register.
  * It provides functionality to record user details including username, email, password, confirm password.
  */
-class AddGoal : PreBindingFragment<FragmentAddGoalBinding>() {
+class AddGoal : PreBindingFragment<FragmentGoalAddBinding>() {
     private val formViewModel: GoalViewModel by viewModels()
     override fun addContentToView(savedInstanceState: Bundle?) {
-        binding.saveGoal.setOnClickListener { saveGoal() }
+        binding.saveGoalAction.setOnClickListener { saveGoal() }
     }
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
@@ -49,7 +49,7 @@ class AddGoal : PreBindingFragment<FragmentAddGoalBinding>() {
             // Validate the form states.
             formStates.forEach(FormState::validate)
             // If all form states are valid, enable the Save Goal button.
-            binding.saveGoal.isEnabled = formStates.all(FormState::isValid)
+            binding.saveGoalAction.isEnabled = formStates.all(FormState::isValid)
         }
     }
 
@@ -66,7 +66,7 @@ class AddGoal : PreBindingFragment<FragmentAddGoalBinding>() {
 
     override fun inflateBindingSelf(
         inflater: LayoutInflater, container: ViewGroup?, attachToRoot: Boolean,
-    ): FragmentAddGoalBinding {
+    ): FragmentGoalAddBinding {
         return inflateBinding(inflater, container)
     }
 }

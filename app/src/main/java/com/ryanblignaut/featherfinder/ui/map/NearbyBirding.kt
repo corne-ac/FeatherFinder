@@ -7,6 +7,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -15,11 +17,12 @@ import com.google.android.gms.maps.model.CircleOptions
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.ryanblignaut.featherfinder.LoginActivity
+import com.ryanblignaut.featherfinder.R
 import com.ryanblignaut.featherfinder.databinding.FragmentMapBinding
 import com.ryanblignaut.featherfinder.model.api.EBirdLocation
 import com.ryanblignaut.featherfinder.ui.helper.PreBindingFragment
 import com.ryanblignaut.featherfinder.viewmodel.BirdingHotspotViewModel
+
 
 private var PERMISSIONS_REQUIRED =
     arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)
@@ -33,11 +36,11 @@ class NearbyBirding : PreBindingFragment<FragmentMapBinding>(), OnMapReadyCallba
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
-        val googleMap =
-            childFragmentManager.findFragmentById(com.ryanblignaut.featherfinder.R.id.map) as SupportMapFragment?
-//        val googleMap = binding.mapView
-        googleMap?.onCreate(savedInstanceState)
-        googleMap?.getMapAsync(this)
+//        val googleMap =
+//            childFragmentManager.findFragmentById(com.ryanblignaut.featherfinder.R.id.map) as SupportMapFragment?
+        val googleMap = binding.map.getFragment<SupportMapFragment>()
+        googleMap.onCreate(savedInstanceState)
+        googleMap.getMapAsync(this)
     }
 
     override fun inflateBindingSelf(
@@ -109,7 +112,16 @@ class NearbyBirding : PreBindingFragment<FragmentMapBinding>(), OnMapReadyCallba
                 map.setOnMarkerClickListener { marker ->
                     val position = marker.position
                     // Move to the next fragment and pass in the position
-                    (activity as LoginActivity).loadFragment(RouteBirding(position))
+//                    (activity as LoginActivity).loadFragment(RouteBirding(position))
+
+                    Bundle().apply {
+                        putDouble("lat", position.latitude)
+                        putDouble("lng", position.longitude)
+                    }.also { bundle ->
+                        findNavController().navigate(R.id.navigation_route, bundle)
+                    }
+
+
 
                     //                val markerTitle = marker.title
                     //                val markerSnippet = marker.snippet
