@@ -1,5 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="16dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="8dp">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/headingTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:text="@string/bird_info"
+            android:textAlignment="center"
+            android:textSize="32sp" />
+
+        <com.ryanblignaut.featherfinder.ui.component.LoadingRecyclerView
+            android:id="@+id/loadingRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            app:context=".ui.education.BirdInfoFragment"
+            app:emptyText="@string/goal_info_empty"
+            app:listItemLayout="@layout/fragment_bird_info_item"
+            app:loadingText="@string/goal_load"
+            tools:listitem="@layout/fragment_bird_info_item" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/add_goal_action"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginBottom="16dp"
+            android:text="@string/add_a_goal" />
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView><!--<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
@@ -59,102 +103,102 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/add_a_goal" />
-        </LinearLayout>
-        <!--<androidx.constraintlayout.widget.ConstraintLayout
+        </LinearLayout>-->
+    <!--<androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:padding="16dp">
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:padding="16dp">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="256dp"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <LinearLayout
+            <androidx.cardview.widget.CardView
+                android:id="@+id/name_input_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="256dp"
-                android:orientation="vertical"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                android:backgroundTint="@color/material_dynamic_neutral90"
+                app:cardCornerRadius="12dp">
 
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/name_input_layout"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:backgroundTint="@color/material_dynamic_neutral90"
-                    app:cardCornerRadius="12dp">
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
-                    <LinearLayout
+                    <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
+                        android:layout_height="wrap_content"
+                        android:hint="Goal name 1"
+                        android:textSize="32dp"
+                        app:startIconDrawable="@drawable/goal_mint"
+                        app:startIconTint="@color/mint" />
 
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="Goal name 1"
-                            android:textSize="32dp"
-                            app:startIconDrawable="@drawable/goal_mint"
-                            app:startIconTint="@color/mint" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="Goal detail"
-                            app:startIconDrawable="@drawable/goal_mint"
-                            app:startIconTint="@color/mint" />
-                    </LinearLayout>
-
-                </androidx.cardview.widget.CardView>
-
-                <Space
-                    android:layout_width="0dp"
-                    android:layout_height="12dp" />
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:backgroundTint="@color/material_dynamic_neutral90"
-                    app:cardCornerRadius="12dp">
-
-                    <LinearLayout
+                    <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
+                        android:layout_height="wrap_content"
+                        android:hint="Goal detail"
+                        app:startIconDrawable="@drawable/goal_mint"
+                        app:startIconTint="@color/mint" />
+                </LinearLayout>
 
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="Goal name 2"
-                            android:textSize="32dp"
-                            app:startIconDrawable="@drawable/goal_mint"
-                            app:startIconTint="@color/mint" />
+            </androidx.cardview.widget.CardView>
 
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="Goal detail"
-                            app:startIconDrawable="@drawable/goal_mint"
-                            app:startIconTint="@color/mint" />
-                    </LinearLayout>
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="12dp" />
 
-                </androidx.cardview.widget.CardView>
-            </LinearLayout>
-
-            <Button
-                android:id="@+id/login"
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:layout_marginBottom="64dp"
-                android:enabled="false"
-                android:text="Create goal"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                android:backgroundTint="@color/material_dynamic_neutral90"
+                app:cardCornerRadius="12dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Goal name 2"
+                        android:textSize="32dp"
+                        app:startIconDrawable="@drawable/goal_mint"
+                        app:startIconTint="@color/mint" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Goal detail"
+                        app:startIconDrawable="@drawable/goal_mint"
+                        app:startIconTint="@color/mint" />
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginBottom="64dp"
+            android:enabled="false"
+            android:text="Create goal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
 
-        </androidx.constraintlayout.widget.ConstraintLayout>-->
+    </androidx.constraintlayout.widget.ConstraintLayout>-->
 
-    </androidx.cardview.widget.CardView>
+    <!--    </androidx.cardview.widget.CardView>
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>-->

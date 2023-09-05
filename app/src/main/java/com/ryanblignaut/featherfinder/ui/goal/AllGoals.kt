@@ -20,7 +20,8 @@ class AllGoals : PreBindingFragment<FragmentGoalListBinding>() {
 
     override fun addContentToView(savedInstanceState: Bundle?) {
         // Start the loader.
-        binding.loader.visibility = ViewGroup.VISIBLE
+//        binding.loader.visibility = ViewGroup.VISIBLE
+        binding.loadingRecyclerView.showLoading()
         model.live.observe(viewLifecycleOwner, ::populateGoalList)
         model.getGoals()
         binding.addGoalAction.setOnClickListener { findNavController().navigate(R.id.navigation_add_goal) }
@@ -28,7 +29,7 @@ class AllGoals : PreBindingFragment<FragmentGoalListBinding>() {
 
     private fun populateGoalList(it: Result<List<Goal>>) {
         // Stop the loading animation
-        binding.loader.visibility = ViewGroup.GONE
+//        binding.loader.visibility = ViewGroup.GONE
         if (it.isFailure) {
             // TODO: Show error message
             println("We have no goals")
@@ -37,9 +38,11 @@ class AllGoals : PreBindingFragment<FragmentGoalListBinding>() {
         }
         val values = it.getOrNull()!!
         if (values.isEmpty()) {
-            binding.noGoalsText.visibility = ViewGroup.VISIBLE
+//            binding.noGoalsText.visibility = ViewGroup.VISIBLE
+            binding.loadingRecyclerView.showEmptyText()
         }
-        binding.goalsRecyclerView.adapter = GoalAdapter(values, ::onGoalClick)
+        binding.loadingRecyclerView.setAdapter(GoalAdapter(values, ::onGoalClick))
+//        binding.goalsRecyclerView.adapter = GoalAdapter(values, ::onGoalClick)
     }
 
     private fun onGoalClick(goal: Goal) {

@@ -2,12 +2,11 @@
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="16dp"
-    android:padding="16dp"
-    app:cardCornerRadius="8dp">
+    app:cardCornerRadius="8dp"
+    app:cardElevation="8dp">
 
 
     <LinearLayout
@@ -25,7 +24,6 @@
             android:textSize="32sp" />
 
         <com.ryanblignaut.featherfinder.ui.component.LoadingRecyclerView
-            tools:listitem="@layout/fragment_bird_info_item"
             android:id="@+id/loadingRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -33,40 +31,7 @@
             app:context=".ui.education.BirdInfoFragment"
             app:emptyText="@string/bird_info_empty"
             app:listItemLayout="@layout/fragment_bird_info_item"
-            app:loadingText="@string/bird_info_load" />
-
-        <!--<FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1">
-
-            <com.google.android.material.progressindicator.CircularProgressIndicator
-                android:id="@+id/loader"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:indeterminate="true"
-                android:visibility="gone"
-                app:indicatorSize="132dp" />
-
-            <TextView
-                android:id="@+id/noObservationsText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/bird_info_empty"
-                android:visibility="gone" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/birding_recycler_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:context=".ui.education.BirdInfoFragment"
-                tools:listitem="@layout/fragment_bird_info_item" />
-
-        </FrameLayout>-->
-
+            app:loadingText="@string/bird_info_load"
+            tools:listitem="@layout/fragment_bird_info_item" />
     </LinearLayout>
-
 </com.google.android.material.card.MaterialCardView>

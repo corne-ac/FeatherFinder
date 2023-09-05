@@ -18,7 +18,7 @@ import com.ryanblignaut.featherfinder.viewmodel.helper.FormState
 class AddGoal : PreBindingFragment<FragmentGoalAddBinding>() {
     private val formViewModel: GoalViewModel by viewModels()
     override fun addContentToView(savedInstanceState: Bundle?) {
-        binding.saveGoal.setOnClickListener { saveGoal() }
+        binding.saveGoalAction.setOnClickListener { saveGoal() }
     }
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
@@ -49,7 +49,7 @@ class AddGoal : PreBindingFragment<FragmentGoalAddBinding>() {
             // Validate the form states.
             formStates.forEach(FormState::validate)
             // If all form states are valid, enable the login button.
-            binding.saveGoal.isEnabled = formStates.all(FormState::isValid)
+            binding.saveGoalAction.isEnabled = formStates.all(FormState::isValid)
         }
     }
 
