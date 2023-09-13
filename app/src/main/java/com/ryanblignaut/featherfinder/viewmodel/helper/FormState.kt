@@ -4,7 +4,7 @@ import androidx.core.widget.doAfterTextChanged
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 
-class FormState(
+open class FormState(
     private val valueField: TextInputEditText,
     private val errorField: TextInputLayout,
     private val key: String,

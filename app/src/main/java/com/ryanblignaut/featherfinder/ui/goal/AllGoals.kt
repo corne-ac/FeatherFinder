@@ -24,12 +24,14 @@ class AllGoals : PreBindingFragment<FragmentGoalListBinding>() {
         binding.loadingRecyclerView.showLoading()
         model.live.observe(viewLifecycleOwner, ::populateGoalList)
         model.getGoals()
-        binding.addGoalAction.setOnClickListener { findNavController().navigate(R.id.navigation_add_goal) }
+        binding.addGoalAction.setOnClickListener {
+//            findNavController().navigate(R.id.navigation_add_goal)
+            findNavController().navigate(R.id.action_all_goals_to_add_goal)
+
+        }
     }
 
     private fun populateGoalList(it: Result<List<Goal>>) {
-        // Stop the loading animation
-//        binding.loader.visibility = ViewGroup.GONE
         if (it.isFailure) {
             // TODO: Show error message
             println("We have no goals")
@@ -38,11 +40,9 @@ class AllGoals : PreBindingFragment<FragmentGoalListBinding>() {
         }
         val values = it.getOrNull()!!
         if (values.isEmpty()) {
-//            binding.noGoalsText.visibility = ViewGroup.VISIBLE
             binding.loadingRecyclerView.showEmptyText()
         }
         binding.loadingRecyclerView.setAdapter(GoalAdapter(values, ::onGoalClick))
-//        binding.goalsRecyclerView.adapter = GoalAdapter(values, ::onGoalClick)
     }
 
     private fun onGoalClick(goal: Goal) {

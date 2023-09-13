@@ -11,4 +11,18 @@
         <attr name="src_img" format="reference" />
     </declare-styleable>
 
+    <declare-styleable name="TimePickerInput">
+
+    </declare-styleable>
+    <declare-styleable name="DatePickerInput">
+
+    </declare-styleable>
+    <declare-styleable name="TextInput">
+        <attr name="hint" format="string" />
+        <attr name="icon" format="reference" />
+        <attr name="compHeight" format="dimension" />
+        <attr name="large" format="boolean" />
+    </declare-styleable>
+
+
 </resources>

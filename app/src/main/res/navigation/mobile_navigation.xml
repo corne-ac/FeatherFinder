@@ -11,7 +11,13 @@
         android:id="@+id/navigation_all_goals"
         android:name="com.ryanblignaut.featherfinder.ui.goal.AllGoals"
         android:label="@string/all_goals"
-        tools:layout="@layout/fragment_goal_list" />
+        tools:layout="@layout/fragment_goal_list">
+        <action
+            android:id="@+id/action_all_goals_to_add_goal"
+            app:destination="@id/navigation_add_goal"
+            app:enterAnim="@anim/fade"
+            app:exitAnim="@anim/fade" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_add_goal"
@@ -31,8 +37,7 @@
         android:id="@+id/navigation_hotspot_info"
         android:name="com.ryanblignaut.featherfinder.ui.map.HotspotInfo"
         android:label="@string/hotspot_info"
-        tools:layout="@layout/fragment_map">
-    </fragment>
+        tools:layout="@layout/fragment_map" />
 
     <fragment
         android:id="@+id/navigation_route"

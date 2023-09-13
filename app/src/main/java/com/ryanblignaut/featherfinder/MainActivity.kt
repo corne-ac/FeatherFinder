@@ -2,8 +2,11 @@ package com.ryanblignaut.featherfinder
 
 import android.os.Bundle
 import android.view.View
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -38,15 +41,41 @@ class MainActivity : AppCompatActivity() {
                 R.id.navigation_add_observation
             )
         )
+        val fadeAnimation = AnimationUtils.loadAnimation(applicationContext, R.anim.fade)
 
         //Hide bottom nav on certain screens
         navController.addOnDestinationChangedListener { _, destination, _ ->
             val id = destination.id
-            if(id == R.id.navigation_add_goal || id == R.id.navigation_add_observation) {
-                binding.navView.visibility = View.GONE
-            } else {
-                binding.navView.visibility = View.VISIBLE
-            }
+            fadeAnimation.setAnimationListener(object : Animation.AnimationListener {
+                override fun onAnimationStart(animation: Animation) {
+                    // Animation started, you can add any necessary actions here
+                }
+
+                override fun onAnimationEnd(animation: Animation) {
+                    // Animation ended, change the visibility based on your conditions
+                    if (id == R.id.navigation_add_goal || id == R.id.navigation_add_observation) {
+                        binding.navView.visibility = View.GONE
+                    } else {
+                        binding.navView.visibility = View.VISIBLE
+                    }
+                }
+
+                override fun onAnimationRepeat(animation: Animation) {
+                    // Animation repeated, if needed
+                }
+            })
+            binding.navView.startAnimation(fadeAnimation)
+
+            /*  if (id == R.id.navigation_add_goal || id == R.id.navigation_add_observation) {
+                  binding.navView.startAnimation(fadeAnimation).also {
+                      binding.navView.visibility = View.GONE
+                  }
+
+              } else {
+                  binding.navView.startAnimation(fadeAnimation).also {
+                      binding.navView.visibility = View.VISIBLE
+                  }
+              }*/
         }
 
         setupActionBarWithNavController(navController, appBarConfiguration)

@@ -56,8 +56,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:hint="@string/notes"
-                app:icon="@drawable/note_mint"
-                app:large="true" />
+                app:icon="@drawable/note_mint" />
         </LinearLayout>
 
         <com.google.android.material.button.MaterialButton

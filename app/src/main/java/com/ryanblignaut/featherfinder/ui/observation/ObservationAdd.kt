@@ -11,6 +11,7 @@ import com.ryanblignaut.featherfinder.model.BirdObservation
 import com.ryanblignaut.featherfinder.ui.helper.PreBindingFragment
 import com.ryanblignaut.featherfinder.utils.DataValidator
 import com.ryanblignaut.featherfinder.viewmodel.helper.FormState
+import com.ryanblignaut.featherfinder.viewmodel.helper.FormStateNew
 import com.ryanblignaut.featherfinder.viewmodel.observation.AddObservationViewModel
 
 /**
@@ -59,9 +60,8 @@ class ObservationAdd : PreBindingFragment<FragmentObservationAddBinding>() {
     }
 
     private fun speciesNameState(): FormState {
-        return FormState(
+        return FormStateNew(
             binding.birdSpecies,
-            binding.birdSpeciesInputLayout,
             "speciesName",
             formViewModel,
             DataValidator::speciesNameValidation,
@@ -69,9 +69,8 @@ class ObservationAdd : PreBindingFragment<FragmentObservationAddBinding>() {
     }
 
     private fun dateState(): FormState {
-        return FormState(
+        return FormStateNew(
             binding.date,
-            binding.dateInputLayout,
             "date",
             formViewModel,
             DataValidator::dateValidation,
@@ -79,9 +78,8 @@ class ObservationAdd : PreBindingFragment<FragmentObservationAddBinding>() {
     }
 
     private fun timeState(): FormState {
-        return FormState(
+        return FormStateNew(
             binding.time,
-            binding.timeInputLayout,
             "time",
             formViewModel,
             DataValidator::timeValidation,
@@ -89,9 +87,8 @@ class ObservationAdd : PreBindingFragment<FragmentObservationAddBinding>() {
     }
 
     private fun positionState(): FormState {
-        return FormState(
+        return FormStateNew(
             binding.pos,
-            binding.posInputLayout,
             "position",
             formViewModel,
             DataValidator::positionValidation,
@@ -102,11 +99,11 @@ class ObservationAdd : PreBindingFragment<FragmentObservationAddBinding>() {
     private fun saveObservation() {
         formViewModel.saveObservation(
             BirdObservation(
-                binding.birdSpecies.text.toString(),
-                binding.date.text.toString(),
-                binding.time.text.toString(),
-                binding.pos.text.toString(),
-                binding.notes.text.toString()
+                binding.birdSpecies.getText(),
+                binding.date.getText(),
+                binding.time.getText(),
+                binding.pos.getText(),
+                binding.notes.getText()
             )
         )
     }
