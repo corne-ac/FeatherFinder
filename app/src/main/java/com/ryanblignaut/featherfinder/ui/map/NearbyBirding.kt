@@ -7,11 +7,10 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -29,14 +28,36 @@ import com.ryanblignaut.featherfinder.viewmodel.BirdingHotspotViewModel
 
 
 private const val REQUEST_LOCATION_PERMISSIONS_CODE = 123
-private val PERMISSIONS_REQUIRED = arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)
+private val PERMISSIONS_REQUIRED =
+    arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)
 
 class NearbyBirding : PreBindingFragment<FragmentMapBinding>(), OnMapReadyCallback {
     private lateinit var birdingHotspotViewModel: BirdingHotspotViewModel
-
     override fun addContentToView(savedInstanceState: Bundle?) {
 
     }
+
+    private val requestPermissionLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted: Boolean ->
+            if (isGranted) {
+                // Permission is granted. Continue the action or workflow in your
+                // app.
+                println("All good now just figure out how to get the map to show")
+
+            } else {
+
+                // Explain to the user that the feature is unavailable because the
+                // feature requires a permission that the user has denied. At the
+                // same time, respect the user's decision. Don't link to system
+                // settings in an effort to convince the user to change their
+                // decision.
+                MaterialAlertDialogBuilder(requireContext()).setTitle("Error")
+                    .setMessage("Location permissions are required to use this feature.")
+                    .setCancelable(true).show()
+            }
+        }
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
@@ -44,39 +65,57 @@ class NearbyBirding : PreBindingFragment<FragmentMapBinding>(), OnMapReadyCallba
 //            childFragmentManager.findFragmentById(com.ryanblignaut.featherfinder.R.id.map) as SupportMapFragment?
 
         //check for permissions
+        when {
+            hasLocationPermissions() -> {
+                showMap(savedInstanceState)
+            }
 
-        if (hasLocationPermissions()) {
-            val googleMap = binding.map.getFragment<SupportMapFragment>()
-            googleMap.onCreate(savedInstanceState)
-            googleMap.getMapAsync(this)
-        } else {
-            requestLocationPermissions()
-        }
-    }
+            shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION) -> {
+                // In an educational UI, explain to the user why your app requires this
+                // permission for a specific feature to behave as expected, and what
+                // features are disabled if it's declined. In this UI, include a
+                // "cancel" or "no thanks" button that lets the user continue
+                // using your app without granting the permission.
+//                TODO("Show a dialog explaining why the user should grant the location permission")
+                MaterialAlertDialogBuilder(requireContext()).setTitle("Error")
+                    .setMessage("Location permissions are required to use this feature.")
+                    .setCancelable(true).show()
+                // When the user clicks "ok", request the permission again.
+                requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
 
-    //Doesnt call this override method, dont know why. Does call it when in mainActivity, but cant handle it from there like this. hell knows.
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray ) {
-        if (requestCode == REQUEST_LOCATION_PERMISSIONS_CODE) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Permission granted
-                if (hasLocationPermissions()) {
-                    val googleMap = binding.map.getFragment<SupportMapFragment>()
-                    googleMap.onCreate(null) //null hier want donno, testing needed
-                    googleMap.getMapAsync(this)
-                }
-            } else {
-                // Permission denied
-                Toast.makeText(requireContext(), "Location permission is required to show map.", Toast.LENGTH_SHORT).show()
+            }
+
+            else -> {
+                // You can directly ask for the permission.
+                // The registered ActivityResultCallback gets the result of this request.
+                requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
             }
         }
-        //super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
+
+    private fun requestLocationPermissions() {
+        ActivityCompat.requestPermissions(requireActivity(), PERMISSIONS_REQUIRED, 1)
+    }
+
+    private fun hasLocationPermissions(): Boolean {
+        for (permission in PERMISSIONS_REQUIRED) {
+            if (checkPermission(permission)) return false
+        }
+        return true
+    }
+
+    private fun checkPermission(permission: String): Boolean {
+        return ContextCompat.checkSelfPermission(
+            requireContext(), permission
+        ) != PackageManager.PERMISSION_GRANTED
     }
 
 
-
+    private fun showMap(savedInstanceState: Bundle?) {
+        val googleMap = binding.map.getFragment<SupportMapFragment>()
+        googleMap.onCreate(savedInstanceState)
+        googleMap.getMapAsync(this)
+    }
 
     override fun inflateBindingSelf(
         inflater: LayoutInflater, container: ViewGroup?, attachToRoot: Boolean,
@@ -84,28 +123,9 @@ class NearbyBirding : PreBindingFragment<FragmentMapBinding>(), OnMapReadyCallba
         return inflateBinding(inflater, container)
     }
 
-    /*
-        private val registerForActivityResult =
-            registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
-                var permissionGranted = true
-                permissions.entries.forEach {
-                    if (it.key in PERMISSIONS_REQUIRED && !it.value) permissionGranted = false
-                }
-
-                if (!permissionGranted) {
-                    Toast.makeText(context, "Permission request denied", Toast.LENGTH_LONG).show()
-                } else {
-                    map.isMyLocationEnabled = true
-                }
-            }
-    */
-
-    @SuppressLint("MissingPermission")
     override fun onMapReady(map: GoogleMap) {
         // Check if the user has given permission to use their location.
-
 //        registerForActivityResult.launch(PERMISSIONS_REQUIRED)
-
 
         birdingHotspotViewModel = ViewModelProvider(this)[BirdingHotspotViewModel::class.java]
         val convertBirdLocationOntoMap = function(map)
@@ -157,7 +177,6 @@ class NearbyBirding : PreBindingFragment<FragmentMapBinding>(), OnMapReadyCallba
                     }
 
 
-
                     //                val markerTitle = marker.title
                     //                val markerSnippet = marker.snippet
                     //                println(markerTitle)
@@ -175,26 +194,5 @@ class NearbyBirding : PreBindingFragment<FragmentMapBinding>(), OnMapReadyCallba
         }
     }
 
-    private fun hasLocationPermissions(): Boolean {
-        val coarseLocationPermission = ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.ACCESS_COARSE_LOCATION
-        ) == PackageManager.PERMISSION_GRANTED
-
-        val fineLocationPermission = ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.ACCESS_FINE_LOCATION
-        ) == PackageManager.PERMISSION_GRANTED
-
-        return coarseLocationPermission && fineLocationPermission
-    }
-
-    private fun requestLocationPermissions() {
-        ActivityCompat.requestPermissions(
-            requireActivity(),
-            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-            REQUEST_LOCATION_PERMISSIONS_CODE
-        )
-    }
 
 }
