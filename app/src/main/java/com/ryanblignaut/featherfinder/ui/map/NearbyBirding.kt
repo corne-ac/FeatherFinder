@@ -2,10 +2,14 @@ package com.ryanblignaut.featherfinder.ui.map
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.findNavController
@@ -24,8 +28,8 @@ import com.ryanblignaut.featherfinder.ui.helper.PreBindingFragment
 import com.ryanblignaut.featherfinder.viewmodel.BirdingHotspotViewModel
 
 
-private var PERMISSIONS_REQUIRED =
-    arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)
+private const val REQUEST_LOCATION_PERMISSIONS_CODE = 123
+private val PERMISSIONS_REQUIRED = arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)
 
 class NearbyBirding : PreBindingFragment<FragmentMapBinding>(), OnMapReadyCallback {
     private lateinit var birdingHotspotViewModel: BirdingHotspotViewModel
@@ -38,10 +42,41 @@ class NearbyBirding : PreBindingFragment<FragmentMapBinding>(), OnMapReadyCallba
         super.onViewStateRestored(savedInstanceState)
 //        val googleMap =
 //            childFragmentManager.findFragmentById(com.ryanblignaut.featherfinder.R.id.map) as SupportMapFragment?
-        val googleMap = binding.map.getFragment<SupportMapFragment>()
-        googleMap.onCreate(savedInstanceState)
-        googleMap.getMapAsync(this)
+
+        //check for permissions
+
+        if (hasLocationPermissions()) {
+            val googleMap = binding.map.getFragment<SupportMapFragment>()
+            googleMap.onCreate(savedInstanceState)
+            googleMap.getMapAsync(this)
+        } else {
+            requestLocationPermissions()
+        }
     }
+
+    //Doesnt call this override method, dont know why. Does call it when in mainActivity, but cant handle it from there like this. hell knows.
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray ) {
+        if (requestCode == REQUEST_LOCATION_PERMISSIONS_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission granted
+                if (hasLocationPermissions()) {
+                    val googleMap = binding.map.getFragment<SupportMapFragment>()
+                    googleMap.onCreate(null) //null hier want donno, testing needed
+                    googleMap.getMapAsync(this)
+                }
+            } else {
+                // Permission denied
+                Toast.makeText(requireContext(), "Location permission is required to show map.", Toast.LENGTH_SHORT).show()
+            }
+        }
+        //super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
+
+
+
 
     override fun inflateBindingSelf(
         inflater: LayoutInflater, container: ViewGroup?, attachToRoot: Boolean,
@@ -139,4 +174,27 @@ class NearbyBirding : PreBindingFragment<FragmentMapBinding>(), OnMapReadyCallba
 
         }
     }
+
+    private fun hasLocationPermissions(): Boolean {
+        val coarseLocationPermission = ContextCompat.checkSelfPermission(
+            requireContext(),
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+
+        val fineLocationPermission = ContextCompat.checkSelfPermission(
+            requireContext(),
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+
+        return coarseLocationPermission && fineLocationPermission
+    }
+
+    private fun requestLocationPermissions() {
+        ActivityCompat.requestPermissions(
+            requireActivity(),
+            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+            REQUEST_LOCATION_PERMISSIONS_CODE
+        )
+    }
+
 }
