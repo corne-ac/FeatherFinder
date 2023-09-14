@@ -39,24 +39,21 @@ class NearbyBirding : PreBindingFragment<FragmentMapBinding>(), OnMapReadyCallba
 
     private val requestPermissionLauncher =
         registerForActivityResult(
-            ActivityResultContracts.RequestPermission()
-        ) { isGranted: Boolean ->
-            if (isGranted) {
-                // Permission is granted. Continue the action or workflow in your
-                // app.
-                println("All good now just figure out how to get the map to show")
+            ActivityResultContracts.RequestMultiplePermissions()
+        ) { permissions ->
+            var isValid = true
+            permissions.entries.forEach {
+                println("${it.key} = ${it.value}")
+                if (!it.value) isValid = false
+            }
 
-            } else {
-
-                // Explain to the user that the feature is unavailable because the
-                // feature requires a permission that the user has denied. At the
-                // same time, respect the user's decision. Don't link to system
-                // settings in an effort to convince the user to change their
-                // decision.
+            if (isValid) {
+                showMap(null)
+            } else
                 MaterialAlertDialogBuilder(requireContext()).setTitle("Error")
                     .setMessage("Location permissions are required to use this feature.")
                     .setCancelable(true).show()
-            }
+
         }
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
@@ -81,14 +78,14 @@ class NearbyBirding : PreBindingFragment<FragmentMapBinding>(), OnMapReadyCallba
                     .setMessage("Location permissions are required to use this feature.")
                     .setCancelable(true).show()
                 // When the user clicks "ok", request the permission again.
-                requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+                requestPermissionLauncher.launch(PERMISSIONS_REQUIRED)
 
             }
 
             else -> {
                 // You can directly ask for the permission.
                 // The registered ActivityResultCallback gets the result of this request.
-                requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+                requestPermissionLauncher.launch(PERMISSIONS_REQUIRED)
             }
         }
     }
