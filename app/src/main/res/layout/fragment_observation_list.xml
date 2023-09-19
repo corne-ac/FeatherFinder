@@ -10,15 +10,19 @@
     app:cardCornerRadius="8dp"
     app:cardElevation="8dp">
 
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1">
+
 
             <com.google.android.material.progressindicator.CircularProgressIndicator
                 android:id="@+id/loader"
@@ -54,4 +58,21 @@
             android:layout_marginBottom="16dp"
             android:text="@string/add_an_observation" />
     </LinearLayout>
+
+    <View
+        android:layout_width="393dp"
+        android:layout_height="80dp"
+        android:background="@color/mint"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="-18dp" />
+
+    <TextView
+        android:layout_width="205dp"
+        android:layout_height="57dp"
+        android:text="Observation List"
+        android:textColor="@color/white"
+        android:textSize="25dp"
+        android:textStyle="bold"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="16dp" />
 </com.google.android.material.card.MaterialCardView>
