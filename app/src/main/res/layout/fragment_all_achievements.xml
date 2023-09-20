@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,15 +10,34 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingBottom="@dimen/activity_vertical_margin">
 
+
+
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="16dp"
         app:cardCornerRadius="8dp">
 
+        <View
+            android:layout_width="393dp"
+            android:layout_height="80dp"
+            android:background="@color/mint"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_editor_absoluteX="-18dp" />
+
+        <TextView
+            android:layout_width="205dp"
+            android:layout_height="57dp"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="16dp"
+            android:text="Achievements"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:textSize="25dp"/>
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:gravity="center"
             android:padding="16dp">
 
@@ -55,8 +75,8 @@
                             >
 
                             <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
                                 android:contentDescription="bird"
                                 android:padding="5dp"
                                 android:src="@drawable/achievement_mint" />
@@ -70,7 +90,7 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="Achivement 1"
+                                android:hint="Hatchling"
                                 android:textSize="32dp"
                                 app:startIconDrawable="@drawable/goal_mint"
                                 app:startIconTint="@color/mint" />
@@ -87,6 +107,64 @@
 
                 </androidx.cardview.widget.CardView>
 
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="12dp" />
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/material_dynamic_neutral90"
+                    app:cardCornerRadius="12dp"
+
+                    >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:padding="6dp">
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:cardCornerRadius="32dp"
+
+                        >
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:contentDescription="bird"
+                            android:padding="5dp"
+                            android:src="@drawable/achievement_mint" />
+                    </androidx.cardview.widget.CardView>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Awesome Avian"
+                            android:textSize="32dp"
+                            app:startIconDrawable="@drawable/goal_mint"
+                            app:startIconTint="@color/mint" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Capture 1000 observations"
+                            app:startIconDrawable="@drawable/goal_mint"
+                            app:startIconTint="@color/mint" />
+                    </LinearLayout>
+
+                </LinearLayout>
+                </androidx.cardview.widget.CardView>
                 <Space
                     android:layout_width="0dp"
                     android:layout_height="12dp" />
@@ -130,7 +208,7 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="Awesome Avian"
+                                android:hint="Fly High"
                                 android:textSize="32dp"
                                 app:startIconDrawable="@drawable/goal_mint"
                                 app:startIconTint="@color/mint" />
@@ -138,16 +216,26 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="Capture 1000 observations"
+                                android:hint="Find a rare bird"
                                 app:startIconDrawable="@drawable/goal_mint"
                                 app:startIconTint="@color/mint" />
                         </LinearLayout>
+
                     </LinearLayout>
 
 
                 </androidx.cardview.widget.CardView>
 
             </LinearLayout>
+
+            <Button
+                android:id="@+id/button"
+                android:layout_width="363dp"
+                android:layout_height="46dp"
+                android:text="My Achievements"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:layout_editor_absoluteY="611dp" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
