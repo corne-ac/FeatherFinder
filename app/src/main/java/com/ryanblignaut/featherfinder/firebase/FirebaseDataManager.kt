@@ -31,6 +31,13 @@ object FirebaseDataManager {
         return fetchListDataFromFirebase(userAchRef)
     }
 
+    suspend fun getObservationById(id: String): Result<BirdObservation?> {
+        // Get the current user and their goals
+        val currentUser = FirebaseAuthManager.getCurrentUser()
+        val userObservationsRef = usersRef.child(currentUser!!.uid).child("observations").child(id)
+        return getItem(userObservationsRef)
+    }
+
     suspend fun getAllObservations(): Result<List<BirdObservation>> {
         // Get the current user and their goals
         val currentUser = FirebaseAuthManager.getCurrentUser()
@@ -87,27 +94,63 @@ object FirebaseDataManager {
     }
 
 
-    private suspend inline fun <reified T> getItems(ref: DatabaseReference): Result<List<T>> {
-        return try {
-            // Refer to https://stackoverflow.com/questions/66072471/what-is-the-difference-between-get-and-addlistenerforsinglevalueevent
-            // Why do you recommend using get() when addListenerForSingleValueEvent is mentioned so much more?
-            // Basically the addlistenerforsinglevalueevent was the old way of doing things and get() is the new way of doing things.
+    /*   private suspend inline fun <reified T> getItems(ref: DatabaseReference): Result<List<T>> {
+           return try {
+               // Refer to https://stackoverflow.com/questions/66072471/what-is-the-difference-between-get-and-addlistenerforsinglevalueevent
+               // Why do you recommend using get() when addListenerForSingleValueEvent is mentioned so much more?
+               // Basically the addlistenerforsinglevalueevent was the old way of doing things and get() is the new way of doing things.
 
+               val dataSnapshot = ref.get().await()
+               if (dataSnapshot.exists()) {
+                   val items = mutableListOf<T>()
+                   for (itemSnapshot in dataSnapshot.children) {
+                       val item = itemSnapshot.getValue<T>()
+                       item?.let { items.add(it) }
+                   }
+                   Result.success(items)
+               } else {
+                   Result.failure(ItemNotFoundExceptionFirebase())
+               }
+           } catch (e: Exception) {
+               Result.failure(e)
+           }
+       }*/
+
+    private suspend inline fun <reified T> getItem(ref: DatabaseReference): Result<T?> {
+        return makeFirebaseQuery(ref) { dataSnapshot ->
+            dataSnapshot.getValue<T>()
+        }
+    }
+
+    private suspend inline fun <reified T> getItems(ref: DatabaseReference): Result<List<T>> {
+        return makeFirebaseQuery(ref) { dataSnapshot ->
+            val items = mutableListOf<T>()
+            for (itemSnapshot in dataSnapshot.children) {
+                val item = itemSnapshot.getValue<T>()
+                item?.let { items.add(it) }
+            }
+            items
+        }
+    }
+
+    private suspend inline fun <reified T> makeFirebaseQuery(
+        ref: DatabaseReference,
+        run: (DataSnapshot) -> T,
+    ): Result<T> {
+        return try {
             val dataSnapshot = ref.get().await()
             if (dataSnapshot.exists()) {
-                val items = mutableListOf<T>()
-                for (itemSnapshot in dataSnapshot.children) {
-                    val item = itemSnapshot.getValue<T>()
-                    item?.let { items.add(it) }
-                }
-                Result.success(items)
+                Result.success(run(dataSnapshot))
             } else {
                 Result.failure(ItemNotFoundExceptionFirebase())
             }
         } catch (e: Exception) {
             Result.failure(e)
         }
+
     }
+
+
     class ItemNotFoundExceptionFirebase : Exception("No items found in the database")
 
     private suspend inline fun <reified T> fetchSingularDataFromFirebase(databaseReference: DatabaseReference): Result<T> {

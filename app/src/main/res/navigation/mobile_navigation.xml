@@ -61,12 +61,27 @@
         android:id="@+id/navigation_observation_list"
         android:name="com.ryanblignaut.featherfinder.ui.observation.ObservationList"
         android:label="@string/observation_list"
-        tools:layout="@layout/fragment_observation_list" />
+        tools:layout="@layout/fragment_observation_list">
+        <action
+            android:id="@+id/action_observation_list_to_observation_detail"
+            app:destination="@id/navigation_observation_detail"
+            app:enterAnim="@anim/fade"
+            app:exitAnim="@anim/fade" >
+
+        </action>
+        <action
+            android:id="@+id/action_navigation_observation_list_to_navigation_add_observation"
+            app:destination="@id/navigation_add_observation" />
+    </fragment>
     <fragment
         android:id="@+id/navigation_observation_detail"
         android:name="com.ryanblignaut.featherfinder.ui.observation.ObservationDetail"
         android:label="@string/observation_detail"
-        tools:layout="@layout/fragment_observation_detail" />
+        tools:layout="@layout/fragment_observation_detail">
+        <argument
+            android:name="observation_id"
+            app:argType="string" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_bird_info"

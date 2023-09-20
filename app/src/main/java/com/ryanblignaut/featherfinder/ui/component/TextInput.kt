@@ -46,7 +46,7 @@ open class TextInput : TextInputLayout {
         return binding.value.text.toString()
     }
 
-    private fun setText(text: String) {
+    fun setText(text: String) {
         binding.value.setText(text)
     }
 

@@ -1,16 +1,13 @@
 package com.ryanblignaut.featherfinder.ui.observation
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.ryanblignaut.featherfinder.databinding.FragmentObservationItemBinding
 import com.ryanblignaut.featherfinder.model.BirdObservation
 
-/**
- * [RecyclerView.Adapter] that can display a [PlaceholderItem].
- * TODO: Replace the implementation with code for your data type.
- */
 class ObservationListViewAdapter(
     private val values: List<BirdObservation>,
     private val onClick: (BirdObservation) -> Unit,
@@ -28,17 +25,18 @@ class ObservationListViewAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = values[position]
-//        holder.idView.text = item.id
-//        holder.contentView.text = item.birdSpecies
-//        holder.contentView.setOnClickListener { onClick(item) }
+        holder.name.text = item.birdSpecies
+        holder.details.text = item.date
+        holder.container.setOnClickListener { onClick(item) }
     }
 
     override fun getItemCount(): Int = values.size
 
     inner class ViewHolder(binding: FragmentObservationItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
-//        val idView: TextView = binding.itemNumber
-//        val contentView: TextView = binding.content
+        val name: TextView = binding.birdName
+        val details: TextView = binding.birdDetails
+        val container: View = binding.observationItemCardContainer
 
     }
 

@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.ryanblignaut.featherfinder.R
 import com.ryanblignaut.featherfinder.databinding.FragmentObservationListBinding
 import com.ryanblignaut.featherfinder.firebase.FirebaseDataManager
 import com.ryanblignaut.featherfinder.model.BirdObservation
@@ -18,21 +17,15 @@ import com.ryanblignaut.featherfinder.viewmodel.observation.AllObservationsViewM
  * The list items will be able to be clicked in order to show more details of the sighting.
  */
 class ObservationList : PreBindingFragment<FragmentObservationListBinding>() {
-    //    private var columnCount = 1
     private val model: AllObservationsViewModel by viewModels()
-
 
     override fun addContentToView(savedInstanceState: Bundle?) {
         binding.loader.visibility = ViewGroup.VISIBLE
         model.live.observe(viewLifecycleOwner, ::populateObservationList)
         model.getObservations()
-        binding.addObservationAction.setOnClickListener { findNavController().navigate(R.id.navigation_add_observation) }
-        /*with(binding.observationsRecyclerView) {
-                    layoutManager = when {
-                        columnCount <= 1 -> androidx.recyclerview.widget.LinearLayoutManager(context)
-                        else -> androidx.recyclerview.widget.GridLayoutManager(context, columnCount)
-                    }
-                }*/
+        binding.addObservationAction.setOnClickListener {
+            findNavController().navigate(ObservationListDirections.actionNavigationObservationListToNavigationAddObservation())
+        }
     }
 
     private fun populateObservationList(result: Result<List<BirdObservation>>) {
@@ -55,9 +48,9 @@ class ObservationList : PreBindingFragment<FragmentObservationListBinding>() {
     }
 
     private fun onObservationClick(observation: BirdObservation) {
-        println("Clicked on observation")
-        println(observation.id)
-        TODO("On click of observation, open observation details")
+        val detailNav =
+            ObservationListDirections.actionObservationListToObservationDetail(observation.id)
+        findNavController().navigate(detailNav)
     }
 
     override fun inflateBindingSelf(

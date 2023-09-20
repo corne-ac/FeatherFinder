@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.org.jetbrains.kotlin.android)
     id("com.google.gms.google-services")
     alias(libs.plugins.com.google.android.libraries.mapsplatform.secrets.gradle.plugin)
+    id("androidx.navigation.safeargs.kotlin")
 }
 
 android {
@@ -61,8 +62,8 @@ dependencies {
     implementation(libs.recyclerview)
     implementation(libs.play.services.location)
     implementation(libs.firebase.auth.ktx)
-    implementation("androidx.navigation:navigation-fragment-ktx:2.6.0")
-    implementation("androidx.navigation:navigation-ui-ktx:2.4.1")
+    implementation(libs.navigation.fragment.ktx.v260)
+    implementation(libs.navigation.ui.ktx.v241)
 
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.android)

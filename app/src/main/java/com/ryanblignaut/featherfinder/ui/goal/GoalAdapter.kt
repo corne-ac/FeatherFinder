@@ -26,19 +26,19 @@ class GoalAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = values[position]
-        holder.idView.text = item.id
-        holder.contentView.text = item.description
-        holder.contentView.setOnClickListener { onClick(item) }
+//        holder.idView.text = item.id
+//        holder.contentView.text = item.description
+//        holder.contentView.setOnClickListener { onClick(item) }
     }
 
     inner class ViewHolder(binding: FragmentGoalItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        val idView: TextView = binding.itemNumber
-        val contentView: TextView = binding.content
+//        val idView: TextView = binding.itemNumber
+//        val contentView: TextView = binding.content
 
-        override fun toString(): String {
+        /*override fun toString(): String {
             return super.toString() + " '" + contentView.text + "'"
-        }
+        }*/
     }
 
 }

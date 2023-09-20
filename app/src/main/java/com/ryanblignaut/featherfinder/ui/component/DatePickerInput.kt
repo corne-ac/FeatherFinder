@@ -1,12 +1,11 @@
 package com.ryanblignaut.featherfinder.ui.component
 
 import android.content.Context
-import android.content.ContextWrapper
 import android.util.AttributeSet
 import android.view.View
-import androidx.fragment.app.FragmentActivity
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.ryanblignaut.featherfinder.R
+import com.ryanblignaut.featherfinder.ui.component.ext.show
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -35,30 +34,8 @@ class DatePickerInput : TextInput {
     }
 
     private fun showPicker(it: View) {
-        val fragmentActivity: FragmentActivity? = tryGetFragmentActivity()
-        if (fragmentActivity != null) {
-            picker.addOnPositiveButtonClickListener(::onSaveClicked)
-            if (!picker.isAdded) picker.show(fragmentActivity.supportFragmentManager, "TimePicker")
-        } else {
-            // TODO: Handle this case
-            // Handle the case where FragmentActivity is not found
-        }
-    }
-
-    // TODO: maybe move to util class
-    // Attempt to find the FragmentActivity
-    private fun tryGetFragmentActivity(): FragmentActivity? {
-        var fragmentActivity: FragmentActivity? = null
-        var context = this.context
-        // Context seems to be androidx.appcompat.view.ContextThemeWrapper but that extends ContextWrapper so this should be safe.
-        while (context is ContextWrapper) {
-            if (context is FragmentActivity) {
-                fragmentActivity = context
-                break
-            }
-            context = context.baseContext
-        }
-        return fragmentActivity
+        picker.addOnPositiveButtonClickListener(::onSaveClicked)
+        picker.show(context, "DatePicker")
     }
 
     private fun onSaveClicked(it: Long) {
