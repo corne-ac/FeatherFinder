@@ -93,13 +93,27 @@
         android:id="@+id/navigation_profile"
         android:name="com.ryanblignaut.featherfinder.ui.ProfileFragment"
         android:label="@string/profile"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_navigation_profile_to_settingsFragment"
+            app:destination="@id/navigation_settings"
+            app:enterAnim="@anim/fade"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_achievement"
         android:name="com.ryanblignaut.featherfinder.ui.achievement.ViewAchievements"
         android:label="@string/achievements"
         tools:layout="@layout/fragment_all_achievements" />
+
+    <fragment
+        android:id="@+id/navigation_settings"
+        android:name="com.ryanblignaut.featherfinder.ui.SettingsFragment"
+        android:label="SettingsFragment"
+        tools:layout="@layout/fragment_set"/>
 
     <!--  <fragment
           android:id="@+id/navigation_profile"

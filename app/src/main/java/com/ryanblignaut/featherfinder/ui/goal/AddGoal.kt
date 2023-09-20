@@ -36,10 +36,10 @@ class AddGoal : PreBindingFragment<FragmentGoalAddBinding>() {
     private fun saveGoal() {
         formViewModel.saveGoal(
             Goal(
-                name = binding.goalName.text.toString(),
-                startTime = binding.start.text.toString(),
-                endTime = binding.end.text.toString(),
-                description = binding.goalInfo.text.toString(),
+                 binding.goalName.text.toString(),
+                 binding.start.text.toString(),
+                 binding.end.text.toString(),
+                 binding.goalInfo.text.toString(),
             )
         )
     }

@@ -41,41 +41,16 @@ class MainActivity : AppCompatActivity() {
                 R.id.navigation_add_observation
             )
         )
-        val fadeAnimation = AnimationUtils.loadAnimation(applicationContext, R.anim.fade)
 
         //Hide bottom nav on certain screens
         navController.addOnDestinationChangedListener { _, destination, _ ->
             val id = destination.id
-            fadeAnimation.setAnimationListener(object : Animation.AnimationListener {
-                override fun onAnimationStart(animation: Animation) {
-                    // Animation started, you can add any necessary actions here
-                }
-
-                override fun onAnimationEnd(animation: Animation) {
-                    // Animation ended, change the visibility based on your conditions
-                    if (id == R.id.navigation_add_goal || id == R.id.navigation_add_observation) {
-                        binding.navView.visibility = View.GONE
-                    } else {
-                        binding.navView.visibility = View.VISIBLE
-                    }
-                }
-
-                override fun onAnimationRepeat(animation: Animation) {
-                    // Animation repeated, if needed
-                }
-            })
-            binding.navView.startAnimation(fadeAnimation)
-
-            /*  if (id == R.id.navigation_add_goal || id == R.id.navigation_add_observation) {
-                  binding.navView.startAnimation(fadeAnimation).also {
-                      binding.navView.visibility = View.GONE
-                  }
-
-              } else {
-                  binding.navView.startAnimation(fadeAnimation).also {
-                      binding.navView.visibility = View.VISIBLE
-                  }
-              }*/
+            val hideBottomList = listOf(
+                R.id.navigation_add_goal, R.id.navigation_add_observation,
+                R.id.navigation_settings, R.id.navigation_all_goals,
+                R.id.navigation_achievement
+            )
+            binding.navView.visibility = (if (hideBottomList.contains(id)) View.GONE else View.VISIBLE)
         }
 
         setupActionBarWithNavController(navController, appBarConfiguration)

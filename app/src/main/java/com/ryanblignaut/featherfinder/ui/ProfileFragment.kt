@@ -13,8 +13,8 @@ class ProfileFragment : PreBindingFragment<FragmentProfileBinding>() {
     override fun addContentToView(savedInstanceState: Bundle?) {
 
         binding.settingsAction.setOnClickListener {
-//            findNavController().navigate(R.id.navigation_settings)
-            TODO("Implement settings screen")
+            findNavController().navigate(R.id.action_navigation_profile_to_settingsFragment)
+            //TODO("Implement settings screen")
         }
         binding.goalsAction.setOnClickListener {
             findNavController().navigate(R.id.navigation_all_goals)

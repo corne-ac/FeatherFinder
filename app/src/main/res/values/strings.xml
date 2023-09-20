@@ -88,6 +88,9 @@
     <string name="icon_of_bird">Icon of bird in observation</string>
     <string name="bird_name_template">Bird Name</string>
     <string name="bird_details_template">Bird Details</string>
+    <string name="goal">goal</string>
+    <string name="observation_1">Observation 1</string>
+    <string name="observation_1_detail">observation 1 detail</string>
 
 
 </resources>

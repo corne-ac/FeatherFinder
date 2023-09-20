@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/observation_item_card_container"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/observation_item_card_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="16dp"
@@ -13,33 +13,99 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:gravity="start|center_vertical"
+        android:layout_height="90dp"
         android:orientation="horizontal">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:contentDescription="@string/icon_of_bird"
-            android:paddingHorizontal="8dp"
+            android:layout_gravity="start|center_vertical"
+            android:contentDescription="@string/goal"
+            android:paddingHorizontal="12dp"
             android:src="@drawable/bird_mint" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:gravity="start"
             android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/bird_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/observation_1"
+                android:textSize="32sp"
+                app:startIconDrawable="@drawable/goal_mint"
+                app:startIconTint="@color/mint" />
 
             <TextView
                 android:id="@+id/bird_details"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center"
-                android:hint="Observation 1"
-                android:textSize="32dp"
+                android:ellipsize="end"
+                android:hint="@string/observation_1_detail"
+                android:maxLines="1"
+                android:paddingHorizontal="8dp"
+                android:textSize="16sp"
                 app:startIconDrawable="@drawable/goal_mint"
                 app:startIconTint="@color/mint" />
 
         </LinearLayout>
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>
+
+    <!--<?xml version="1.0" encoding="utf-8"?>-->
+
+    <!--<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--    android:id="@+id/observation_item_card_container"-->
+    <!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
+    <!--    android:layout_width="match_parent"-->
+    <!--    android:layout_height="wrap_content"-->
+    <!--    android:layout_marginHorizontal="16dp"-->
+    <!--    android:layout_marginVertical="8dp"-->
+    <!--    app:cardBackgroundColor="?attr/cardBackgroundOnCard"-->
+    <!--    app:cardCornerRadius="12dp"-->
+    <!--    app:cardElevation="8dp">-->
+
+    <!--    <LinearLayout-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="match_parent"-->
+    <!--        android:layout_gravity="center"-->
+    <!--        android:gravity="start|center_vertical"-->
+    <!--        android:orientation="horizontal">-->
+
+    <!--        <ImageView-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:contentDescription="@string/icon_of_bird"-->
+    <!--            android:paddingHorizontal="8dp"-->
+    <!--            android:src="@drawable/bird_mint" />-->
+
+    <!--        <LinearLayout-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="match_parent"-->
+    <!--            android:orientation="vertical">-->
+
+    <!--            <TextView-->
+    <!--                android:id="@+id/bird_details"-->
+    <!--                android:layout_width="match_parent"-->
+    <!--                android:layout_height="match_parent"-->
+    <!--                android:gravity="center"-->
+    <!--                android:hint="Observation 1"-->
+    <!--                android:textSize="32dp"-->
+    <!--                app:startIconDrawable="@drawable/goal_mint"-->
+    <!--                app:startIconTint="@color/mint" />-->
+    <!--            <TextView-->
+    <!--                android:id="@+id/birdName"-->
+    <!--                android:layout_width="match_parent"-->
+    <!--                android:layout_height="match_parent"-->
+    <!--                android:gravity="center"-->
+    <!--                android:hint="Observation 1"-->
+    <!--                android:textSize="32dp"-->
+    <!--                app:startIconDrawable="@drawable/goal_mint"-->
+    <!--                app:startIconTint="@color/mint" />-->
+
+    <!--        </LinearLayout>-->
+    <!--    </LinearLayout>-->
+    <!--</com.google.android.material.card.MaterialCardView>-->
