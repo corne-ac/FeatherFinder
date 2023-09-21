@@ -6,8 +6,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.ryanblignaut.featherfinder.databinding.FragmentObservationListBinding
-import com.ryanblignaut.featherfinder.firebase.FirebaseDataManager
-import com.ryanblignaut.featherfinder.model.BirdObservation
+import com.ryanblignaut.featherfinder.model.BirdObsTitle
 import com.ryanblignaut.featherfinder.ui.helper.PreBindingFragment
 import com.ryanblignaut.featherfinder.viewmodel.observation.AllObservationsViewModel
 
@@ -28,28 +27,30 @@ class ObservationList : PreBindingFragment<FragmentObservationListBinding>() {
         }
     }
 
-    private fun populateObservationList(result: Result<List<BirdObservation>>) {
+    private fun populateObservationList(result: Result<List<BirdObsTitle>?>) {
         binding.loader.visibility = ViewGroup.GONE
 
         if (result.isFailure) {
             val throwable = result.exceptionOrNull()!!
-            if (throwable is FirebaseDataManager.ItemNotFoundExceptionFirebase) {
-                binding.noItemsFound.visibility = ViewGroup.VISIBLE
-                return
-            }
             throwable.printStackTrace()
             TODO("Show error message")
             return
         }
         val values = result.getOrNull()!!
+        if (values.isEmpty()) {
+            binding.noItemsFound.visibility = ViewGroup.VISIBLE
+            return
+        }
+
         binding.observationsRecyclerView.adapter =
             ObservationListViewAdapter(values, ::onObservationClick)
 
     }
 
-    private fun onObservationClick(observation: BirdObservation) {
-        val detailNav =
-            ObservationListDirections.actionObservationListToObservationDetail(observation.id)
+    private fun onObservationClick(observation: BirdObsTitle) {
+        val detailNav = ObservationListDirections.actionObservationListToObservationDetail(
+            observation.id, observation.date, observation.birdSpecies
+        )
         findNavController().navigate(detailNav)
     }
 

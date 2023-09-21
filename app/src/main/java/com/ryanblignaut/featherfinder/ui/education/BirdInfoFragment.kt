@@ -21,7 +21,7 @@ class BirdInfoFragment : PreBindingFragment<FragmentBirdInfoListBinding>() {
         // for how to implement paging
         binding.loadingRecyclerView.showLoading()
         viewModel.live.observe(viewLifecycleOwner, ::populateBirdList)
-        viewModel.fetchBirdsInLocation("Gauteng")
+        viewModel.fetchBirdsInLocation("centurion")
     }
 
     private fun populateBirdList(result: Result<XenoResponse>) {

@@ -42,7 +42,7 @@ class ObservationAdd : PreBindingFragment<FragmentObservationAddBinding>() {
         formViewModel.formState.observe(viewLifecycleOwner, updateFormStates(formStates))
     }
 
-    private fun onSaveObservationResult(result: Result<BirdObservation>) {
+    private fun onSaveObservationResult(result: Result<String>) {
         if (result.isFailure) {
             TODO("Error message")
         }

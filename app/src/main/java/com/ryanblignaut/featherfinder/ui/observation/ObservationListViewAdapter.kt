@@ -6,11 +6,12 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.ryanblignaut.featherfinder.databinding.FragmentObservationItemBinding
+import com.ryanblignaut.featherfinder.model.BirdObsTitle
 import com.ryanblignaut.featherfinder.model.BirdObservation
 
 class ObservationListViewAdapter(
-    private val values: List<BirdObservation>,
-    private val onClick: (BirdObservation) -> Unit,
+    private val values: List<BirdObsTitle>,
+    private val onClick: (BirdObsTitle) -> Unit,
 ) : RecyclerView.Adapter<ObservationListViewAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

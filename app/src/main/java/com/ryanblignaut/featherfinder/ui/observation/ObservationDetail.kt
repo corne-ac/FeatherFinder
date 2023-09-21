@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.ryanblignaut.featherfinder.databinding.FragmentObservationAddBinding
-import com.ryanblignaut.featherfinder.model.BirdObservation
+import com.ryanblignaut.featherfinder.model.BirdObsDetails
 import com.ryanblignaut.featherfinder.ui.helper.PreBindingFragment
 import com.ryanblignaut.featherfinder.viewmodel.observation.DetailObservationViewModel
 
@@ -25,18 +25,18 @@ class ObservationDetail : PreBindingFragment<FragmentObservationAddBinding>() {
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
         formViewModel.getObservationById(args.observationId)
+        binding.birdSpecies.setText(args.birdSpecies)
+        binding.date.setText(args.date)
         formViewModel.live.observe(viewLifecycleOwner, ::loadObservationDetails)
     }
 
-    private fun loadObservationDetails(result: Result<BirdObservation?>) {
+    private fun loadObservationDetails(result: Result<BirdObsDetails?>) {
 
         if (result.isFailure) {
             val throwable = result.exceptionOrNull()!!
             throwable.printStackTrace()
         }
         val values = result.getOrNull()!!
-        binding.birdSpecies.setText(values.birdSpecies)
-        binding.date.setText(values.date)
         binding.time.setText(values.time)
         binding.pos.setText(values.location)
         binding.notes.setText(values.notes)

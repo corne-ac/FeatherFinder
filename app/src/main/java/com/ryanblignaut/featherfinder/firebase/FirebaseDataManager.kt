@@ -1,3 +1,4 @@
+/*
 package com.ryanblignaut.featherfinder.firebase
 
 import com.google.firebase.database.DataSnapshot
@@ -46,6 +47,8 @@ object FirebaseDataManager {
     }
 
 
+*/
+/*
     suspend fun getAllGoals(): Result<List<Goal>> {
         // Get the current user and their goals
         val currentUser = FirebaseAuthManager.getCurrentUser()
@@ -58,24 +61,34 @@ object FirebaseDataManager {
         val userGoalRef = usersRef.child(currentUser!!.uid).child("goals").child(id)
         return fetchSingularDataFromFirebase(userGoalRef)
     }
+*//*
 
+
+*/
+/*
     fun saveGoal(goal: Goal): Result<Goal> {
         val currentUser = FirebaseAuthManager.getCurrentUser()
         val userGoalReg = usersRef.child(currentUser!!.uid).child("goals").child(goal.id)
         userGoalReg.setValue(goal)
         return Result.success(goal)
     }
+*//*
 
-    suspend fun saveObservation(observation: BirdObservation): Result<BirdObservation> {
+
+  */
+/*  suspend fun saveObservation(observation: BirdObservation): Result<BirdObservation> {
         val currentUser = FirebaseAuthManager.getCurrentUser()!!
         return saveDataToFirebase(
             usersRef.child(currentUser.uid).child("observations").child(observation.id), observation
         )
-    }
+    }*//*
 
-    suspend fun addUser(uid: String, username: String): Result<String> {
+
+   */
+/* suspend fun addUser(uid: String, username: String): Result<String> {
         return saveDataToFirebase(usersRef.child(uid).child("username"), username)
-    }
+    }*//*
+
 
     private suspend inline fun <reified T> saveDataToFirebase(
         databaseReference: DatabaseReference,
@@ -94,7 +107,8 @@ object FirebaseDataManager {
     }
 
 
-    /*   private suspend inline fun <reified T> getItems(ref: DatabaseReference): Result<List<T>> {
+    */
+/*   private suspend inline fun <reified T> getItems(ref: DatabaseReference): Result<List<T>> {
            return try {
                // Refer to https://stackoverflow.com/questions/66072471/what-is-the-difference-between-get-and-addlistenerforsinglevalueevent
                // Why do you recommend using get() when addListenerForSingleValueEvent is mentioned so much more?
@@ -114,7 +128,8 @@ object FirebaseDataManager {
            } catch (e: Exception) {
                Result.failure(e)
            }
-       }*/
+       }*//*
+
 
     private suspend inline fun <reified T> getItem(ref: DatabaseReference): Result<T?> {
         return makeFirebaseQuery(ref) { dataSnapshot ->
@@ -241,4 +256,4 @@ object FirebaseDataManager {
     }
 
 
-}
+}*/

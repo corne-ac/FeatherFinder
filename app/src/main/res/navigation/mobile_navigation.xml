@@ -81,6 +81,12 @@
         <argument
             android:name="observation_id"
             app:argType="string" />
+        <argument
+            android:name="date"
+            app:argType="string" />
+        <argument
+            android:name="birdSpecies"
+            app:argType="string" />
     </fragment>
 
     <fragment

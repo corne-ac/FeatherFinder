@@ -3,14 +3,14 @@ package com.ryanblignaut.featherfinder.ui.goal
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.ryanblignaut.featherfinder.databinding.FragmentGoalItemBinding
 import com.ryanblignaut.featherfinder.model.Goal
+import com.ryanblignaut.featherfinder.model.GoalTitle
 
 class GoalAdapter(
-    private val values: List<Goal>,
-    private val onClick: (Goal) -> Unit,
+    private val values: List<GoalTitle>,
+    private val onClick: (GoalTitle) -> Unit,
 ) : RecyclerView.Adapter<GoalAdapter.ViewHolder>() {
     override fun onCreateViewHolder(
         parent: ViewGroup,

@@ -1,6 +1,5 @@
 package com.ryanblignaut.featherfinder.viewmodel.achievement
 
-import com.ryanblignaut.featherfinder.firebase.FirebaseDataManager
 import com.ryanblignaut.featherfinder.model.Achievement
 import com.ryanblignaut.featherfinder.viewmodel.helper.BaseViewModel
 

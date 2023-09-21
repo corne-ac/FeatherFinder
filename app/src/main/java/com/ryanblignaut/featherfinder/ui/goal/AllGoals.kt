@@ -8,6 +8,7 @@ import androidx.navigation.fragment.findNavController
 import com.ryanblignaut.featherfinder.R
 import com.ryanblignaut.featherfinder.databinding.FragmentGoalListBinding
 import com.ryanblignaut.featherfinder.model.Goal
+import com.ryanblignaut.featherfinder.model.GoalTitle
 import com.ryanblignaut.featherfinder.ui.helper.PreBindingFragment
 import com.ryanblignaut.featherfinder.viewmodel.goal.AllGoalsViewModel
 
@@ -31,7 +32,7 @@ class AllGoals : PreBindingFragment<FragmentGoalListBinding>() {
         }
     }
 
-    private fun populateGoalList(it: Result<List<Goal>>) {
+    private fun populateGoalList(it: Result<List<GoalTitle>?>) {
         if (it.isFailure) {
             // TODO: Show error message
             println("We have no goals")
@@ -45,7 +46,7 @@ class AllGoals : PreBindingFragment<FragmentGoalListBinding>() {
         binding.loadingRecyclerView.setAdapter(GoalAdapter(values, ::onGoalClick))
     }
 
-    private fun onGoalClick(goal: Goal) {
+    private fun onGoalClick(goal: GoalTitle) {
         println("Clicked on goal")
         println(goal.id)
         //TODO: Open the goal view fragment
