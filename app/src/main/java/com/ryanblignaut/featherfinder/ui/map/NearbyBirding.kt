@@ -4,6 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.graphics.Color
+import android.location.Location
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -12,6 +13,8 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -33,6 +36,7 @@ private val PERMISSIONS_REQUIRED =
 
 class NearbyBirding : PreBindingFragment<FragmentMapBinding>(), OnMapReadyCallback {
     private lateinit var birdingHotspotViewModel: BirdingHotspotViewModel
+    private lateinit var fusedLocationClient: FusedLocationProviderClient //Used to get user location
     override fun addContentToView(savedInstanceState: Bundle?) {
 
     }
@@ -58,8 +62,7 @@ class NearbyBirding : PreBindingFragment<FragmentMapBinding>(), OnMapReadyCallba
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
-//        val googleMap =
-//            childFragmentManager.findFragmentById(com.ryanblignaut.featherfinder.R.id.map) as SupportMapFragment?
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext()) //initialise for retrieving location later
 
         //check for permissions
         when {
@@ -109,6 +112,7 @@ class NearbyBirding : PreBindingFragment<FragmentMapBinding>(), OnMapReadyCallba
 
 
     private fun showMap(savedInstanceState: Bundle?) {
+
         val googleMap = binding.map.getFragment<SupportMapFragment>()
         googleMap.onCreate(savedInstanceState)
         googleMap.getMapAsync(this)
@@ -120,6 +124,7 @@ class NearbyBirding : PreBindingFragment<FragmentMapBinding>(), OnMapReadyCallba
         return inflateBinding(inflater, container)
     }
 
+    @SuppressLint("MissingPermission")
     override fun onMapReady(map: GoogleMap) {
         // Check if the user has given permission to use their location.
 //        registerForActivityResult.launch(PERMISSIONS_REQUIRED)
@@ -127,68 +132,105 @@ class NearbyBirding : PreBindingFragment<FragmentMapBinding>(), OnMapReadyCallba
         birdingHotspotViewModel = ViewModelProvider(this)[BirdingHotspotViewModel::class.java]
         val convertBirdLocationOntoMap = function(map)
         birdingHotspotViewModel.live.observe(viewLifecycleOwner, convertBirdLocationOntoMap)
-        birdingHotspotViewModel.fetchHotspots(-25.873390, 28.197800)
+
+        //Get user location and fetch hotspots according to it
+        fusedLocationClient.lastLocation
+            .addOnSuccessListener { location: Location? -> //Can return null
+                location?.let {
+                    val userLoc = LatLng(location.latitude, location.longitude)
+                    birdingHotspotViewModel.fetchHotspots(userLoc.latitude, userLoc.longitude)
+                }
+
+            }
+            .addOnFailureListener {
+                val s = it.printStackTrace().toString()
+                val r = 1
+            }
 
     }
 
-    @SuppressLint("PotentialBehaviorOverride")
+    @SuppressLint("PotentialBehaviorOverride", "MissingPermission")
     private fun function(map: GoogleMap): (Result<Array<EBirdLocation>>) -> Unit {
-        return {
+        return { result ->
+            var userLocation: LatLng? = null
+            val radius = 10000.0
 
+            //Get user's last known location
+            fusedLocationClient.lastLocation
+                .addOnSuccessListener { location: Location? -> // Can return null
+                    location?.let {
+                        userLocation = LatLng(location.latitude, location.longitude)
 
-            var p = LatLng(40.730610, -73.935242);
-            map.clear()
-//                .fillColor(Color.parseColor("#220000FF"))
+                        //Handle the result of fetching eBird locations
+                        result.onSuccess { hotspots ->
+                            val markersInsideRadius = hotspots
+                                .filter { it.lat != null && it.lng != null }
+                                .filter { hotspot ->
+                                    val hotspotLocation = LatLng(hotspot.lat!!, hotspot.lng!!)
+                                    userLocation != null &&
+                                            calculateDistance(userLocation!!, hotspotLocation) <= radius
+                                }
 
+                            map.clear()
+                            map.isMyLocationEnabled = true
 
-            if (it.isSuccess) {
-                it.getOrNull()!!.forEach { hotspot ->
-                    // Skip the location if its latitude or longitude is null.
-                    if (hotspot.lat == null || hotspot.lng == null) return@forEach
-                    p = LatLng(hotspot.lat!!, hotspot.lng!!)
-                    val markerOptions =
-                        MarkerOptions().position(LatLng(hotspot.lat!!, hotspot.lng!!))
-                            .title(hotspot.locName)
+                            //Add markers for hotspots inside the radius
+                            markersInsideRadius.forEach { hotspot ->
+                                val p = LatLng(hotspot.lat!!, hotspot.lng!!)
+                                val markerOptions = MarkerOptions().position(p).title(hotspot.locName)
+                                map.addMarker(markerOptions)
+                            }
 
-                    map.addMarker(markerOptions)
-                }
+                            //Add a circle around user's location
+                            userLocation?.let { loc ->
+                                val circleOptions = CircleOptions()
+                                    .center(loc)
+                                    .radius(radius) // Radius in meters
+                                    .strokeColor(Color.BLUE)
+                                map.addCircle(circleOptions)
 
-                map.moveCamera(CameraUpdateFactory.newLatLng(p))
-                //TODO: Add a circle around the users current location
-                val circleOptions = CircleOptions().center(p).radius(10000.0) // Radius in meters
-                    .strokeColor(Color.BLUE)
-                map.addCircle(circleOptions)
+                                map.moveCamera(CameraUpdateFactory.newLatLng(loc))
+                            }
 
-                // TODO: Move to where we are on the map.
+                            //Set click listener for markers
+                            map.setOnMarkerClickListener { marker ->
+                                val position = marker.position
+                                val bundle = Bundle().apply {
+                                    putDouble("lat", position.latitude)
+                                    putDouble("lng", position.longitude)
+                                }
+                                findNavController().navigate(R.id.navigation_route, bundle)
+                                true
+                            }
 
-                map.setOnMarkerClickListener { marker ->
-                    val position = marker.position
-                    // Move to the next fragment and pass in the position
-//                    (activity as LoginActivity).loadFragment(RouteBirding(position))
+                            map.moveCamera(CameraUpdateFactory.zoomTo(11F))
+                            map.mapType = GoogleMap.MAP_TYPE_TERRAIN
+                        }
 
-                    Bundle().apply {
-                        putDouble("lat", position.latitude)
-                        putDouble("lng", position.longitude)
-                    }.also { bundle ->
-                        findNavController().navigate(R.id.navigation_route, bundle)
+                        result.onFailure { exception ->
+                            MaterialAlertDialogBuilder(requireContext())
+                                .setTitle("Error")
+                                .setMessage(exception.message ?: "Unknown error")
+                                .setCancelable(true)
+                                .show()
+                        }
                     }
-
-
-                    //                val markerTitle = marker.title
-                    //                val markerSnippet = marker.snippet
-                    //                println(markerTitle)
-                    true
                 }
-
-
-
-                map.moveCamera(CameraUpdateFactory.zoomTo(11F));
-                map.mapType = GoogleMap.MAP_TYPE_TERRAIN
-            } else MaterialAlertDialogBuilder(requireContext()).setTitle("Error")
-                .setMessage(it.exceptionOrNull()?.message ?: "Unknown error").setCancelable(true)
-                .show()
-
         }
+    }
+
+
+    // Function to calculate distance between two LatLng points in meters
+    private fun calculateDistance(point1: LatLng, point2: LatLng): Float {
+        val results = FloatArray(1)
+        Location.distanceBetween(
+            point1.latitude,
+            point1.longitude,
+            point2.latitude,
+            point2.longitude,
+            results
+        )
+        return results[0]
     }
 
 
