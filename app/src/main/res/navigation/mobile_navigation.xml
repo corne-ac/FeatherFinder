@@ -117,7 +117,7 @@
 
     <fragment
         android:id="@+id/navigation_settings"
-        android:name="com.ryanblignaut.featherfinder.ui.SettingsFragment"
+        android:name="com.ryanblignaut.featherfinder.ui.settings.SettingsFragment"
         android:label="SettingsFragment"
         tools:layout="@layout/fragment_set"/>
 

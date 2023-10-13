@@ -91,6 +91,9 @@
     <string name="goal">goal</string>
     <string name="observation_1">Observation 1</string>
     <string name="observation_1_detail">observation 1 detail</string>
+    <string name="measurement_system_preference">Measurement System Preference</string>
+    <string name="maximum_distance">Maximum Distance</string>
+    <string name="save_settings_action">Save Settings</string>
 
 
 </resources>

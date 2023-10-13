@@ -3,11 +3,13 @@ package com.ryanblignaut.featherfinder.firebase
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 import com.ryanblignaut.featherfinder.model.BirdObsDetails
 import com.ryanblignaut.featherfinder.model.BirdObsTitle
 import com.ryanblignaut.featherfinder.model.BirdObservation
 import com.ryanblignaut.featherfinder.model.Goal
 import com.ryanblignaut.featherfinder.model.GoalTitle
+import com.ryanblignaut.featherfinder.model.UserSettings
 import kotlinx.coroutines.tasks.await
 
 object FirestoreDataManager {
@@ -30,6 +32,47 @@ object FirestoreDataManager {
         }
     }
 
+
+    suspend fun getSettings(): Result<UserSettings?> {
+        return getDataFirestoreAuth { userRef ->
+//            getDataFirestore(it.collection("settings").document("settings"))
+
+            val settingsQuery = userRef.collection("settings").limit(1)
+            val settingsSnapshot = settingsQuery.get().await()
+            if (!settingsSnapshot.isEmpty) {
+                // If a settings document exists, parse and return it
+                val settingsData = settingsSnapshot.documents[0].toObject(UserSettings::class.java)
+                if (settingsData != null) {
+                    Result.success(settingsData)
+                } else {
+                    Result.failure(Exception("Failed to parse user settings"))
+                }
+            } else {
+                return Result.success(null)
+            }
+        }
+    }
+
+    suspend fun saveSettings(settings: UserSettings): Result<String> {
+        return saveDataFirestoreAuth { userRef ->
+            /*  it.collection("settings").add(settings).await().id*/
+
+            val settingsQuery = userRef.collection("settings").limit(1)
+            val existingSettings = settingsQuery.get().await()
+            if (existingSettings.isEmpty) {
+                // If no settings document exists, create a new one
+                val newSettingsRef = userRef.collection("settings").document()
+                newSettingsRef.set(settings).await()
+                newSettingsRef.id
+            } else {
+                // If a settings document exists, update it
+                val existingSettingsDoc = existingSettings.documents[0]
+                existingSettingsDoc.reference.set(settings, SetOptions.merge()).await()
+                existingSettingsDoc.id
+            }
+
+        }
+    }
 
     suspend fun requestObservationIdList(): Result<List<BirdObsTitle>?> {
         return getDataFirestoreAuth { getDataFirestoreCollection(it.collection("observations_list")) }
