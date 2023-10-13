@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.graphics.Color
 import android.location.Location
 import android.os.Bundle
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
@@ -14,7 +15,11 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.Priority
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -37,6 +42,7 @@ private val PERMISSIONS_REQUIRED =
 class NearbyBirding : PreBindingFragment<FragmentMapBinding>(), OnMapReadyCallback {
     private lateinit var birdingHotspotViewModel: BirdingHotspotViewModel
     private lateinit var fusedLocationClient: FusedLocationProviderClient //Used to get user location
+    private lateinit var locationCallback: LocationCallback //Used for location services
     override fun addContentToView(savedInstanceState: Bundle?) {
 
     }
@@ -136,17 +142,59 @@ class NearbyBirding : PreBindingFragment<FragmentMapBinding>(), OnMapReadyCallba
         //Get user location and fetch hotspots according to it
         fusedLocationClient.lastLocation
             .addOnSuccessListener { location: Location? -> //Can return null
-                location?.let {
+                if (location != null) {
                     val userLoc = LatLng(location.latitude, location.longitude)
                     birdingHotspotViewModel.fetchHotspots(userLoc.latitude, userLoc.longitude)
+                } else {
+                    //Try to start location service, as it is most common cause for a null return
+                    locServiceTry()
                 }
 
             }
             .addOnFailureListener {
-                val s = it.printStackTrace().toString()
-                val r = 1
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle("Location Retrieval Error")
+                    .setMessage(it.message ?: "Unknown error")
+                    .setCancelable(true)
+                    .show()
             }
 
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun locServiceTry() {
+        // 1. Start the location service
+        val locationRequest = LocationRequest.Builder(10000) // 10 seconds
+            .setPriority(Priority.PRIORITY_HIGH_ACCURACY) // 100
+            .build()
+
+        locationCallback = object : LocationCallback() {
+            override fun onLocationResult(locationResult: LocationResult) {
+                locationResult ?: return
+                for (location in locationResult.locations) {
+                    // 3. Use the location for further processing
+                    val userLoc = LatLng(location.latitude, location.longitude)
+                    birdingHotspotViewModel.fetchHotspots(userLoc.latitude, userLoc.longitude)
+
+                    // Stop location updates after the first successful retrieval
+                    fusedLocationClient.removeLocationUpdates(locationCallback)
+                }
+                //Dialog should only show if fail
+//                // Show a dialog indicating that no location was found
+//                MaterialAlertDialogBuilder(requireContext())
+//                    .setTitle("Location Service Error")
+//                    .setMessage("Please enable a location service on device")
+//                    .setCancelable(true)
+//                    .show()
+            }
+        }
+
+        // 2. Retrieve the location
+        fusedLocationClient.requestLocationUpdates(
+            locationRequest,
+            locationCallback,
+            Looper.getMainLooper()
+        )
     }
 
     @SuppressLint("PotentialBehaviorOverride", "MissingPermission")
