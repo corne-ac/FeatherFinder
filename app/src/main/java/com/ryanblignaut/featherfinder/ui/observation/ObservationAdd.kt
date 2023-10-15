@@ -106,6 +106,8 @@ class ObservationAdd : PreBindingFragment<FragmentObservationAddBinding>() {
                 .addOnSuccessListener { location: Location? -> //Can return null
                     if (location != null) {
                         val userLoc = LatLng(location.latitude, location.longitude)
+                        val lat = userLoc.latitude.toString()
+                        val long = userLoc.longitude.toString()
                         //Save here
                         formViewModel.saveObservation(
                             BirdObservation(
@@ -113,8 +115,8 @@ class ObservationAdd : PreBindingFragment<FragmentObservationAddBinding>() {
                                 binding.date.getText(),
                                 binding.time.getText(),
                                 binding.notes.getText(),
-                                userLoc.latitude.toString(),
-                                userLoc.longitude.toString()
+                                lat,
+                                long
                             )
                         )
                     } else {

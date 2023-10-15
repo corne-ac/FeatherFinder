@@ -61,7 +61,7 @@
                 />
 
             <com.google.android.gms.maps.MapView
-                android:id="@+id/pos"
+                android:id="@+id/miniMap"
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
                 app:compHeight="128dp"
