@@ -38,7 +38,7 @@ class ObservationDetail : PreBindingFragment<FragmentObservationAddBinding>() {
         }
         val values = result.getOrNull()!!
         binding.time.setText(values.time)
-        binding.pos.setText(values.location)
+        //binding.pos.setText(values.lat)
         binding.notes.setText(values.notes)
 
     }
