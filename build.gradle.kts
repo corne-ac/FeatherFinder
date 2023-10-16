@@ -1,7 +1,7 @@
 
 buildscript {
     dependencies {
-        classpath("com.android.tools.build:gradle:8.0.2")
+        classpath("com.android.tools.build:gradle:8.1.1")
         classpath(libs.google.services)
         classpath(libs.navigation.safe.args.gradle.plugin)
     }

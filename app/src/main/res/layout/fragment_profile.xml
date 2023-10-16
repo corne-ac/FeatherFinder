@@ -21,7 +21,9 @@
             android:layout_height="wrap_content"
             android:padding="12dp"
             android:text="@string/profile"
-            android:textSize="32sp" />
+            android:textSize="32sp"
+            android:background="@color/mint"
+            android:textColor="@color/white"/>
 
         <ScrollView
             android:layout_width="match_parent"
