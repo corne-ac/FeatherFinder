@@ -41,7 +41,7 @@
                 android:id="@+id/headingTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Bird Name"
+                android:hint="Achievements"
 
                 android:textSize="32dp"
                 app:startIconDrawable="@drawable/settings_mint"
