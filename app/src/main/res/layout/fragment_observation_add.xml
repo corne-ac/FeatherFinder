@@ -52,13 +52,23 @@
                 app:hint="@string/time"
                 app:icon="@drawable/time_mint" />
 
-            <com.ryanblignaut.featherfinder.ui.component.TextInput
-                android:id="@+id/pos"
-                android:layout_width="match_parent"
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/myLocSwitch"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="Use current location? "
+                android:checked="false"
+                />
+
+            <com.google.android.gms.maps.MapView
+                android:id="@+id/miniMap"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
                 app:compHeight="128dp"
                 app:hint="@string/pos"
                 app:icon="@drawable/map_mint" />
+
+
 
             <com.ryanblignaut.featherfinder.ui.component.TextInput
                 android:id="@+id/notes"
@@ -77,4 +87,5 @@
             android:layout_marginBottom="16dp"
             android:text="@string/action_save_observation" />
     </LinearLayout>
+
 </com.google.android.material.card.MaterialCardView>

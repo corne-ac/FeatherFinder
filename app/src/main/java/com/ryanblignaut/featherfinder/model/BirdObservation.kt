@@ -5,8 +5,9 @@ class BirdObservation(
     birdSpecies: String,
     date: String,
     time: String,
-    location: String,
     notes: String,
+    lat: String,
+    long: String
 ) {
 
     val birdObsTitle: BirdObsTitle = BirdObsTitle()
@@ -16,8 +17,9 @@ class BirdObservation(
         this.birdObsTitle.birdSpecies = birdSpecies
         this.birdObsTitle.date = date
         this.birdObsDetails.time = time
-        this.birdObsDetails.location = location
         this.birdObsDetails.notes = notes
+        this.birdObsDetails.lat = lat
+        this.birdObsDetails.long = long
     }
 
 
@@ -25,8 +27,9 @@ class BirdObservation(
 
 class BirdObsDetails {
     var time: String = ""
-    var location: String = ""
     var notes: String = ""
+    var lat: String = ""
+    var long: String = ""
 }
 
 class BirdObsTitle {
