@@ -10,7 +10,7 @@ class XenoApiTest {
 
     @Test
     fun testLocation() = runTest {
-        val nearbyHotspots = XenoApi.fetchBirdsInLocation("Pretoria")
+        val nearbyHotspots = XenoApi.fetchBirdsInLocation("centurion")
         TestCase.assertTrue(nearbyHotspots.isSuccess)
         println(nearbyHotspots.getOrNull())
     }

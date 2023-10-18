@@ -2,7 +2,6 @@ package com.ryanblignaut.featherfinder.ui.map
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.content.res.Resources
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,7 +14,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MapStyleOptions
+import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.maps.android.data.geojson.GeoJsonLayer
@@ -68,7 +67,7 @@ class RouteBirding : PreBindingFragment<FragmentMapBinding>(),
         }
         map.isMyLocationEnabled = true
 
-        try {
+      /*  try {
             // Customise the styling of the base map using a JSON object defined
             // in a raw resource file.
             val success: Boolean = map.setMapStyle(
@@ -81,18 +80,17 @@ class RouteBirding : PreBindingFragment<FragmentMapBinding>(),
             }
         } catch (e: Resources.NotFoundException) {
             Log.e("a", "Can't find style. Error: ", e)
-        }
+        }*/
 //        map.mapType = GoogleMap.MAP_TYPE_TERRAIN
 
         val fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
         fusedLocationClient.lastLocation.addOnSuccessListener { location ->
             val currentLocation = LatLng(location.latitude, location.longitude)
-            map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 11f))
-
             val startLat = currentLocation.latitude
             val startLong = currentLocation.longitude
             val endLat = positionIn.latitude
             val endLong = positionIn.longitude
+
 
             Log.d("FF_APP", "onMapReady: $startLat, $startLong, $endLat, $endLong")
             routeViewModel.fetchRoute(startLong, startLat, endLong, endLat)
@@ -105,6 +103,10 @@ class RouteBirding : PreBindingFragment<FragmentMapBinding>(),
                 layer.defaultLineStringStyle.color = 0xFF0000FF.toInt()
                 layer.addLayerToMap()
                 layer.defaultLineStringStyle.width = 15f
+                layer.boundingBox?.let { bounds ->
+                    map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 100))
+                }
+
             } else {
                 MaterialAlertDialogBuilder(requireContext()).setTitle("Error")
                     .setMessage(it.exceptionOrNull()?.message ?: "Unknown error")

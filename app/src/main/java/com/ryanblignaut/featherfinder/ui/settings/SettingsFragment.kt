@@ -7,6 +7,8 @@ import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import com.ryanblignaut.featherfinder.R
 import com.ryanblignaut.featherfinder.databinding.FragmentSetBinding
 import com.ryanblignaut.featherfinder.model.UserSettings
 import com.ryanblignaut.featherfinder.ui.helper.PreBindingFragment
@@ -32,7 +34,7 @@ class SettingsFragment : PreBindingFragment<FragmentSetBinding>() {
         binding.measurement.setOnItemClickListener { _, _, position, _ ->
             SettingReferences.userSettings.isMetric = position == 0
         }
-        binding.measurement.setText(metricOptions[0], false)
+//        binding.measurement.setText(metricOptions[0], false)
 
         val darkModeOptions = arrayOf("Off", "On")
         binding.darkMode.setAdapter(
@@ -46,10 +48,14 @@ class SettingsFragment : PreBindingFragment<FragmentSetBinding>() {
 
             SettingReferences.userSettings.isDarkMode = position == 1
         }
-        binding.darkMode.setText(darkModeOptions[0], false)
+//        binding.darkMode.setText(darkModeOptions[0], false)
+        var units = " Miles "
+        if (SettingReferences.userSettings.isMetric) units = " Km "
+        val map = SettingReferences.MaxDist.entries.map {
+            it.maxDist.toString() + units
+        }
 
-
-        val rangeOptions = arrayOf("1 Km", "5 Km", "10 Km", "50 Km")
+        val rangeOptions = map.toTypedArray()
         binding.distance.setAdapter(
             ArrayAdapter(
                 requireContext(),
@@ -61,7 +67,7 @@ class SettingsFragment : PreBindingFragment<FragmentSetBinding>() {
             //TODO: map this to the actual distance
             SettingReferences.userSettings.maxDistance = position
         }
-        binding.distance.setText(rangeOptions[0], false)
+//        binding.distance.setText(rangeOptions[0], false)
 
         binding.saveSettingsAction.setOnClickListener {
             viewModel.updateSettings(SettingReferences.userSettings)
@@ -72,6 +78,9 @@ class SettingsFragment : PreBindingFragment<FragmentSetBinding>() {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
                 }
             }
+
+            findNavController().navigate(R.id.navigation_home)
+
 
         }
         viewModel.live.observe(viewLifecycleOwner, ::updateSettings)
@@ -86,7 +95,12 @@ class SettingsFragment : PreBindingFragment<FragmentSetBinding>() {
 
         binding.measurement.setText(if (settings.isMetric) "Metric" else "Imperial", false)
         binding.darkMode.setText(if (settings.isDarkMode) "On" else "Off", false)
-        binding.distance.setText(settings.maxDistance.toString() + " Km ", false)
+        var units = " Miles "
+        if (settings.isMetric) units = " Km "
+        binding.distance.setText(
+            SettingReferences.MaxDist.values()[settings.maxDistance].maxDist.toString() + units,
+            false
+        )
     }
 
     override fun inflateBindingSelf(

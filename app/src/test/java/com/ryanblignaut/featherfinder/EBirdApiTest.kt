@@ -9,7 +9,7 @@ class EBirdApiTest {
 
     @Test
     fun testGetBirds() = runTest {
-        val nearbyHotspots = EBirdApi.fetchNearbyHotspots(-25.873390, 28.197800, 10)
+        val nearbyHotspots = EBirdApi.fetchNearbyHotspots(-25.873390, 28.197800, 10.0)
         TestCase.assertTrue(nearbyHotspots.isSuccess)
         /*  nearbyHotspots.getOrNull()?.forEach {
               println(it)
