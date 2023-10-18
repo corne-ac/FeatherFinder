@@ -6,6 +6,10 @@ import com.ryanblignaut.featherfinder.model.api.EBirdLocation
 import com.ryanblignaut.featherfinder.utils.ApiRequestUtility
 
 // Docs: https://documenter.getpostman.com/view/664302/S1ENwy59#674e81c1-6a0c-4836-8a7e-6ea1fe8e6677
+
+//The below code was derived from eBird API
+//https://documenter.getpostman.com/view/664302/S1ENwy59
+
 object EBirdApi {
 
     private const val baseUrl = "https://api.ebird.org"

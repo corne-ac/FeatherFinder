@@ -5,6 +5,9 @@ import com.ryanblignaut.featherfinder.utils.ApiRequestUtility
 
 //Docs https://openrouteservice.org/dev/#/api-docs/v2/directions/{profile}/json/post
 
+//The below code was derived from OpenRouteService
+//https://openrouteservice.org/
+
 enum class VehicleType(val type: String) {
     CAR("driving-car"), CAR_HGV("driving-hgv"), BIKE("cycling-regular"), BIKE_ELECTRIC("cycling-electric"), BIKE_MOUNTAIN(
         "cycling-mountain"

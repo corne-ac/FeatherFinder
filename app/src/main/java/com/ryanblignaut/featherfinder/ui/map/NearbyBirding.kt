@@ -48,6 +48,11 @@ class NearbyBirding : PreBindingFragment<FragmentMapBinding>(), OnMapReadyCallba
 
     }
 
+    //The below code was derived from StackOverflow
+    //https://stackoverflow.com/questions/73864190/location-permission-does-not-always-show-up
+    //Primo
+    //https://stackoverflow.com/users/8101634/primo
+
     private val requestPermissionLauncher =
         registerForActivityResult(
             ActivityResultContracts.RequestMultiplePermissions()

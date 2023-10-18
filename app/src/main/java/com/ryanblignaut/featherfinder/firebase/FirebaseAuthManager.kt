@@ -13,6 +13,9 @@ object FirebaseAuthManager {
         return auth.currentUser
     }
 
+    //The below auth code was derived from Google Firebase
+    //https://firebase.google.com/docs/auth/android/google-signin
+
     suspend fun registerUser(email: String, password: String): Result<FirebaseUser> {
         return try {
             val result = auth.createUserWithEmailAndPassword(email, password).await()

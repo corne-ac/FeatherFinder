@@ -27,6 +27,9 @@ object ApiRequestUtility {
         }
     }
 
+    //The below code was derived from Google Firebase
+    //https://firebase.google.com/docs/database/android/read-and-write
+
     suspend inline fun <reified T> makeRequestJson(
         apiUrl: String,
         method: RequestMethod = RequestMethod.GET,

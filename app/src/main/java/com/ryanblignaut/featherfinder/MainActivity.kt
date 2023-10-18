@@ -43,6 +43,12 @@ class MainActivity : AppCompatActivity() {
         )
 
         //Hide bottom nav on certain screens
+
+        //The below hide code snippet was derived from StackOverflow
+        //https://stackoverflow.com/questions/56461156/how-to-hide-the-bottom-navigation-bar-in-certain-fragments
+        //Skyrela
+        //https://stackoverflow.com/users/17714915/skyrela
+
         navController.addOnDestinationChangedListener { _, destination, _ ->
             val id = destination.id
             val hideBottomList = listOf(

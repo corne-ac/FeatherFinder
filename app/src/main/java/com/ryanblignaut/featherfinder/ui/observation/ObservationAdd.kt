@@ -41,6 +41,9 @@ class ObservationAdd : PreBindingFragment<FragmentObservationAddBinding>(), OnMa
     private lateinit var locationCallback: LocationCallback //Used for location services
     private var selectedLatLng: LatLng? = null
 
+    //The fusedLocation code inside the below snippets are derived form Google Developers
+    //https://developers.google.com/android/reference/com/google/android/gms/location/FusedLocationProviderClient
+
     override fun addContentToView(savedInstanceState: Bundle?) {
         binding.saveObservationAction.setOnClickListener { saveObservation() }
         binding.saveObservationAction.isVisible = true
