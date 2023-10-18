@@ -60,13 +60,21 @@
                 android:checked="false"
                 />
 
-            <com.google.android.gms.maps.MapView
+            <androidx.fragment.app.FragmentContainerView
                 android:id="@+id/miniMap"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
                 app:compHeight="128dp"
                 app:hint="@string/pos"
-                app:icon="@drawable/map_mint" />
+                app:icon="@drawable/map_mint"
+                android:layout_marginEnd="12dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginBottom="12dp">
+
+
+
+            </androidx.fragment.app.FragmentContainerView>
 
 
 
