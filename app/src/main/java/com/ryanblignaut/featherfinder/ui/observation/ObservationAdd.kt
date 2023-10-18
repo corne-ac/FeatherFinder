@@ -5,6 +5,7 @@ import android.location.Location
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -13,7 +14,11 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.ryanblignaut.featherfinder.R
 import com.ryanblignaut.featherfinder.databinding.FragmentObservationAddBinding
@@ -24,18 +29,21 @@ import com.ryanblignaut.featherfinder.viewmodel.helper.FormState
 import com.ryanblignaut.featherfinder.viewmodel.helper.FormStateNew
 import com.ryanblignaut.featherfinder.viewmodel.observation.AddObservationViewModel
 
+
 /**
  * This class represents the user interface for creating a bird observation.
  * It provides functionality to record details of a bird sighting made by a user.
  * Bird observations include information such as the bird species, location, date, and additional notes.
  */
-class ObservationAdd : PreBindingFragment<FragmentObservationAddBinding>() {
+class ObservationAdd : PreBindingFragment<FragmentObservationAddBinding>(), OnMapReadyCallback {
     private val formViewModel: AddObservationViewModel by viewModels()
     private lateinit var fusedLocationClient: FusedLocationProviderClient //Used to get user location
     private lateinit var locationCallback: LocationCallback //Used for location services
+    private var selectedLatLng: LatLng? = null
 
     override fun addContentToView(savedInstanceState: Bundle?) {
         binding.saveObservationAction.setOnClickListener { saveObservation() }
+        binding.saveObservationAction.isVisible = true
         formViewModel.live.observe(viewLifecycleOwner, ::onSaveObservationResult)
     }
 
@@ -52,6 +60,21 @@ class ObservationAdd : PreBindingFragment<FragmentObservationAddBinding>() {
         // Observe the form state.
         formViewModel.formState.observe(viewLifecycleOwner, updateFormStates(formStates))
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext()) //initialise for retrieving location later
+        val googleMap = binding.miniMap.getFragment<SupportMapFragment>()
+        googleMap.onCreate(savedInstanceState)
+        googleMap.getMapAsync(this)
+        binding.myLocSwitch.setOnCheckedChangeListener { _, isChecked ->
+            //Disable map
+            binding.miniMap.isVisible = !isChecked
+        }
+    }
+
+    override fun onMapReady(googleMap: GoogleMap) {
+        googleMap.setOnMapClickListener {//Set user selected location
+            selectedLatLng = it
+            googleMap.clear()
+            googleMap.addMarker(MarkerOptions().position(it))
+        }
     }
 
     private fun onSaveObservationResult(result: Result<String>) {
@@ -125,6 +148,7 @@ class ObservationAdd : PreBindingFragment<FragmentObservationAddBinding>() {
                     }
 
                 }
+                //User select loc on map?
                 .addOnFailureListener {
                     MaterialAlertDialogBuilder(requireContext())
                         .setTitle("Location Retrieval Error")
@@ -133,6 +157,19 @@ class ObservationAdd : PreBindingFragment<FragmentObservationAddBinding>() {
                         .show()
                 }
         } else {
+            if (selectedLatLng!=null) {
+                formViewModel.saveObservation(
+                    BirdObservation(
+                        binding.birdSpecies.getText(),
+                        binding.date.getText(),
+                        binding.time.getText(),
+                        binding.notes.getText(),
+                        selectedLatLng!!.latitude.toString(),
+                        selectedLatLng!!.longitude.toString()
+                    )
+                )
+                return
+            }
             formViewModel.saveObservation(
                 BirdObservation(
                     binding.birdSpecies.getText(),

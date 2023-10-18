@@ -51,17 +51,17 @@ class ObservationDetail : PreBindingFragment<FragmentObservationAddBinding>() {
         binding.time.setText(values.time)
         //binding.pos.setText(values.lat)
         binding.notes.setText(values.notes)
+        binding.saveObservationAction.isVisible = false
 
         //check if null location, display toggle
         if (values.lat != "" || values.long != "") {
-            //create google map ding eers
-//            val googleMap = view?.findViewById<MapView>(R.id.miniMap)
             googleMap.getMapAsync { map ->
                 val location = LatLng(values.lat.toDouble(), values.long.toDouble())
                 val marker = MarkerOptions().position(location)
                 map.addMarker(marker)
-                map.moveCamera(CameraUpdateFactory.newLatLng(location))
                 map.moveCamera(CameraUpdateFactory.zoomTo(15F))
+                map.moveCamera(CameraUpdateFactory.newLatLng(location))
+
                 map.uiSettings.apply {
                     isScrollGesturesEnabled = false
                     isZoomGesturesEnabled = false
@@ -74,10 +74,8 @@ class ObservationDetail : PreBindingFragment<FragmentObservationAddBinding>() {
         } else {
             binding.myLocSwitch.isEnabled = false
             binding.myLocSwitch.isActivated = false
+            binding.miniMap.isVisible = false
         }
-
-
-
     }
 
     override fun inflateBindingSelf(
