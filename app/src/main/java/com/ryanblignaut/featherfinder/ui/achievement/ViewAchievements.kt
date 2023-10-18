@@ -4,12 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import com.ryanblignaut.featherfinder.databinding.FragmentAllAchievementsBinding
 import com.ryanblignaut.featherfinder.databinding.FragmentRegisterBinding
 import com.ryanblignaut.featherfinder.model.Achievement
 import com.ryanblignaut.featherfinder.ui.helper.PreBindingFragment
 import com.ryanblignaut.featherfinder.viewmodel.achievement.AllAchievementsViewModel
 
-class ViewAchievements : PreBindingFragment<FragmentRegisterBinding>() {
+class ViewAchievements : PreBindingFragment<FragmentAllAchievementsBinding>() {
     private val model: AllAchievementsViewModel by viewModels()
 
     override fun addContentToView(savedInstanceState: Bundle?) {
@@ -30,7 +31,7 @@ class ViewAchievements : PreBindingFragment<FragmentRegisterBinding>() {
 
     override fun inflateBindingSelf(
         inflater: LayoutInflater, container: ViewGroup?, attachToRoot: Boolean,
-    ): FragmentRegisterBinding {
+    ): FragmentAllAchievementsBinding {
         return inflateBinding(inflater, container)
     }
 }

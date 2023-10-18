@@ -5,8 +5,8 @@ import com.ryanblignaut.featherfinder.model.api.EBirdLocation
 import com.ryanblignaut.featherfinder.viewmodel.helper.BaseViewModel
 
 class BirdingHotspotViewModel : BaseViewModel<Array<EBirdLocation>>() {
-    fun fetchHotspots(latitude: Double, longitude: Double) =
-        fetchInBackground { EBirdApi.fetchNearbyHotspots(latitude, longitude, 20) }
+    fun fetchHotspots(latitude: Double, longitude: Double, dist: Float) =
+        fetchInBackground { EBirdApi.fetchNearbyHotspots(latitude, longitude, dist) }
 }
 
 /*class BirdingHotspotViewModel : BaseViewModel<Result<Array<EBirdLocation>>>() {

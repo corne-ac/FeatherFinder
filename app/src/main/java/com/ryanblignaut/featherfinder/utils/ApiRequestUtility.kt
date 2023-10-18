@@ -68,10 +68,11 @@ object ApiRequestUtility {
     ): Result<String> {
         var connection: HttpURLConnection? = null
         try {
-            val url = URL(apiUrl.toString())
+            val url = URL(apiUrl)
             connection = url.openConnection() as HttpURLConnection
             connection.requestMethod = method.name
-            connection.connectTimeout = 5000
+            connection.connectTimeout = 15000
+            connection.readTimeout = 15000
 
             // Add headers to the request
             headers?.forEach { (key, value) ->

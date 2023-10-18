@@ -26,16 +26,17 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.CircleOptions
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.ryanblignaut.featherfinder.R
 import com.ryanblignaut.featherfinder.databinding.FragmentMapBinding
 import com.ryanblignaut.featherfinder.model.api.EBirdLocation
 import com.ryanblignaut.featherfinder.ui.helper.PreBindingFragment
+import com.ryanblignaut.featherfinder.utils.SettingReferences
 import com.ryanblignaut.featherfinder.viewmodel.BirdingHotspotViewModel
 
 
-private const val REQUEST_LOCATION_PERMISSIONS_CODE = 123
 private val PERMISSIONS_REQUIRED =
     arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)
 
@@ -68,7 +69,8 @@ class NearbyBirding : PreBindingFragment<FragmentMapBinding>(), OnMapReadyCallba
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext()) //initialise for retrieving location later
+        fusedLocationClient =
+            LocationServices.getFusedLocationProviderClient(requireContext()) //initialise for retrieving location later
 
         //check for permissions
         when {
@@ -136,7 +138,7 @@ class NearbyBirding : PreBindingFragment<FragmentMapBinding>(), OnMapReadyCallba
 //        registerForActivityResult.launch(PERMISSIONS_REQUIRED)
 
         birdingHotspotViewModel = ViewModelProvider(this)[BirdingHotspotViewModel::class.java]
-        val convertBirdLocationOntoMap = function(map)
+        val convertBirdLocationOntoMap = addItems(map)
         birdingHotspotViewModel.live.observe(viewLifecycleOwner, convertBirdLocationOntoMap)
 
         //Get user location and fetch hotspots according to it
@@ -144,7 +146,12 @@ class NearbyBirding : PreBindingFragment<FragmentMapBinding>(), OnMapReadyCallba
             .addOnSuccessListener { location: Location? -> //Can return null
                 if (location != null) {
                     val userLoc = LatLng(location.latitude, location.longitude)
-                    birdingHotspotViewModel.fetchHotspots(userLoc.latitude, userLoc.longitude)
+                    SettingReferences.getMaxDistance()
+                    birdingHotspotViewModel.fetchHotspots(
+                        userLoc.latitude,
+                        userLoc.longitude,
+                        SettingReferences.getMaxDistance()
+                    )
                 } else {
                     //Try to start location service, as it is most common cause for a null return
                     locServiceTry()
@@ -170,11 +177,14 @@ class NearbyBirding : PreBindingFragment<FragmentMapBinding>(), OnMapReadyCallba
 
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult) {
-                locationResult ?: return
                 for (location in locationResult.locations) {
                     // 3. Use the location for further processing
                     val userLoc = LatLng(location.latitude, location.longitude)
-                    birdingHotspotViewModel.fetchHotspots(userLoc.latitude, userLoc.longitude)
+                    birdingHotspotViewModel.fetchHotspots(
+                        userLoc.latitude,
+                        userLoc.longitude,
+                        SettingReferences.getMaxDistance()
+                    )
 
                     // Stop location updates after the first successful retrieval
                     fusedLocationClient.removeLocationUpdates(locationCallback)
@@ -198,10 +208,10 @@ class NearbyBirding : PreBindingFragment<FragmentMapBinding>(), OnMapReadyCallba
     }
 
     @SuppressLint("PotentialBehaviorOverride", "MissingPermission")
-    private fun function(map: GoogleMap): (Result<Array<EBirdLocation>>) -> Unit {
+    private fun addItems(map: GoogleMap): (Result<Array<EBirdLocation>>) -> Unit {
         return { result ->
-            var userLocation: LatLng? = null
-            val radius = 10000.0
+            var userLocation: LatLng?
+            val radius = SettingReferences.getMaxDistance() * 1000 /*10000.0*/
 
             //Get user's last known location
             fusedLocationClient.lastLocation
@@ -211,33 +221,47 @@ class NearbyBirding : PreBindingFragment<FragmentMapBinding>(), OnMapReadyCallba
 
                         //Handle the result of fetching eBird locations
                         result.onSuccess { hotspots ->
+
+                            // Sometimes the eBird API returns a value that would be outside the radius so we will filter them out for now.
                             val markersInsideRadius = hotspots
                                 .filter { it.lat != null && it.lng != null }
                                 .filter { hotspot ->
                                     val hotspotLocation = LatLng(hotspot.lat!!, hotspot.lng!!)
                                     userLocation != null &&
-                                            calculateDistance(userLocation!!, hotspotLocation) <= radius
+                                            calculateDistance(
+                                                userLocation!!,
+                                                hotspotLocation
+                                            ) <= radius
                                 }
 
                             map.clear()
                             map.isMyLocationEnabled = true
 
+                            val boundsBuilder = LatLngBounds.Builder()
+
                             //Add markers for hotspots inside the radius
                             markersInsideRadius.forEach { hotspot ->
                                 val p = LatLng(hotspot.lat!!, hotspot.lng!!)
-                                val markerOptions = MarkerOptions().position(p).title(hotspot.locName)
+                                boundsBuilder.include(p)
+                                val markerOptions =
+                                    MarkerOptions().position(p).title(hotspot.locName)
                                 map.addMarker(markerOptions)
                             }
+                            // Animate the map camera to the bounds of the markers.
+                            map.animateCamera(
+                                CameraUpdateFactory.newLatLngZoom(
+                                    userLocation!!,
+                                    11f
+                                )
+                            )
 
                             //Add a circle around user's location
                             userLocation?.let { loc ->
                                 val circleOptions = CircleOptions()
                                     .center(loc)
-                                    .radius(radius) // Radius in meters
+                                    .radius(radius.toDouble()) // Radius in meters
                                     .strokeColor(Color.BLUE)
                                 map.addCircle(circleOptions)
-
-                                map.moveCamera(CameraUpdateFactory.newLatLng(loc))
                             }
 
                             //Set click listener for markers
@@ -251,7 +275,6 @@ class NearbyBirding : PreBindingFragment<FragmentMapBinding>(), OnMapReadyCallba
                                 true
                             }
 
-                            map.moveCamera(CameraUpdateFactory.zoomTo(11F))
                             map.mapType = GoogleMap.MAP_TYPE_TERRAIN
                         }
 

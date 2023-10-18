@@ -34,7 +34,6 @@
     <string name="ui">UI</string>
     <string name="dark_mode">Dark Mode</string>
     <string name="dark_mode_def_value">MODE_NIGHT_FOLLOW_SYSTEM</string>
-    <string name="app_info">Some info about the app and how to use it</string>
     <string name="home">Home</string>
     <string name="invalid_empty_email">Email can\'t be empty</string>
     <string name="invalid_empty_password">Password can\'t be empty</string>
@@ -94,6 +93,13 @@
     <string name="measurement_system_preference">Measurement System Preference</string>
     <string name="maximum_distance">Maximum Distance</string>
     <string name="save_settings_action">Save Settings</string>
+    <string name="birdsounds">BirdSounds</string>
+    <string name="explore_bird_sounds">Explore bird sounds</string>
+    <string name="view_this_page">View this page</string>
+    <string name="browse_map">Browse the map to find birding hotspots</string>
+    <string name="view_and_capture">View and capture bird sightings</string>
+    <string name="manage_your_profile">Manage your profile</string>
+    <string name="app_info">Welcome to our Feather Finder!\nDiscover the enchanting world of birding. Select from the bottom menu to:</string>
 
 
 </resources>

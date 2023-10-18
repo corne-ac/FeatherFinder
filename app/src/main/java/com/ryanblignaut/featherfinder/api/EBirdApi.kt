@@ -19,7 +19,7 @@ object EBirdApi {
 
 
     suspend fun fetchNearbyHotspots(
-        lat: Double, lng: Double, distance: Int,
+        lat: Double, lng: Double, distanceInKm: Float,
     ): Result<Array<EBirdLocation>> {
 
         // TODO: Validation
@@ -36,7 +36,7 @@ object EBirdApi {
             .appendQueryParameter("dist", distance.toString()).appendQueryParameter("fmt", "json")
             .build()*/
 
-        val url = "$baseUrl$version$hotspots/geo?lat=$lat&lng=$lng&dist=$distance&fmt=json"
+        val url = "$baseUrl$version$hotspots/geo?lat=$lat&lng=$lng&dist=$distanceInKm&fmt=json"
         return ApiRequestUtility.makeRequestJson(url)
     }
 
