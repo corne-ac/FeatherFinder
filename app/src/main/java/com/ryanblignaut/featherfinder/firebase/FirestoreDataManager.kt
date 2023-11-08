@@ -3,6 +3,7 @@ package com.ryanblignaut.featherfinder.firebase
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.SetOptions
 import com.ryanblignaut.featherfinder.model.BirdObsDetails
 import com.ryanblignaut.featherfinder.model.BirdObsTitle
@@ -78,6 +79,10 @@ object FirestoreDataManager {
         return getDataFirestoreAuth { getDataFirestoreCollection(it.collection("observations_list")) }
     }
 
+    suspend fun requestObservationIdListFiltered(filterTime: String, nameSort: Boolean): Result<List<BirdObsTitle>?> {
+        return getDataFirestoreAuth { getDataFirestoreCollectionFilterSort(it.collection("observations_list"), filterTime, nameSort) }
+    }
+
     suspend fun requestObservationById(id: String): Result<BirdObsDetails?> {
         return getDataFirestoreAuth { getDataFirestore(it.collection("observations").document(id)) }
     }
@@ -141,6 +146,25 @@ object FirestoreDataManager {
         val dataList = mutableListOf<T>()
         for (document in snapshot) dataList.add(document.toObject(T::class.java))
         return Result.success(dataList)
+    }
+
+    private suspend inline fun <reified T> getDataFirestoreCollectionFilterSort(collection: CollectionReference, filterTime: String, nameSort: Boolean): Result<List<T>?> {
+        var customCollection: Query = collection
+
+        if (filterTime.isNotEmpty())
+            customCollection = customCollection.whereEqualTo("date", filterTime)
+
+        if (nameSort)
+            customCollection = customCollection.orderBy("birdSpecies")
+
+
+
+        val snapshot = customCollection.get().await()
+
+        val dataList = mutableListOf<T>()
+        for (document in snapshot) dataList.add(document.toObject(T::class.java))
+        return Result.success(dataList)
+
     }
 
 }
