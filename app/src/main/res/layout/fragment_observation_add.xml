@@ -14,22 +14,31 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
         <TextView
             android:id="@+id/headingTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:background="@color/mint"
             android:padding="12dp"
             android:text="@string/add_observations"
-            android:textSize="32sp"
-            android:background="@color/mint"
-            android:textColor="@color/white"/>
+            android:textColor="@color/white"
+            android:textSize="32sp" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:gravity="center"
             android:orientation="vertical">
+
+            <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                android:id="@+id/speciesList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </com.google.android.material.textfield.MaterialAutoCompleteTextView>
 
             <com.ryanblignaut.featherfinder.ui.component.TextInput
                 android:id="@+id/bird_species"
@@ -56,26 +65,28 @@
                 android:id="@+id/myLocSwitch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Use current location? "
                 android:checked="false"
-                />
+                android:text="Use current location? " />
+
+            <TextView
+                android:id="@+id/generalLocationText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="12dp" />
 
             <androidx.fragment.app.FragmentContainerView
                 android:id="@+id/miniMap"
                 android:name="com.google.android.gms.maps.SupportMapFragment"
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="12dp"
+                android:layout_marginBottom="12dp"
                 app:compHeight="128dp"
                 app:hint="@string/pos"
-                app:icon="@drawable/map_mint"
-                android:layout_marginEnd="12dp"
-                android:layout_marginStart="12dp"
-                android:layout_marginBottom="12dp">
-
-
+                app:icon="@drawable/map_mint">
 
             </androidx.fragment.app.FragmentContainerView>
-
 
 
             <com.ryanblignaut.featherfinder.ui.component.TextInput

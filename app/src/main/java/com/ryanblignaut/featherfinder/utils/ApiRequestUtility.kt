@@ -52,7 +52,6 @@ object ApiRequestUtility {
     ): Result<String> {
         return withContext(Dispatchers.IO) {
             makeRequestStringInternal(
-
                 apiUrl,
                 method,
                 body,

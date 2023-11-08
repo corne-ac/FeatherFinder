@@ -3,6 +3,7 @@ package com.ryanblignaut.featherfinder.api
 import android.net.Uri
 import com.ryanblignaut.featherfinder.model.api.EBirdHotspotData
 import com.ryanblignaut.featherfinder.model.api.EBirdLocation
+import com.ryanblignaut.featherfinder.model.api.EBirdSpecies
 import com.ryanblignaut.featherfinder.utils.ApiRequestUtility
 
 // Docs: https://documenter.getpostman.com/view/664302/S1ENwy59#674e81c1-6a0c-4836-8a7e-6ea1fe8e6677
@@ -19,8 +20,18 @@ object EBirdApi {
     private val builder = Uri.parse("$baseUrl$version$hotspots")
 
     // Key https://ebird.org/api/request
-    private const val key = "k1j2h3g4f5d6s7a8"
+    // Old API key ???
+//    private const val key = "k1j2h3g4f5d6s7a8"
+    // Got new key
+    private const val key = "3ah32q2593cu"
 
+    suspend fun fetchNearObservations(
+        lat: Double, lng: Double,
+    ): Result<Array<EBirdSpecies>> {
+        val headers = mapOf("X-eBirdApiToken" to key)
+        val url = "$baseUrl$version/data/obs/geo/recent?lat=$lat&lng=$lng&fmt=json"
+        return ApiRequestUtility.makeRequestJson(url, headers = headers)
+    }
 
     suspend fun fetchNearbyHotspots(
         lat: Double, lng: Double, distanceInKm: Float,
@@ -48,10 +59,10 @@ object EBirdApi {
         hotspotId: String,
     ): Result<EBirdHotspotData> {
 
-     /*   val uri =
-            builder.buildUpon().appendPath("info").appendPath(hotspotId)
-                .appendQueryParameter("fmt", "json")
-                .build()*/
+        /*   val uri =
+               builder.buildUpon().appendPath("info").appendPath(hotspotId)
+                   .appendQueryParameter("fmt", "json")
+                   .build()*/
 
         val headers = mapOf("X-eBirdApiToken" to key)
         val url = "$baseUrl$version$hotspots/info/$hotspotId?&fmt=json"

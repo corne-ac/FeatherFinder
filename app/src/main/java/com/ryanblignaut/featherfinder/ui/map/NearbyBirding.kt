@@ -24,6 +24,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.CircleOptions
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
@@ -35,6 +36,7 @@ import com.ryanblignaut.featherfinder.model.api.EBirdLocation
 import com.ryanblignaut.featherfinder.ui.helper.PreBindingFragment
 import com.ryanblignaut.featherfinder.utils.SettingReferences
 import com.ryanblignaut.featherfinder.viewmodel.BirdingHotspotViewModel
+import java.text.SimpleDateFormat
 
 
 private val PERMISSIONS_REQUIRED =
@@ -53,24 +55,22 @@ class NearbyBirding : PreBindingFragment<FragmentMapBinding>(), OnMapReadyCallba
     //Primo
     //https://stackoverflow.com/users/8101634/primo
 
-    private val requestPermissionLauncher =
-        registerForActivityResult(
-            ActivityResultContracts.RequestMultiplePermissions()
-        ) { permissions ->
-            var isValid = true
-            permissions.entries.forEach {
-                println("${it.key} = ${it.value}")
-                if (!it.value) isValid = false
-            }
-
-            if (isValid) {
-                showMap(null)
-            } else
-                MaterialAlertDialogBuilder(requireContext()).setTitle("Error")
-                    .setMessage("Location permissions are required to use this feature.")
-                    .setCancelable(true).show()
-
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissions ->
+        var isValid = true
+        permissions.entries.forEach {
+            println("${it.key} = ${it.value}")
+            if (!it.value) isValid = false
         }
+
+        if (isValid) {
+            showMap(null)
+        } else MaterialAlertDialogBuilder(requireContext()).setTitle("Error")
+            .setMessage("Location permissions are required to use this feature.")
+            .setCancelable(true).show()
+
+    }
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
@@ -145,29 +145,22 @@ class NearbyBirding : PreBindingFragment<FragmentMapBinding>(), OnMapReadyCallba
         birdingHotspotViewModel.live.observe(viewLifecycleOwner, convertBirdLocationOntoMap)
 
         //Get user location and fetch hotspots according to it
-        fusedLocationClient.lastLocation
-            .addOnSuccessListener { location: Location? -> //Can return null
-                if (location != null) {
-                    val userLoc = LatLng(location.latitude, location.longitude)
-                    SettingReferences.getMaxDistance()
-                    birdingHotspotViewModel.fetchHotspots(
-                        userLoc.latitude,
-                        userLoc.longitude,
-                        SettingReferences.getMaxDistance()
-                    )
-                } else {
-                    //Try to start location service, as it is most common cause for a null return
-                    locServiceTry()
-                }
+        fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? -> //Can return null
+            if (location != null) {
+                val userLoc = LatLng(location.latitude, location.longitude)
+                SettingReferences.getMaxDistance()
+                birdingHotspotViewModel.fetchHotspots(
+                    userLoc.latitude, userLoc.longitude, SettingReferences.getMaxDistance()
+                )
+            } else {
+                //Try to start location service, as it is most common cause for a null return
+                locServiceTry()
+            }
 
-            }
-            .addOnFailureListener {
-                MaterialAlertDialogBuilder(requireContext())
-                    .setTitle("Location Retrieval Error")
-                    .setMessage(it.message ?: "Unknown error")
-                    .setCancelable(true)
-                    .show()
-            }
+        }.addOnFailureListener {
+            MaterialAlertDialogBuilder(requireContext()).setTitle("Location Retrieval Error")
+                .setMessage(it.message ?: "Unknown error").setCancelable(true).show()
+        }
 
     }
 
@@ -184,9 +177,7 @@ class NearbyBirding : PreBindingFragment<FragmentMapBinding>(), OnMapReadyCallba
                     // 3. Use the location for further processing
                     val userLoc = LatLng(location.latitude, location.longitude)
                     birdingHotspotViewModel.fetchHotspots(
-                        userLoc.latitude,
-                        userLoc.longitude,
-                        SettingReferences.getMaxDistance()
+                        userLoc.latitude, userLoc.longitude, SettingReferences.getMaxDistance()
                     )
 
                     // Stop location updates after the first successful retrieval
@@ -204,9 +195,7 @@ class NearbyBirding : PreBindingFragment<FragmentMapBinding>(), OnMapReadyCallba
 
         // 2. Retrieve the location
         fusedLocationClient.requestLocationUpdates(
-            locationRequest,
-            locationCallback,
-            Looper.getMainLooper()
+            locationRequest, locationCallback, Looper.getMainLooper()
         )
     }
 
@@ -217,79 +206,85 @@ class NearbyBirding : PreBindingFragment<FragmentMapBinding>(), OnMapReadyCallba
             val radius = SettingReferences.getMaxDistance() * 1000 /*10000.0*/
 
             //Get user's last known location
-            fusedLocationClient.lastLocation
-                .addOnSuccessListener { location: Location? -> // Can return null
-                    location?.let {
-                        userLocation = LatLng(location.latitude, location.longitude)
+            fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? -> // Can return null
+                location?.let {
+                    userLocation = LatLng(location.latitude, location.longitude)
 
-                        //Handle the result of fetching eBird locations
-                        result.onSuccess { hotspots ->
+                    //Handle the result of fetching eBird locations
+                    result.onSuccess { hotspots ->
 
-                            // Sometimes the eBird API returns a value that would be outside the radius so we will filter them out for now.
-                            val markersInsideRadius = hotspots
-                                .filter { it.lat != null && it.lng != null }
-                                .filter { hotspot ->
-                                    val hotspotLocation = LatLng(hotspot.lat!!, hotspot.lng!!)
-                                    userLocation != null &&
-                                            calculateDistance(
-                                                userLocation!!,
-                                                hotspotLocation
-                                            ) <= radius
-                                }
-
-                            map.clear()
-                            map.isMyLocationEnabled = true
-
-                            val boundsBuilder = LatLngBounds.Builder()
-
-                            //Add markers for hotspots inside the radius
-                            markersInsideRadius.forEach { hotspot ->
-                                val p = LatLng(hotspot.lat!!, hotspot.lng!!)
-                                boundsBuilder.include(p)
-                                val markerOptions =
-                                    MarkerOptions().position(p).title(hotspot.locName)
-                                map.addMarker(markerOptions)
+                        // Sometimes the eBird API returns a value that would be outside the radius so we will filter them out for now.
+                        val markersInsideRadius =
+                            hotspots.filter { it.lat != null && it.lng != null }.filter { hotspot ->
+                                val hotspotLocation = LatLng(hotspot.lat!!, hotspot.lng!!)
+                                userLocation != null && calculateDistance(
+                                    userLocation!!, hotspotLocation
+                                ) <= radius
                             }
-                            // Animate the map camera to the bounds of the markers.
-                            map.animateCamera(
-                                CameraUpdateFactory.newLatLngZoom(
-                                    userLocation!!,
-                                    11f
-                                )
+
+                        map.clear()
+                        map.isMyLocationEnabled = true
+
+                        val boundsBuilder = LatLngBounds.Builder()
+
+                        //Add markers for hotspots inside the radius
+                        markersInsideRadius.forEach { hotspot ->
+                            val p = LatLng(hotspot.lat!!, hotspot.lng!!)
+                            boundsBuilder.include(p)
+
+                            // Implemented feedback on -> View birding hotspots on map
+                            // Marker will be green if it has had an observation in the last 30 days, orange if it is older than 30 days and less than 6 months, violet if older than 6 months and azure if the date cant be parsed/is null.
+                            val markerOptions = MarkerOptions().position(p).title(hotspot.locName)
+
+                            if (hotspot.latestObsDt != null) markerOptions.icon(
+                                BitmapDescriptorFactory.defaultMarker(getColorBasedOnDate(hotspot.latestObsDt!!))
                             )
 
-                            //Add a circle around user's location
-                            userLocation?.let { loc ->
-                                val circleOptions = CircleOptions()
-                                    .center(loc)
-                                    .radius(radius.toDouble()) // Radius in meters
-                                    .strokeColor(Color.BLUE)
-                                map.addCircle(circleOptions)
-                            }
-
-                            //Set click listener for markers
-                            map.setOnMarkerClickListener { marker ->
-                                val position = marker.position
-                                val bundle = Bundle().apply {
-                                    putDouble("lat", position.latitude)
-                                    putDouble("lng", position.longitude)
-                                }
-                                findNavController().navigate(R.id.navigation_route, bundle)
-                                true
-                            }
-
-                            map.mapType = GoogleMap.MAP_TYPE_TERRAIN
+                            map.addMarker(markerOptions)
+                        }
+                        // If there are no markers inside the radius, then we will just add the user's location.
+                        // Not too sure if this is necessary but I assume that the map will not have any bounds and wont zoom if no markers are around.
+                        if (markersInsideRadius.isEmpty()) {
+                            boundsBuilder.include(userLocation!!);
                         }
 
-                        result.onFailure { exception ->
-                            MaterialAlertDialogBuilder(requireContext())
-                                .setTitle("Error")
-                                .setMessage(exception.message ?: "Unknown error")
-                                .setCancelable(true)
-                                .show()
+                        // Implemented feedback on -> Display user’s current position on map.
+                        // Here we are taking the bounds of the markers and zooming in based on that. The whole circle might not be fully visible yet all the markers will be in focus with 100 units of padding around them.
+                        map.animateCamera(
+                            CameraUpdateFactory.newLatLngBounds(
+                                boundsBuilder.build(), 100
+                            )
+                        )
+
+                        //Add a circle around user's location
+                        userLocation?.let { loc ->
+                            val circleOptions = CircleOptions().center(loc)
+                                .radius(radius.toDouble()) // Radius in meters
+                                .strokeColor(Color.BLUE)
+                            map.addCircle(circleOptions)
                         }
+
+                        //Set click listener for markers
+                        map.setOnMarkerClickListener { marker ->
+                            val position = marker.position
+                            val bundle = Bundle().apply {
+                                putDouble("lat", position.latitude)
+                                putDouble("lng", position.longitude)
+                            }
+                            findNavController().navigate(R.id.navigation_route, bundle)
+                            true
+                        }
+
+                        map.mapType = GoogleMap.MAP_TYPE_TERRAIN
+                    }
+
+                    result.onFailure { exception ->
+                        MaterialAlertDialogBuilder(requireContext()).setTitle("Error")
+                            .setMessage(exception.message ?: "Unknown error").setCancelable(true)
+                            .show()
                     }
                 }
+            }
         }
     }
 
@@ -298,13 +293,42 @@ class NearbyBirding : PreBindingFragment<FragmentMapBinding>(), OnMapReadyCallba
     private fun calculateDistance(point1: LatLng, point2: LatLng): Float {
         val results = FloatArray(1)
         Location.distanceBetween(
-            point1.latitude,
-            point1.longitude,
-            point2.latitude,
-            point2.longitude,
-            results
+            point1.latitude, point1.longitude, point2.latitude, point2.longitude, results
         )
         return results[0]
+    }
+
+    // We know the date format of the ebird observation is "yyyy-MM-dd HH:mm" so simple date format can be used to parse the date without needing about locate.
+    @SuppressLint("SimpleDateFormat")
+    private fun getColorBasedOnDate(inputDateStr: String): Float {
+        // Define the date format for parsing the ebird input string.
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm")
+
+        try {
+            // Parse the input string into a Date object.
+            val inputDate = dateFormat.parse(inputDateStr)
+
+            // Calculate the time difference in milliseconds.
+            val currentTime = System.currentTimeMillis()
+            val dateDifference = currentTime - inputDate.time
+
+            // Calculate the number of days and months
+            val daysDifference = dateDifference / (1000 * 60 * 60 * 24)
+            val monthsDifference = daysDifference / 30
+
+            // Assign colors based on the time difference
+            return if (daysDifference >= 30) {
+                when {
+                    monthsDifference >= 6 -> BitmapDescriptorFactory.HUE_VIOLET // More than 6 months ago
+                    else -> BitmapDescriptorFactory.HUE_ORANGE // Between 30 days and 6 months ago
+                }
+            } else {
+                BitmapDescriptorFactory.HUE_GREEN // Less than 30 days ago
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return BitmapDescriptorFactory.HUE_AZURE // Default color in case of parsing error
+        }
     }
 
 

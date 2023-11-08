@@ -64,7 +64,6 @@ class SettingsFragment : PreBindingFragment<FragmentSetBinding>() {
             )
         )
         binding.distance.setOnItemClickListener { _, _, position, _ ->
-            //TODO: map this to the actual distance
             SettingReferences.userSettings.maxDistance = position
         }
 //        binding.distance.setText(rangeOptions[0], false)

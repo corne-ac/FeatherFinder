@@ -5,6 +5,7 @@ import android.location.Location
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -23,6 +24,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.ryanblignaut.featherfinder.R
 import com.ryanblignaut.featherfinder.databinding.FragmentObservationAddBinding
 import com.ryanblignaut.featherfinder.model.BirdObservation
+import com.ryanblignaut.featherfinder.model.api.EBirdSpecies
 import com.ryanblignaut.featherfinder.ui.helper.PreBindingFragment
 import com.ryanblignaut.featherfinder.utils.DataValidator
 import com.ryanblignaut.featherfinder.viewmodel.helper.FormState
@@ -45,11 +47,30 @@ class ObservationAdd : PreBindingFragment<FragmentObservationAddBinding>(), OnMa
     //https://developers.google.com/android/reference/com/google/android/gms/location/FusedLocationProviderClient
 
     override fun addContentToView(savedInstanceState: Bundle?) {
+
         binding.saveObservationAction.setOnClickListener { saveObservation() }
         binding.saveObservationAction.isVisible = true
         formViewModel.live.observe(viewLifecycleOwner, ::onSaveObservationResult)
+
+        // Populate the dropdown with the bird species.
+        formViewModel.liveBirdSpecies.observe(viewLifecycleOwner, ::onFetchBirdsResult)
     }
 
+    private fun onFetchBirdsResult(result: Result<Array<EBirdSpecies>>?) {
+        // Populate a dropdown with the bird species.
+        val speciesNames = result?.getOrNull()?.map(EBirdSpecies::comName)?.toTypedArray()
+        if (speciesNames != null) {
+            binding.speciesList.setAdapter(
+                ArrayAdapter(
+                    requireContext(),
+                    android.R.layout.simple_dropdown_item_1line,
+                    speciesNames
+                )
+            )
+        }
+    }
+
+    @SuppressLint("MissingPermission")
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
         // Do all the form state stuff here to prevent ghost calls.
@@ -62,13 +83,18 @@ class ObservationAdd : PreBindingFragment<FragmentObservationAddBinding>(), OnMa
         formStates.forEach(FormState::attachListener)
         // Observe the form state.
         formViewModel.formState.observe(viewLifecycleOwner, updateFormStates(formStates))
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext()) //initialise for retrieving location later
+        fusedLocationClient =
+            LocationServices.getFusedLocationProviderClient(requireContext()) //initialise for retrieving location later
         val googleMap = binding.miniMap.getFragment<SupportMapFragment>()
         googleMap.onCreate(savedInstanceState)
         googleMap.getMapAsync(this)
         binding.myLocSwitch.setOnCheckedChangeListener { _, isChecked ->
             //Disable map
             binding.miniMap.isVisible = !isChecked
+        }
+        // Use the location service to get the birds seen from api.
+        fusedLocationClient.lastLocation.addOnSuccessListener {
+            formViewModel.fetchLiveBirds(it.latitude, it.longitude)
         }
     }
 
@@ -134,6 +160,7 @@ class ObservationAdd : PreBindingFragment<FragmentObservationAddBinding>(), OnMa
                         val userLoc = LatLng(location.latitude, location.longitude)
                         val lat = userLoc.latitude.toString()
                         val long = userLoc.longitude.toString()
+
                         //Save here
                         formViewModel.saveObservation(
                             BirdObservation(
@@ -160,7 +187,7 @@ class ObservationAdd : PreBindingFragment<FragmentObservationAddBinding>(), OnMa
                         .show()
                 }
         } else {
-            if (selectedLatLng!=null) {
+            if (selectedLatLng != null) {
                 formViewModel.saveObservation(
                     BirdObservation(
                         binding.birdSpecies.getText(),

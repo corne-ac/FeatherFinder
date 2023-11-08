@@ -9,7 +9,11 @@ class EBirdApiTest {
 
     @Test
     fun testGetBirds() = runTest {
-        val nearbyHotspots = EBirdApi.fetchNearbyHotspots(-25.873390, 28.197800, 10.0)
+        val nearbyHotspots = EBirdApi.fetchNearbyHotspots(-25.873390, 28.197800, 10.0f)
+        nearbyHotspots.getOrNull()?.forEach {
+            println(it)
+        }
+
         TestCase.assertTrue(nearbyHotspots.isSuccess)
         /*  nearbyHotspots.getOrNull()?.forEach {
               println(it)
@@ -30,6 +34,17 @@ class EBirdApiTest {
         val hotspotInfo = EBirdApi.fetchHotspotInfo("L6101408")
         TestCase.assertTrue(hotspotInfo.isSuccess)
         print(hotspotInfo)
+    }
+
+    @Test
+    fun not() = runTest {
+        val fetchNearNotableObservations =
+            EBirdApi.fetchNearObservations(-25.873390, 28.197800)
+
+        fetchNearNotableObservations.getOrNull()?.forEach { println(it) }
+
+        TestCase.assertTrue(fetchNearNotableObservations.isSuccess)
+        print(fetchNearNotableObservations)
     }
 
 }
