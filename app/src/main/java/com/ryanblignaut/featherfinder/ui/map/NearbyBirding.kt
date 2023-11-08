@@ -139,7 +139,6 @@ class NearbyBirding : PreBindingFragment<FragmentMapBinding>(), OnMapReadyCallba
 
     @SuppressLint("MissingPermission")
     override fun onMapReady(map: GoogleMap) {
-
         birdingHotspotViewModel = ViewModelProvider(this)[BirdingHotspotViewModel::class.java]
         val convertBirdLocationOntoMap = addItems(map)
         birdingHotspotViewModel.live.observe(viewLifecycleOwner, convertBirdLocationOntoMap)
@@ -152,9 +151,9 @@ class NearbyBirding : PreBindingFragment<FragmentMapBinding>(), OnMapReadyCallba
                 birdingHotspotViewModel.fetchHotspots(
                     userLoc.latitude, userLoc.longitude, SettingReferences.getMaxDistance()
                 )
-            } else {
+            map.isMyLocationEnabled = true} else {
                 //Try to start location service, as it is most common cause for a null return
-                locServiceTry()
+                locServiceTry(map)
             }
 
         }.addOnFailureListener {
@@ -165,7 +164,7 @@ class NearbyBirding : PreBindingFragment<FragmentMapBinding>(), OnMapReadyCallba
     }
 
     @SuppressLint("MissingPermission")
-    private fun locServiceTry() {
+    private fun locServiceTry(map: GoogleMap) {
         // 1. Start the location service
         val locationRequest = LocationRequest.Builder(10000) // 10 seconds
             .setPriority(Priority.PRIORITY_HIGH_ACCURACY) // 100
@@ -179,7 +178,7 @@ class NearbyBirding : PreBindingFragment<FragmentMapBinding>(), OnMapReadyCallba
                     birdingHotspotViewModel.fetchHotspots(
                         userLoc.latitude, userLoc.longitude, SettingReferences.getMaxDistance()
                     )
-
+                    map.isMyLocationEnabled = true
                     // Stop location updates after the first successful retrieval
                     fusedLocationClient.removeLocationUpdates(locationCallback)
                 }

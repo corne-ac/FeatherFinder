@@ -53,6 +53,7 @@ class ObservationDetail : PreBindingFragment<FragmentObservationAddBinding>() {
         //binding.pos.setText(values.lat)
         binding.notes.setText(values.notes)
         binding.saveObservationAction.isVisible = false
+        binding.headingTextView.text = "Observation Details"
 
         //check if null location, display toggle
         if (values.lat != "" || values.long != "") {
