@@ -33,16 +33,21 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.ryanblignaut.featherfinder.R
 import com.ryanblignaut.featherfinder.databinding.FragmentMapBinding
 import com.ryanblignaut.featherfinder.model.api.EBirdLocation
+import com.ryanblignaut.featherfinder.ui.component.ext.setOnClickListener
 import com.ryanblignaut.featherfinder.ui.helper.PreBindingFragment
 import com.ryanblignaut.featherfinder.utils.SettingReferences
 import com.ryanblignaut.featherfinder.viewmodel.BirdingHotspotViewModel
+import com.ryanblignaut.featherfinder.viewmodel.observation.AllObservationsViewModel
 import java.text.SimpleDateFormat
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 
 private val PERMISSIONS_REQUIRED =
     arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)
 
 class NearbyBirding : PreBindingFragment<FragmentMapBinding>(), OnMapReadyCallback {
+    private lateinit var allObservationsViewModel: AllObservationsViewModel
     private lateinit var birdingHotspotViewModel: BirdingHotspotViewModel
     private lateinit var fusedLocationClient: FusedLocationProviderClient //Used to get user location
     private lateinit var locationCallback: LocationCallback //Used for location services
@@ -140,12 +145,14 @@ class NearbyBirding : PreBindingFragment<FragmentMapBinding>(), OnMapReadyCallba
     @SuppressLint("MissingPermission")
     override fun onMapReady(map: GoogleMap) {
         birdingHotspotViewModel = ViewModelProvider(this)[BirdingHotspotViewModel::class.java]
+        allObservationsViewModel = ViewModelProvider(this)[AllObservationsViewModel::class.java]
         val convertBirdLocationOntoMap = addItems(map)
         birdingHotspotViewModel.live.observe(viewLifecycleOwner, convertBirdLocationOntoMap)
-
+        var userLocation: LatLng = LatLng(0.0, 0.0)
         //Get user location and fetch hotspots according to it
         fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? -> //Can return null
             if (location != null) {
+                userLocation = LatLng(location.latitude, location.longitude)
                 val userLoc = LatLng(location.latitude, location.longitude)
                 SettingReferences.getMaxDistance()
                 birdingHotspotViewModel.fetchHotspots(
@@ -161,6 +168,14 @@ class NearbyBirding : PreBindingFragment<FragmentMapBinding>(), OnMapReadyCallba
                 .setMessage(it.message ?: "Unknown error").setCancelable(true).show()
         }
 
+        binding.btnLoadObs.setOnClickListener {
+            addObsItems(map)
+        }
+
+        binding.btnLoadNearby.setOnClickListener {
+            addItems(map)
+            birdingHotspotViewModel.fetchHotspots(userLocation.latitude, userLocation.longitude, SettingReferences.getMaxDistance())
+        }
     }
 
     @SuppressLint("MissingPermission")
@@ -196,6 +211,63 @@ class NearbyBirding : PreBindingFragment<FragmentMapBinding>(), OnMapReadyCallba
         fusedLocationClient.requestLocationUpdates(
             locationRequest, locationCallback, Looper.getMainLooper()
         )
+    }
+
+    @SuppressLint("MissingPermission", "SimpleDateFormat")
+    private fun addObsItems(map: GoogleMap) {
+        map.clear()
+        //Get observations
+        allObservationsViewModel.getObservationsLocations()
+        allObservationsViewModel.liveDetails.observe(viewLifecycleOwner) {
+            if (it.isFailure) {
+                return@observe
+            }
+            var list = it.getOrNull()!!
+
+            //Add markers
+
+            val boundsBuilder = LatLngBounds.Builder()
+
+            list.forEach { entry ->
+                val p = LatLng( entry.lat.toDouble(), entry.long.toDouble())
+                boundsBuilder.include(p)
+
+                // Implemented feedback on -> View birding hotspots on map
+                // Marker will be green if it has had an observation in the last 30 days, orange if it is older than 30 days and less than 6 months, violet if older than 6 months and azure if the date cant be parsed/is null.
+                val markerOptions = MarkerOptions().position(p).title(entry.birdSpecies)
+
+                markerOptions.icon(
+                    BitmapDescriptorFactory.defaultMarker(getColorBasedOnDateWithSimpleDateFormat(
+                        SimpleDateFormat("EEEE, dd MMMM yyyy", Locale.ENGLISH), entry.date))
+                )
+
+                map.addMarker(markerOptions)
+            }
+            // If there are no markers inside the radius, then we will just add the user's location.
+            // Not too sure if this is necessary but I assume that the map will not have any bounds and wont zoom if no markers are around.
+//            if (markersInsideRadius.isEmpty()) {
+//                boundsBuilder.include(userLocation!!);
+//            }
+
+            // Implemented feedback on -> Display user’s current position on map.
+            // Here we are taking the bounds of the markers and zooming in based on that. The whole circle might not be fully visible yet all the markers will be in focus with 100 units of padding around them.
+            map.animateCamera(
+                CameraUpdateFactory.newLatLngBounds(
+                    boundsBuilder.build(), 100
+                )
+            )
+
+
+            map.isMyLocationEnabled = true
+            //Set camera pos
+
+        }
+
+
+
+
+
+        map.mapType = GoogleMap.MAP_TYPE_TERRAIN
     }
 
     @SuppressLint("PotentialBehaviorOverride", "MissingPermission")
@@ -303,9 +375,13 @@ class NearbyBirding : PreBindingFragment<FragmentMapBinding>(), OnMapReadyCallba
         // Define the date format for parsing the ebird input string.
         val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm")
 
+        return getColorBasedOnDateWithSimpleDateFormat(dateFormat, inputDateStr)
+    }
+
+    private fun getColorBasedOnDateWithSimpleDateFormat(simpleDateFormat: SimpleDateFormat, inputDateStr: String): Float {
         try {
             // Parse the input string into a Date object.
-            val inputDate = dateFormat.parse(inputDateStr)
+            val inputDate = simpleDateFormat.parse(inputDateStr)
 
             // Calculate the time difference in milliseconds.
             val currentTime = System.currentTimeMillis()
@@ -329,6 +405,5 @@ class NearbyBirding : PreBindingFragment<FragmentMapBinding>(), OnMapReadyCallba
             return BitmapDescriptorFactory.HUE_AZURE // Default color in case of parsing error
         }
     }
-
 
 }

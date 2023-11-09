@@ -2,12 +2,12 @@ package com.ryanblignaut.featherfinder.model
 
 //bird species, location, date, and additional notes
 class BirdObservation(
-    birdSpecies: String,
-    date: String,
-    time: String,
-    notes: String,
-    lat: String,
-    long: String
+    private var birdSpecies: String = "",
+    private var date: String = "",
+    private var time: String = "",
+    private var notes: String = "",
+    private var lat: String = "",
+    private var long: String = ""
 ) {
 
     val birdObsTitle: BirdObsTitle = BirdObsTitle()
@@ -22,6 +22,7 @@ class BirdObservation(
         this.birdObsDetails.long = long
     }
 
+//    constructor() : this("", "", "", "", "", "") {}
 
 }
 
@@ -37,3 +38,12 @@ class BirdObsTitle {
     var birdSpecies: String = ""
     var date: String = ""
 }
+
+class FullBirdObservation(
+    var birdSpecies: String = "",
+    var date: String = "",
+    var time: String = "",
+    var notes: String = "",
+    var lat: String = "",
+    var long: String = ""
+)

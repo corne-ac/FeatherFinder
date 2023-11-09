@@ -1,12 +1,65 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="-9dp"
+        tools:layout_editor_absoluteY="-108dp" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        app:cardCornerRadius="100dp"
+        app:layout_constraintBottom_toTopOf="@+id/cardMyObs"
+        app:layout_constraintEnd_toEndOf="@+id/map"
+        android:backgroundTint="@color/mint"
+        android:layout_margin="10dp">
+
+        <ImageButton
+            android:id="@+id/btnLoadNearby"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            app:srcCompat="@drawable/bird_white"
+            android:background="@color/transparent"
+            android:padding="10dp"
+            />
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardMyObs"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        app:cardCornerRadius="100dp"
+        app:layout_constraintBottom_toBottomOf="@+id/map"
+        app:layout_constraintEnd_toEndOf="@+id/map"
+        android:backgroundTint="@color/mint"
+        android:layout_margin="10dp">
+
+
+
+
+        <ImageButton
+            android:id="@+id/btnLoadObs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+
+            app:srcCompat="@android:drawable/ic_menu_myplaces"
+            android:background="@color/transparent"
+            android:padding="10dp"
+            />
+
+    </com.google.android.material.card.MaterialCardView>
+
+
 
     <!-- Add a LinearLayout for overlay -->
   <!--  <LinearLayout
@@ -34,7 +87,7 @@
         &lt;!&ndash; Add more views as needed &ndash;&gt;
 
     </LinearLayout>-->
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
 
     <!--
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"

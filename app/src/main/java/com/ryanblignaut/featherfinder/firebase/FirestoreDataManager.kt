@@ -8,6 +8,7 @@ import com.google.firebase.firestore.SetOptions
 import com.ryanblignaut.featherfinder.model.BirdObsDetails
 import com.ryanblignaut.featherfinder.model.BirdObsTitle
 import com.ryanblignaut.featherfinder.model.BirdObservation
+import com.ryanblignaut.featherfinder.model.FullBirdObservation
 import com.ryanblignaut.featherfinder.model.Goal
 import com.ryanblignaut.featherfinder.model.GoalTitle
 import com.ryanblignaut.featherfinder.model.UserSettings
@@ -18,7 +19,8 @@ object FirestoreDataManager {
 
     suspend fun saveObservation(observation: BirdObservation): Result<String> {
         saveDataFirestoreAuth {
-            it.collection("observations_full").add(observation.birdObsDetails).await().id
+            val OBS = FullBirdObservation(observation.birdObsTitle.birdSpecies, observation.birdObsTitle.date, observation.birdObsDetails.time, observation.birdObsDetails.notes, observation.birdObsDetails.lat, observation.birdObsDetails.long)
+            it.collection("observations_full").add(OBS).await().id
         }
         val idResult: Result<String> = saveDataFirestoreAuth {
             it.collection("observations").add(observation.birdObsDetails).await().id
@@ -89,6 +91,10 @@ object FirestoreDataManager {
     suspend fun requestObservationById(id: String): Result<BirdObsDetails?> {
         return getDataFirestoreAuth { getDataFirestore(it.collection("observations").document(id)) }
     }
+    suspend fun requestAllObservations(): Result<List<FullBirdObservation>?> {
+        return getDataFirestoreAuth { getDataFirestoreCollection(it.collection("observations_full")) }
+    }
+
 
     suspend fun requestGoalTitleList(): Result<List<GoalTitle>?> {
         return getDataFirestoreAuth { getDataFirestoreCollection(it.collection("goals_titles")) }
@@ -149,6 +155,8 @@ object FirestoreDataManager {
         for (document in snapshot) dataList.add(document.toObject(T::class.java))
         return Result.success(dataList)
     }
+
+
 
     private suspend inline fun <reified T> getDataFirestoreCollectionFilterSort(collection: CollectionReference, filterTime: String, nameSort: Boolean): Result<List<T>?> {
         var customCollection: Query = collection
