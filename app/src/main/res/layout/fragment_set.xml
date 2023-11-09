@@ -107,19 +107,44 @@
                         android:minHeight="48dp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="3dp"
+                    android:background="@color/mint"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="10dp"
+
+                    />
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:padding="12dp"
-                    android:text="Preferences" />
+                    android:text="Account" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:paddingHorizontal="16dp"
+                    android:id="@+id/email_status"
+                    android:text="Your email is not verified" />
 
                 <com.google.android.material.button.MaterialButton
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-
+                    android:text="Verify email"
+                    android:id="@+id/verify_email"
+                    android:layout_marginHorizontal="16dp"
+                    android:backgroundTint="@color/teal_700"
                     />
-
+                <com.google.android.material.button.MaterialButton
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Refresh verification"
+                    android:id="@+id/refresh"
+                    android:layout_marginHorizontal="16dp"
+                    android:backgroundTint="@color/teal_700"
+                    />
             </LinearLayout>
         </ScrollView>
 

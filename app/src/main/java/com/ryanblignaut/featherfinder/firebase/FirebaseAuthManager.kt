@@ -46,6 +46,10 @@ object FirebaseAuthManager {
         auth.signOut()
     }
 
+    fun sendVerificationEmail() {
+        auth.currentUser?.sendEmailVerification()
+    }
+
     class AuthException(message: String) : Exception(message)
 
 

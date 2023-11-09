@@ -1,6 +1,7 @@
 package com.ryanblignaut.featherfinder.ui.settings
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
@@ -10,12 +11,14 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.ryanblignaut.featherfinder.R
 import com.ryanblignaut.featherfinder.databinding.FragmentSetBinding
+import com.ryanblignaut.featherfinder.firebase.FirebaseAuthManager
 import com.ryanblignaut.featherfinder.model.UserSettings
 import com.ryanblignaut.featherfinder.ui.helper.PreBindingFragment
 import com.ryanblignaut.featherfinder.utils.SettingReferences
 import com.ryanblignaut.featherfinder.viewmodel.settings.SettingsViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+
 
 class SettingsFragment : PreBindingFragment<FragmentSetBinding>() {
     private val viewModel: SettingsViewModel by viewModels()
@@ -26,9 +29,7 @@ class SettingsFragment : PreBindingFragment<FragmentSetBinding>() {
         val metricOptions = arrayOf("Metric", "Imperial")
         binding.measurement.setAdapter(
             ArrayAdapter(
-                requireContext(),
-                android.R.layout.simple_list_item_1,
-                metricOptions
+                requireContext(), android.R.layout.simple_list_item_1, metricOptions
             )
         )
         binding.measurement.setOnItemClickListener { _, _, position, _ ->
@@ -38,9 +39,7 @@ class SettingsFragment : PreBindingFragment<FragmentSetBinding>() {
         val darkModeOptions = arrayOf("Off", "On")
         binding.darkMode.setAdapter(
             ArrayAdapter(
-                requireContext(),
-                android.R.layout.simple_list_item_1,
-                darkModeOptions
+                requireContext(), android.R.layout.simple_list_item_1, darkModeOptions
             )
         )
         binding.darkMode.setOnItemClickListener { _, _, position, _ ->
@@ -57,9 +56,7 @@ class SettingsFragment : PreBindingFragment<FragmentSetBinding>() {
         val rangeOptions = map.toTypedArray()
         binding.distance.setAdapter(
             ArrayAdapter(
-                requireContext(),
-                android.R.layout.simple_list_item_1,
-                rangeOptions
+                requireContext(), android.R.layout.simple_list_item_1, rangeOptions
             )
         )
         binding.distance.setOnItemClickListener { _, _, position, _ ->
@@ -82,6 +79,30 @@ class SettingsFragment : PreBindingFragment<FragmentSetBinding>() {
 
         }
         viewModel.live.observe(viewLifecycleOwner, ::updateSettings)
+
+        // Here we check if the user is verified and if not we show the button to send the verification email.
+        Log.d(
+            "SettingsFragment",
+            "isEmailVerified: ${FirebaseAuthManager.getCurrentUser()!!.isEmailVerified}"
+        )
+
+        if (FirebaseAuthManager.getCurrentUser()!!.isEmailVerified) {
+            binding.verifyEmail.isEnabled = false
+            binding.emailStatus.text = "Email Verified"
+        }
+        binding.verifyEmail.setOnClickListener {
+            FirebaseAuthManager.sendVerificationEmail()
+        }
+
+        binding.refresh.setOnClickListener {
+            FirebaseAuthManager.getCurrentUser()!!.reload().addOnSuccessListener {
+                    if (FirebaseAuthManager.getCurrentUser()!!.isEmailVerified) {
+                        binding.verifyEmail.isEnabled = false
+                        binding.emailStatus.text = "Email Verified"
+                    }
+                }
+        }
+
 
     }
 

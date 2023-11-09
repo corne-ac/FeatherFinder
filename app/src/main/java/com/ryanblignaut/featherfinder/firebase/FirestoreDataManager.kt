@@ -17,6 +17,9 @@ object FirestoreDataManager {
     private val database: FirebaseFirestore = FirebaseFirestore.getInstance()
 
     suspend fun saveObservation(observation: BirdObservation): Result<String> {
+        saveDataFirestoreAuth {
+            it.collection("observations_full").add(observation.birdObsDetails).await().id
+        }
         val idResult: Result<String> = saveDataFirestoreAuth {
             it.collection("observations").add(observation.birdObsDetails).await().id
         }
@@ -86,7 +89,6 @@ object FirestoreDataManager {
     suspend fun requestObservationById(id: String): Result<BirdObsDetails?> {
         return getDataFirestoreAuth { getDataFirestore(it.collection("observations").document(id)) }
     }
-
 
     suspend fun requestGoalTitleList(): Result<List<GoalTitle>?> {
         return getDataFirestoreAuth { getDataFirestoreCollection(it.collection("goals_titles")) }
