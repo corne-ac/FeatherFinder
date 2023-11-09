@@ -78,9 +78,11 @@ object FirestoreDataManager {
     suspend fun requestObservationIdList(): Result<List<BirdObsTitle>?> {
         return getDataFirestoreAuth { getDataFirestoreCollection(it.collection("observations_list")) }
     }
-    suspend fun requestObservationIdList1(): Result<List<BirdObsTitle>?> {
-        return getDataFirestoreAuth { getDataFirestoreCollection(it.collection("observations_list").orderBy("test")) }
+
+    suspend fun requestObservationIdListFiltered(filterTime: String, nameSort: Boolean): Result<List<BirdObsTitle>?> {
+        return getDataFirestoreAuth { getDataFirestoreCollectionFilterSort(it.collection("observations_list"), filterTime, nameSort) }
     }
+
     suspend fun requestObservationById(id: String): Result<BirdObsDetails?> {
         return getDataFirestoreAuth { getDataFirestore(it.collection("observations").document(id)) }
     }
@@ -137,14 +139,32 @@ object FirestoreDataManager {
         return Result.success(data)
     }
 
-    private suspend inline fun <reified T> getDataFirestoreCollection(collection: Query): Result<List<T>?> {
+    private suspend inline fun <reified T> getDataFirestoreCollection(collection: CollectionReference): Result<List<T>?> {
         val snapshot = collection.get().await()
-
 //        if (snapshot.isEmpty) return Result.failure(Exception("Collection is empty"))
 
         val dataList = mutableListOf<T>()
         for (document in snapshot) dataList.add(document.toObject(T::class.java))
         return Result.success(dataList)
+    }
+
+    private suspend inline fun <reified T> getDataFirestoreCollectionFilterSort(collection: CollectionReference, filterTime: String, nameSort: Boolean): Result<List<T>?> {
+        var customCollection: Query = collection
+
+        if (filterTime.isNotEmpty())
+            customCollection = customCollection.whereEqualTo("date", filterTime)
+
+        if (nameSort)
+            customCollection = customCollection.orderBy("birdSpecies")
+
+
+
+        val snapshot = customCollection.get().await()
+
+        val dataList = mutableListOf<T>()
+        for (document in snapshot) dataList.add(document.toObject(T::class.java))
+        return Result.success(dataList)
+
     }
 
 }

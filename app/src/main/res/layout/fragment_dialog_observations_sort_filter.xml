@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center|top"
+    android:orientation="vertical"
+    android:id="@+id/fragment_sort_filter_dialog"
+    android:paddingHorizontal="20dp"
+    android:paddingVertical="10dp"
+    android:theme="@style/Theme.FeatherFinder">
+
+
+
+
+    <TextView
+        android:id="@+id/dialogTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sort/Filter Observations"
+        android:textSize="26sp"/>
+
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sort by Name"
+            android:textSize="20sp"
+            android:layout_gravity="center_vertical"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/switchSortName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="@color/mint"
+        android:layout_marginBottom="10dp"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+
+        <!--        <TextView-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:text="Sort by Date"-->
+        <!--            android:textSize="20sp"-->
+        <!--            android:layout_gravity="center_vertical"/>-->
+
+
+        <com.ryanblignaut.featherfinder.ui.component.DatePickerInput
+            android:id="@+id/filterDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:hint="Filter By date"
+            app:icon="@drawable/date_mint" />
+
+        <!--        <androidx.appcompat.widget.SwitchCompat-->
+        <!--            android:id="@+id/switchSortDate"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"/>-->
+
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+
+<!--        <TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="Filter by Name"-->
+<!--            android:textSize="20sp"-->
+<!--            android:layout_gravity="center_vertical"/>-->
+
+
+
+<!--        <com.ryanblignaut.featherfinder.ui.component.TextInput-->
+<!--            android:id="@+id/bird_species"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            app:hint="Filter by Name..."-->
+<!--            app:icon="@drawable/bird_mint_02" />-->
+
+
+        <!--<RadioGroup
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/radioGroupFilterDate">
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Today"
+                android:textSize="18sp"/>
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Week"
+                android:textSize="18sp"/>
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Month"
+                android:textSize="18sp"/>
+
+        </RadioGroup>-->
+
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/sortFilterCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cancel"
+            android:backgroundTint="@color/teal_700"/>
+
+        <View
+            android:layout_width="30dp"
+            android:layout_height="3dp"
+            android:layout_marginHorizontal="2dp"
+            />
+
+        <Button
+            android:id="@+id/sortFilterConfirm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Confrim"/>
+
+    </LinearLayout>
+
+</LinearLayout>

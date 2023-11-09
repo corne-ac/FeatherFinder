@@ -1,6 +1,7 @@
 package com.ryanblignaut.featherfinder.ui.observation
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
@@ -22,6 +23,14 @@ class ObservationList : PreBindingFragment<FragmentObservationListBinding>() {
         binding.loader.visibility = ViewGroup.VISIBLE
         model.live.observe(viewLifecycleOwner, ::populateObservationList)
         model.getObservations()
+
+        binding.filterSortObservations.setOnClickListener {
+
+            val dialog = ObservationSortFilterDialog(::getObsSortFilter)
+
+            dialog.show(parentFragmentManager, "sortFilterDialog")
+        }
+
         binding.addObservationAction.setOnClickListener {
             findNavController().navigate(ObservationListDirections.actionNavigationObservationListToNavigationAddObservation())
         }
@@ -60,5 +69,10 @@ class ObservationList : PreBindingFragment<FragmentObservationListBinding>() {
         return inflateBinding(inflater, container)
     }
 
+    fun getObsSortFilter(filterTime: String, nameSort: Boolean) {
+
+       model.getObservationsSorted(filterTime, nameSort)
+
+    }
 
 }
