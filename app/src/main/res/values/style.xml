@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="ThemeOverlay.Catalog.BottomSheetDialog.Scrollable" parent="ThemeOverlay.Material3.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/Widget.Catalog.BottomSheet.Modal.Scrollable</item>
+    </style>
+
+    <style name="Widget.Catalog.BottomSheet.Modal.Scrollable" parent="Widget.Material3.BottomSheet.Modal">
+        <item name="paddingBottomSystemWindowInsets">false</item>
+    </style>
+
+    <style name="selectableTextView" parent="@android:style/Widget.TextView">
+        <item name="android:textSize">20sp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:clickable">true</item>
+        <item name="android:paddingLeft">8dp</item>
+        <item name="android:drawablePadding">8dp</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
+    </style>
+</resources>

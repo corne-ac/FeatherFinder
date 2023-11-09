@@ -1,6 +1,5 @@
 package com.ryanblignaut.featherfinder.utils
 
-import android.net.Uri
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonSyntaxException
@@ -38,11 +37,14 @@ object ApiRequestUtility {
     ): Result<T> {
         val stringResult = makeRequestString(apiUrl, method, body, headers)
         // If the stringResult is a failure, return the failure else deserialize the JSON string into an object of type Result<T>.
-        return stringResult.fold(::fromJson, Result.Companion::failure)
+        return convertToJson<T>(stringResult)
 
 //        The above code is equivalent to the following:
 //        return stringResult.getOrElse { return Result.failure(it) }.run { fromJson<T>(this) }
     }
+
+    inline fun <reified T> convertToJson(stringResult: Result<String>): Result<T> =
+        stringResult.fold(::fromJson, Result.Companion::failure)
 
     suspend fun makeRequestString(
         apiUrl: String,

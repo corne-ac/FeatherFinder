@@ -3,6 +3,7 @@ package com.ryanblignaut.featherfinder.firebase
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.SetOptions
 import com.ryanblignaut.featherfinder.model.BirdObsDetails
 import com.ryanblignaut.featherfinder.model.BirdObsTitle
@@ -77,7 +78,9 @@ object FirestoreDataManager {
     suspend fun requestObservationIdList(): Result<List<BirdObsTitle>?> {
         return getDataFirestoreAuth { getDataFirestoreCollection(it.collection("observations_list")) }
     }
-
+    suspend fun requestObservationIdList1(): Result<List<BirdObsTitle>?> {
+        return getDataFirestoreAuth { getDataFirestoreCollection(it.collection("observations_list").orderBy("test")) }
+    }
     suspend fun requestObservationById(id: String): Result<BirdObsDetails?> {
         return getDataFirestoreAuth { getDataFirestore(it.collection("observations").document(id)) }
     }
@@ -134,8 +137,9 @@ object FirestoreDataManager {
         return Result.success(data)
     }
 
-    private suspend inline fun <reified T> getDataFirestoreCollection(collection: CollectionReference): Result<List<T>?> {
+    private suspend inline fun <reified T> getDataFirestoreCollection(collection: Query): Result<List<T>?> {
         val snapshot = collection.get().await()
+
 //        if (snapshot.isEmpty) return Result.failure(Exception("Collection is empty"))
 
         val dataList = mutableListOf<T>()
