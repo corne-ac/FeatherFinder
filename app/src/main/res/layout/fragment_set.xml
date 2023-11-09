@@ -43,6 +43,12 @@
                 android:gravity="center"
                 android:orientation="vertical">
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="12dp"
+                    android:text="Preferences" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/measurement_input_layout"
@@ -101,6 +107,18 @@
                         android:minHeight="48dp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="12dp"
+                    android:text="Preferences" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    />
 
             </LinearLayout>
         </ScrollView>

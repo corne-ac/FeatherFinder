@@ -1,11 +1,11 @@
 package com.ryanblignaut.featherfinder.ui.observation
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.ryanblignaut.featherfinder.databinding.FragmentObservationListBinding
 import com.ryanblignaut.featherfinder.model.BirdObsTitle
 import com.ryanblignaut.featherfinder.ui.helper.PreBindingFragment
@@ -42,7 +42,9 @@ class ObservationList : PreBindingFragment<FragmentObservationListBinding>() {
         if (result.isFailure) {
             val throwable = result.exceptionOrNull()!!
             throwable.printStackTrace()
-            TODO("Show error message")
+            MaterialAlertDialogBuilder(requireContext()).setTitle("Error")
+                .setMessage(throwable.localizedMessage).setCancelable(true)
+                .show()
             return
         }
         val values = result.getOrNull()!!
@@ -71,7 +73,7 @@ class ObservationList : PreBindingFragment<FragmentObservationListBinding>() {
 
     fun getObsSortFilter(filterTime: String, nameSort: Boolean) {
 
-       model.getObservationsSorted(filterTime, nameSort)
+        model.getObservationsSorted(filterTime, nameSort)
 
     }
 

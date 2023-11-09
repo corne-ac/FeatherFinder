@@ -1,6 +1,7 @@
 package com.ryanblignaut.featherfinder.ui.observation
 
 import android.annotation.SuppressLint
+import android.location.Geocoder
 import android.location.Location
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -27,9 +28,11 @@ import com.ryanblignaut.featherfinder.model.BirdObservation
 import com.ryanblignaut.featherfinder.model.api.EBirdSpecies
 import com.ryanblignaut.featherfinder.ui.helper.PreBindingFragment
 import com.ryanblignaut.featherfinder.utils.DataValidator
+import com.ryanblignaut.featherfinder.utils.LocationConverter
 import com.ryanblignaut.featherfinder.viewmodel.helper.FormState
 import com.ryanblignaut.featherfinder.viewmodel.helper.FormStateNew
 import com.ryanblignaut.featherfinder.viewmodel.observation.AddObservationViewModel
+import java.util.Locale
 
 
 /**
@@ -91,10 +94,19 @@ class ObservationAdd : PreBindingFragment<FragmentObservationAddBinding>(), OnMa
         binding.myLocSwitch.setOnCheckedChangeListener { _, isChecked ->
             //Disable map
             binding.miniMap.isVisible = !isChecked
+            binding.generalLocationText.isVisible = isChecked;
         }
         // Use the location service to get the birds seen from api.
         fusedLocationClient.lastLocation.addOnSuccessListener {
             formViewModel.fetchLiveBirds(it.latitude, it.longitude)
+            val geocoder = Geocoder(requireContext(), Locale.getDefault())
+            LocationConverter.populateGeneralLocation(
+                geocoder,
+                it.latitude,
+                it.longitude,
+                binding.generalLocationText
+            )
+
         }
     }
 
@@ -124,8 +136,9 @@ class ObservationAdd : PreBindingFragment<FragmentObservationAddBinding>(), OnMa
     }
 
     private fun speciesNameState(): FormState {
-        return FormStateNew(
-            binding.birdSpecies,
+        return FormState(
+            binding.speciesList,
+            binding.speciesListLayout,
             "speciesName",
             formViewModel,
             DataValidator::speciesNameValidation,
@@ -164,7 +177,7 @@ class ObservationAdd : PreBindingFragment<FragmentObservationAddBinding>(), OnMa
                         //Save here
                         formViewModel.saveObservation(
                             BirdObservation(
-                                binding.birdSpecies.getText(),
+                                binding.speciesList.text.toString(),
                                 binding.date.getText(),
                                 binding.time.getText(),
                                 binding.notes.getText(),
@@ -190,7 +203,7 @@ class ObservationAdd : PreBindingFragment<FragmentObservationAddBinding>(), OnMa
             if (selectedLatLng != null) {
                 formViewModel.saveObservation(
                     BirdObservation(
-                        binding.birdSpecies.getText(),
+                        binding.speciesList.text.toString(),
                         binding.date.getText(),
                         binding.time.getText(),
                         binding.notes.getText(),
@@ -202,7 +215,7 @@ class ObservationAdd : PreBindingFragment<FragmentObservationAddBinding>(), OnMa
             }
             formViewModel.saveObservation(
                 BirdObservation(
-                    binding.birdSpecies.getText(),
+                    binding.speciesList.text.toString(),
                     binding.date.getText(),
                     binding.time.getText(),
                     binding.notes.getText(),
@@ -237,7 +250,7 @@ class ObservationAdd : PreBindingFragment<FragmentObservationAddBinding>(), OnMa
                     //Save here
                     formViewModel.saveObservation(
                         BirdObservation(
-                            binding.birdSpecies.getText(),
+                            binding.speciesList.text.toString(),
                             binding.date.getText(),
                             binding.time.getText(),
                             binding.notes.getText(),

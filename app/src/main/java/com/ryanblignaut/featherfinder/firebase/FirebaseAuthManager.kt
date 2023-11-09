@@ -42,6 +42,10 @@ object FirebaseAuthManager {
         }
     }
 
+    fun signOutOwn() {
+        auth.signOut()
+    }
+
     class AuthException(message: String) : Exception(message)
 
 

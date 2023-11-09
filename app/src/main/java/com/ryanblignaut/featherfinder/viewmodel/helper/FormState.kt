@@ -1,11 +1,11 @@
 package com.ryanblignaut.featherfinder.viewmodel.helper
 
+import android.widget.EditText
 import androidx.core.widget.doAfterTextChanged
-import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 
 open class FormState(
-    private val valueField: TextInputEditText,
+    private val valueField: EditText,
     private val errorField: TextInputLayout,
     private val key: String,
     val map: IFormState,

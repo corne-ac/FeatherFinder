@@ -34,7 +34,6 @@ class SettingsFragment : PreBindingFragment<FragmentSetBinding>() {
         binding.measurement.setOnItemClickListener { _, _, position, _ ->
             SettingReferences.userSettings.isMetric = position == 0
         }
-//        binding.measurement.setText(metricOptions[0], false)
 
         val darkModeOptions = arrayOf("Off", "On")
         binding.darkMode.setAdapter(

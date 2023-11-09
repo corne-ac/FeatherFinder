@@ -1,7 +1,6 @@
 package com.ryanblignaut.featherfinder.ui.observation
 
 import android.location.Geocoder
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -16,6 +15,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.ryanblignaut.featherfinder.databinding.FragmentObservationAddBinding
 import com.ryanblignaut.featherfinder.model.BirdObsDetails
 import com.ryanblignaut.featherfinder.ui.helper.PreBindingFragment
+import com.ryanblignaut.featherfinder.utils.LocationConverter.populateGeneralLocation
 import com.ryanblignaut.featherfinder.viewmodel.observation.DetailObservationViewModel
 import java.util.Locale
 
@@ -35,7 +35,7 @@ class ObservationDetail : PreBindingFragment<FragmentObservationAddBinding>() {
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
         formViewModel.getObservationById(args.observationId)
-        binding.birdSpecies.setText(args.birdSpecies)
+        binding.speciesList.setText(args.birdSpecies)
         binding.date.setText(args.date)
         googleMap = binding.miniMap.getFragment<SupportMapFragment>()
         googleMap.onCreate(savedInstanceState)
@@ -54,7 +54,7 @@ class ObservationDetail : PreBindingFragment<FragmentObservationAddBinding>() {
         binding.notes.setText(values.notes)
         binding.saveObservationAction.isVisible = false
         binding.headingTextView.text = "Observation Details"
-
+        binding.generalLocationText.isVisible = true
         //check if null location, display toggle
         if (values.lat != "" || values.long != "") {
             googleMap.getMapAsync { map ->
@@ -73,7 +73,12 @@ class ObservationDetail : PreBindingFragment<FragmentObservationAddBinding>() {
             }
             val geocoder = Geocoder(requireContext(), Locale.getDefault())
 
-            populateGeneralLocation(geocoder, values)
+            populateGeneralLocation(
+                geocoder,
+                values.lat.toDouble(),
+                values.long.toDouble(),
+                binding.generalLocationText
+            )
 
 
             binding.myLocSwitch.isVisible = false
@@ -85,35 +90,36 @@ class ObservationDetail : PreBindingFragment<FragmentObservationAddBinding>() {
         }
     }
 
-    // The geocoder.getFromLocation is deprecated in API 33 but we can target API 24 so we need to account both cases.
-    // Suppress the deprecation warning for api values < 33.
-    @Suppress("DEPRECATION")
-    private fun populateGeneralLocation(
-        geocoder: Geocoder,
-        values: BirdObsDetails,
-    ) {
-        // Docs for Geocoder reference the deprecated feature as well:  https://developer.android.com/reference/android/location/Geocoder
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            geocoder.getFromLocation(
-                values.lat.toDouble(),
-                values.long.toDouble(),
-                1
-            ) {
-//                binding.pos.setText(it.firstOrNull()?.getAddressLine(0))
-                binding.generalLocationText.text = it.firstOrNull()?.getAddressLine(0)
-            }
-        } else {
-            val addresses = geocoder.getFromLocation(
-                values.lat.toDouble(),
-                values.long.toDouble(),
-                1
-            )
-            if (!addresses.isNullOrEmpty()) {
-                binding.generalLocationText.text = addresses.firstOrNull()?.getAddressLine(0)
-            }
-        }
+    /*  // The geocoder.getFromLocation is deprecated in API 33 but we can target API 24 so we need to account both cases.
+      // Suppress the deprecation warning for api values < 33.
+      @Suppress("DEPRECATION")
+      private fun populateGeneralLocation(
+          geocoder: Geocoder,
+          values: BirdObsDetails,
+      ) {
+          // Docs for Geocoder reference the deprecated feature as well:  https://developer.android.com/reference/android/location/Geocoder
+          val generalLocationText = binding.generalLocationText
+          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+              geocoder.getFromLocation(
+                  values.lat.toDouble(),
+                  values.long.toDouble(),
+                  1
+              ) {
+  //                binding.pos.setText(it.firstOrNull()?.getAddressLine(0))
+                  generalLocationText.text = it.firstOrNull()?.getAddressLine(0)
+              }
+          } else {
+              val addresses = geocoder.getFromLocation(
+                  values.lat.toDouble(),
+                  values.long.toDouble(),
+                  1
+              )
+              if (!addresses.isNullOrEmpty()) {
+                  generalLocationText.text = addresses.firstOrNull()?.getAddressLine(0)
+              }
+          }
 
-    }
+      }*/
 
     override fun inflateBindingSelf(
         inflater: LayoutInflater,

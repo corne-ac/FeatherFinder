@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.annotation.StyleRes
 import androidx.fragment.app.viewModels
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.progressindicator.CircularProgressIndicatorSpec
 import com.google.android.material.progressindicator.IndeterminateDrawable
 import com.google.firebase.auth.FirebaseUser
@@ -84,7 +85,13 @@ class Login : PreBindingFragment<FragmentLoginBinding>() {
 
     private fun onLoginResult(result: Result<FirebaseUser>) {
         if (result.isFailure) {
-            TODO("Error this out " + result.exceptionOrNull()!!.message)
+            MaterialAlertDialogBuilder(requireContext()).setTitle("Error")
+                .setMessage("Invalid credentials").setCancelable(true)
+                .show()
+
+            binding.loginAction.isEnabled = true
+            binding.loginAction.icon = null
+            return
         }
         moveToMain()
     }
