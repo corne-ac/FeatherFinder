@@ -68,7 +68,7 @@
     <string name="profile">Profile</string>
     <string name="observations">Observations</string>
     <string name="map">Map</string>
-    <string name="bird_info">Birding Info???</string>
+    <string name="bird_info">Birding Sounds</string>
     <string name="add_an_observation">add an observation</string>
     <string name="logout">Logout</string>
     <string name="bird_info_empty">Bird info is empty (TODO: change me)</string>

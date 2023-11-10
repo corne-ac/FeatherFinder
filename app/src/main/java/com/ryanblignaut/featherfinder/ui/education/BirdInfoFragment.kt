@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.ryanblignaut.featherfinder.databinding.FragmentBirdInfoListBinding
 import com.ryanblignaut.featherfinder.model.api.XenoRecording
 import com.ryanblignaut.featherfinder.model.api.XenoResponse
@@ -32,22 +33,32 @@ class BirdInfoFragment : PreBindingFragment<FragmentBirdInfoListBinding>() {
             binding.loadingRecyclerView.hideLoading()
             return
         }
-        val adapter = InfoAdapter(result.getOrNull()!!.recordings, ::onBirdClicked)
+        val values = result.getOrNull()!!.recordings
+
+
+        val filteredBirds = values.distinctBy { it.en }.filter { it.file != null }.toList()
+
+
+        val adapter = InfoAdapter(filteredBirds, ::onBirdClicked)
         binding.loadingRecyclerView.setAdapter(adapter)
     }
 
     private fun onBirdClicked(holder: InfoAdapter.ViewHolder, recording: XenoRecording) {
-        if (recording.file == null) {
-            //TODO: show a toast or something
-            return
-        }
-
+        // Current media playing
         if (mediaPair != null) {
             val media = mediaPair!!.first
+
             media.stop()
-            media.release()
+//            media.release()
             mediaPair!!.second.playButton.setImageResource(android.R.drawable.ic_media_play)
+            if (mediaPair!!.second == holder) {
+                return
+            }
         }
+
+
+
+
         mediaPair = Pair(MediaPlayer(), holder)
         val media = mediaPair!!.first
         media.setDataSource(recording.file)

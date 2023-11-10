@@ -29,6 +29,7 @@ class InfoAdapter(
         val item = values[position]
         holder.heading.text = item.en
         holder.playButton.setOnClickListener { onClick(holder, item) }
+        holder.playButton.setImageResource(android.R.drawable.ic_media_play)
     }
 
     inner class ViewHolder(binding: FragmentBirdInfoItemBinding) :
