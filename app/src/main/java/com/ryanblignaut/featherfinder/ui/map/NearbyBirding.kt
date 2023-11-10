@@ -8,10 +8,12 @@ import android.location.Location
 import android.os.Bundle
 import android.os.Looper
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -213,7 +215,7 @@ class NearbyBirding : PreBindingFragment<FragmentMapBinding>(), OnMapReadyCallba
         )
     }
 
-    @SuppressLint("MissingPermission", "SimpleDateFormat")
+    @SuppressLint("MissingPermission", "SimpleDateFormat", "PotentialBehaviorOverride")
     private fun addObsItems(map: GoogleMap) {
         map.clear()
         //Get observations
@@ -222,17 +224,15 @@ class NearbyBirding : PreBindingFragment<FragmentMapBinding>(), OnMapReadyCallba
             if (it.isFailure) {
                 return@observe
             }
-            var list = it.getOrNull()!!
+            val list = it.getOrNull()!!
 
             //Add markers
-
             val boundsBuilder = LatLngBounds.Builder()
 
             list.forEach { entry ->
                 val p = LatLng( entry.lat.toDouble(), entry.long.toDouble())
                 boundsBuilder.include(p)
 
-                // Implemented feedback on -> View birding hotspots on map
                 // Marker will be green if it has had an observation in the last 30 days, orange if it is older than 30 days and less than 6 months, violet if older than 6 months and azure if the date cant be parsed/is null.
                 val markerOptions = MarkerOptions().position(p).title(entry.birdSpecies)
 
@@ -241,16 +241,10 @@ class NearbyBirding : PreBindingFragment<FragmentMapBinding>(), OnMapReadyCallba
                         SimpleDateFormat("EEEE, dd MMMM yyyy", Locale.ENGLISH), entry.date))
                 )
 
-                map.addMarker(markerOptions)
+                map.addMarker(markerOptions)?.tag = entry
             }
-            // If there are no markers inside the radius, then we will just add the user's location.
-            // Not too sure if this is necessary but I assume that the map will not have any bounds and wont zoom if no markers are around.
-//            if (markersInsideRadius.isEmpty()) {
-//                boundsBuilder.include(userLocation!!);
-//            }
 
-            // Implemented feedback on -> Display user’s current position on map.
-            // Here we are taking the bounds of the markers and zooming in based on that. The whole circle might not be fully visible yet all the markers will be in focus with 100 units of padding around them.
+            // Here we are taking the bounds of the markers and zooming in based on that.
             map.animateCamera(
                 CameraUpdateFactory.newLatLngBounds(
                     boundsBuilder.build(), 100
@@ -259,8 +253,11 @@ class NearbyBirding : PreBindingFragment<FragmentMapBinding>(), OnMapReadyCallba
 
 
             map.isMyLocationEnabled = true
-            //Set camera pos
 
+            // Show dialog
+            map.setInfoWindowAdapter(ObsInfoAdapter(requireContext()))
+            //Set empty onl;
+            map.setOnMarkerClickListener { false }
         }
 
 
@@ -343,6 +340,7 @@ class NearbyBirding : PreBindingFragment<FragmentMapBinding>(), OnMapReadyCallba
                                 putDouble("lng", position.longitude)
                             }
                             findNavController().navigate(R.id.navigation_route, bundle)
+
                             true
                         }
 

@@ -18,6 +18,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -26,6 +27,7 @@ import com.google.maps.android.data.geojson.GeoJsonLayer
 import com.ryanblignaut.featherfinder.R
 
 import com.ryanblignaut.featherfinder.databinding.FragmentMapBinding
+import com.ryanblignaut.featherfinder.ui.component.ext.setOnClickListener
 import com.ryanblignaut.featherfinder.ui.helper.PreBindingFragment
 import com.ryanblignaut.featherfinder.viewmodel.RouteViewModel
 
@@ -38,21 +40,26 @@ class RouteBirding : PreBindingFragment<FragmentMapBinding>(),
     private lateinit var bottomSheetContent: LinearLayout
     private lateinit var routeViewModel: RouteViewModel
     private var positionIn = LatLng(0.0, 0.0)
+    val boundsBuilder = LatLngBounds.Builder()
     override fun addContentToView(savedInstanceState: Bundle?) {
 
+        binding.cardLoadNearby.visibility = View.INVISIBLE
+        binding.cardLoadObs.visibility = View.INVISIBLE
+        binding.cardShowDirections.visibility = View.VISIBLE
 
-        
 
         positionIn = LatLng(
             arguments?.getDouble("lat") ?: 0.0,
             arguments?.getDouble("lng") ?: 0.0
         )
+        boundsBuilder.include(positionIn)
+
         routeViewModel = ViewModelProvider(this)[RouteViewModel::class.java]
 
         val googleMap =
             childFragmentManager.findFragmentById(com.ryanblignaut.featherfinder.R.id.map) as SupportMapFragment?
         googleMap?.onCreate(savedInstanceState)
-        googleMap?.getMapAsync(this);
+        googleMap?.getMapAsync(this)
 
         // Set up BottomSheetDialog
         val bottomSheetDialog = BottomSheetDialog(
@@ -65,8 +72,13 @@ class RouteBirding : PreBindingFragment<FragmentMapBinding>(),
         BottomSheetBehavior.from<View>(bottomSheetInternal!!).peekHeight = 400
         bottomSheetDialog.setTitle("Route Information")
         bottomSheetDialog.show()
+
         bottomSheetContent = bottomSheetInternal.findViewById(R.id.bottom_drawer_2)
 
+        binding.btnShowDirections.setOnClickListener {
+            BottomSheetBehavior.from<View>(bottomSheetInternal!!).peekHeight = 2000
+            bottomSheetDialog.show()
+        }
     }
 
     override fun inflateBindingSelf(
@@ -107,7 +119,7 @@ class RouteBirding : PreBindingFragment<FragmentMapBinding>(),
           } catch (e: Resources.NotFoundException) {
               Log.e("a", "Can't find style. Error: ", e)
           }*/
-//        map.mapType = GoogleMap.MAP_TYPE_TERRAIN
+        map.mapType = GoogleMap.MAP_TYPE_TERRAIN
 
         val fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
         fusedLocationClient.lastLocation.addOnSuccessListener { location ->
@@ -116,7 +128,7 @@ class RouteBirding : PreBindingFragment<FragmentMapBinding>(),
             val startLong = currentLocation.longitude
             val endLat = positionIn.latitude
             val endLong = positionIn.longitude
-
+            boundsBuilder.include(currentLocation)
 
             Log.d("FF_APP", "onMapReady: $startLat, $startLong, $endLat, $endLong")
             routeViewModel.fetchRoute(endLong, endLat, startLong, startLat)
@@ -166,5 +178,11 @@ class RouteBirding : PreBindingFragment<FragmentMapBinding>(),
                     .setCancelable(true).show()
             }
         }
+
+        map.animateCamera(
+            CameraUpdateFactory.newLatLngBounds(
+                boundsBuilder.build(), 100
+            )
+        )
     }
 }

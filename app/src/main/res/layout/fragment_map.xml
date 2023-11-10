@@ -13,10 +13,11 @@
         tools:layout_editor_absoluteY="-108dp" />
 
     <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardLoadNearby"
         android:layout_width="48dp"
         android:layout_height="48dp"
         app:cardCornerRadius="100dp"
-        app:layout_constraintBottom_toTopOf="@+id/cardMyObs"
+        app:layout_constraintBottom_toTopOf="@+id/cardLoadObs"
         app:layout_constraintEnd_toEndOf="@+id/map"
         android:backgroundTint="@color/mint"
         android:layout_margin="10dp">
@@ -34,7 +35,7 @@
     </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cardMyObs"
+        android:id="@+id/cardLoadObs"
         android:layout_width="48dp"
         android:layout_height="48dp"
         app:cardCornerRadius="100dp"
@@ -53,6 +54,33 @@
             android:visibility="visible"
 
             app:srcCompat="@android:drawable/ic_menu_myplaces"
+            android:background="@color/transparent"
+            android:padding="10dp"
+            />
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardShowDirections"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        app:cardCornerRadius="100dp"
+        app:layout_constraintBottom_toBottomOf="@+id/map"
+        app:layout_constraintEnd_toEndOf="@+id/map"
+        android:backgroundTint="@color/mint"
+        android:layout_margin="10dp"
+        android:visibility="gone">
+
+
+
+
+        <ImageButton
+            android:id="@+id/btnShowDirections"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+
+            app:srcCompat="@android:drawable/ic_menu_directions"
             android:background="@color/transparent"
             android:padding="10dp"
             />
