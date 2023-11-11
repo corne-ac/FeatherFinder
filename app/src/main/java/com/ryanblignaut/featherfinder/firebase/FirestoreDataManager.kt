@@ -9,6 +9,7 @@ import com.ryanblignaut.featherfinder.model.BirdObsDetails
 import com.ryanblignaut.featherfinder.model.BirdObsTitle
 import com.ryanblignaut.featherfinder.model.BirdObservation
 import com.ryanblignaut.featherfinder.model.FullBirdObservation
+import com.ryanblignaut.featherfinder.model.Fullgoal
 import com.ryanblignaut.featherfinder.model.Goal
 import com.ryanblignaut.featherfinder.model.GoalTitle
 import com.ryanblignaut.featherfinder.model.UserSettings
@@ -99,6 +100,10 @@ object FirestoreDataManager {
     suspend fun requestGoalTitleList(): Result<List<GoalTitle>?> {
         return getDataFirestoreAuth { getDataFirestoreCollection(it.collection("goals_titles")) }
     }
+    suspend fun requestFullGoalList(): Result<List<Fullgoal>?> {
+        return getDataFirestoreAuth { getDataFirestoreCollection(it.collection("goals_full")) } // This has to return  a fullgoal list so we can test the Adapter code for the goalsList
+    }
+
 
     suspend fun addUser(username: String): Result<String> {
         return saveDataFirestoreAuth {
@@ -113,6 +118,7 @@ object FirestoreDataManager {
         }
         return goalIdResult.fold({
             saveGoalTitle(it, goal.goalTitle)
+            saveGoalFull(it,  Fullgoal(goalIdResult.toString(), goal.goalTitle.name.toString(), goal.goalTitle.description, goal.goalDetail.startTime, goal.goalDetail.endTime))
         }, Result.Companion::failure)
     }
 
@@ -120,6 +126,13 @@ object FirestoreDataManager {
         return saveDataFirestoreAuth {
             goal.id = id
             it.collection("goals_titles").add(goal).await().id
+        }
+    }
+
+    private suspend fun saveGoalFull(id: String, goal: Fullgoal): Result<String> {
+        return saveDataFirestoreAuth {
+            goal.id = id
+            it.collection("goals_full").add(goal).await().id
         }
     }
 

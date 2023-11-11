@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import com.ryanblignaut.featherfinder.R
 import com.ryanblignaut.featherfinder.databinding.FragmentGoalAddBinding
 import com.ryanblignaut.featherfinder.model.Goal
 import com.ryanblignaut.featherfinder.ui.helper.PreBindingFragment
@@ -17,8 +19,22 @@ import com.ryanblignaut.featherfinder.viewmodel.helper.FormState
  */
 class AddGoal : PreBindingFragment<FragmentGoalAddBinding>() {
     private val formViewModel: GoalViewModel by viewModels()
+
     override fun addContentToView(savedInstanceState: Bundle?) {
         binding.saveGoalAction.setOnClickListener { saveGoal() }
+
+        // Observe the formViewModel.live for the result of the save operation
+        formViewModel.live.observe(viewLifecycleOwner, ::onSaveGoalResult)
+    }
+
+    private fun onSaveGoalResult(result: Result<String>) {
+        if (result.isSuccess) {
+            // Navigation on success
+            findNavController().navigate(R.id.navigation_all_goals)
+        } else {
+            // Handle error or display an error message
+            TODO("Error message")
+        }
     }
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
@@ -36,10 +52,10 @@ class AddGoal : PreBindingFragment<FragmentGoalAddBinding>() {
     private fun saveGoal() {
         formViewModel.saveGoal(
             Goal(
-                 binding.goalName.text.toString(),
-                 binding.start.text.toString(),
-                 binding.end.text.toString(),
-                 binding.goalInfo.text.toString(),
+                binding.goalName.text.toString(),
+                binding.goalStart.getText(),
+                binding.goalEnd.getText(),
+                binding.goalInfo.text.toString(),
             )
         )
     }
@@ -62,7 +78,6 @@ class AddGoal : PreBindingFragment<FragmentGoalAddBinding>() {
             DataValidator::goalNameValidation,
         )
     }
-
 
     override fun inflateBindingSelf(
         inflater: LayoutInflater, container: ViewGroup?, attachToRoot: Boolean,

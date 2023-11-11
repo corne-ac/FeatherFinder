@@ -60,44 +60,20 @@
                         android:selectAllOnFocus="true" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/start_input_layout"
+                <com.ryanblignaut.featherfinder.ui.component.DatePickerInput
+                    android:id="@+id/goalStart"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="16dp"
-                    android:hint="Goal start"
-                    app:errorEnabled="true"
-                    app:startIconDrawable="@drawable/time_mint"
-                    app:startIconTint="@color/mint">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/start"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:imeOptions="actionDone"
-                        android:minHeight="48dp"
-                        android:selectAllOnFocus="true" />
-                </com.google.android.material.textfield.TextInputLayout>
+                    app:hint="Goal Start"
+                    app:icon="@drawable/date_mint" />
 
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/end_input_layout"
+                <com.ryanblignaut.featherfinder.ui.component.DatePickerInput
+                    android:id="@+id/goalEnd"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="16dp"
-                    android:hint="Goal end"
-                    app:errorEnabled="true"
-                    app:startIconDrawable="@drawable/time_mint"
-                    app:startIconTint="@color/mint">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/end"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:imeOptions="actionDone"
-                        android:minHeight="48dp"
-                        android:selectAllOnFocus="true" />
-                </com.google.android.material.textfield.TextInputLayout>
+                    app:hint="Date End"
+                    app:icon="@drawable/date_mint" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/goal_info_input_layout"

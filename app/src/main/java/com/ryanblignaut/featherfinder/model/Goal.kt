@@ -24,4 +24,13 @@ class GoalDetail {
     var endTime: String = ""
 }
 
+class Fullgoal(
+    var id: String,
+    var name: String,
+    var description: String,
+    var startTime: String,
+    var endTime: String
+) {
+    constructor() : this("", "", "", "", "")
+}
 

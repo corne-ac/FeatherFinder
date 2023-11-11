@@ -7,10 +7,13 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.ryanblignaut.featherfinder.R
 import com.ryanblignaut.featherfinder.databinding.FragmentGoalListBinding
-import com.ryanblignaut.featherfinder.model.Goal
-import com.ryanblignaut.featherfinder.model.GoalTitle
+import com.ryanblignaut.featherfinder.model.Fullgoal
 import com.ryanblignaut.featherfinder.ui.helper.PreBindingFragment
 import com.ryanblignaut.featherfinder.viewmodel.goal.AllGoalsViewModel
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+import java.util.concurrent.TimeUnit
 
 /**
  * This class represents the user interface for a user to register.
@@ -32,7 +35,7 @@ class AllGoals : PreBindingFragment<FragmentGoalListBinding>() {
         }
     }
 
-    private fun populateGoalList(it: Result<List<GoalTitle>?>) {
+    private fun populateGoalList(it: Result<List<Fullgoal>?>) {
         if (it.isFailure) {
             // TODO: Show error message
             println("We have no goals")
@@ -46,7 +49,7 @@ class AllGoals : PreBindingFragment<FragmentGoalListBinding>() {
         binding.loadingRecyclerView.setAdapter(GoalAdapter(values, ::onGoalClick))
     }
 
-    private fun onGoalClick(goal: GoalTitle) {
+    private fun onGoalClick(goal: Fullgoal) {
         println("Clicked on goal")
         println(goal.id)
         //TODO: Open the goal view fragment
@@ -58,4 +61,6 @@ class AllGoals : PreBindingFragment<FragmentGoalListBinding>() {
     ): FragmentGoalListBinding {
         return inflateBinding(inflater, container)
     }
+
+
 }
