@@ -100,6 +100,10 @@
     <string name="view_and_capture">View and capture bird sightings</string>
     <string name="manage_your_profile">Manage your profile</string>
     <string name="app_info">Welcome to our Feather Finder!\nDiscover the enchanting world of birding. Select from the bottom menu to:</string>
+    <string name="unlocked">Unlocked</string>
+    <string name="locked">Locked</string>
+    <string name="achievement_1">Achievement Example 1 with a lot of extra text </string>
+    <string name="achievement_1_detail">Log in 3 days in a row wow this will be a lot to render maybe more than 2 lines maybe it will even be longer than 3 lines</string>
 
 
 </resources>

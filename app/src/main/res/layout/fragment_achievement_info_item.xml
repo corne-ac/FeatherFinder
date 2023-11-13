@@ -1,8 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
-
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/observation_item_card_container"
+    android:id="@+id/achievement_item_card_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="16dp"
@@ -17,12 +15,13 @@
         android:orientation="horizontal">
 
         <ImageView
+            android:id="@+id/achievement_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start|center_vertical"
-            android:contentDescription="@string/goal"
+            android:contentDescription="@string/achievements"
             android:paddingHorizontal="12dp"
-            android:src="@drawable/bird_mint" />
+            android:src="@drawable/achievement_mint" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -31,23 +30,21 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/bird_name"
+                android:id="@+id/achievement_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/observation_1"
-                android:textSize="32sp"
-                app:startIconDrawable="@drawable/goal_mint"
-                android:maxLines="1"
                 android:ellipsize="end"
-                app:startIconTint="@color/mint" />
+                android:hint="@string/achievement_1"
+                android:maxLines="1"
+                android:textSize="24sp" />
 
             <TextView
-                android:id="@+id/bird_details"
+                android:id="@+id/achievement_detail"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:ellipsize="end"
-                android:hint="@string/observation_1_detail"
-                android:maxLines="2"
+                android:hint="@string/achievement_1_detail"
+                android:maxLines="3"
                 android:paddingHorizontal="8dp"
                 android:textSize="16sp"
                 app:startIconDrawable="@drawable/goal_mint"

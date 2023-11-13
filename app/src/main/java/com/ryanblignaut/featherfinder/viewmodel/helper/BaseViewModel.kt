@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ryanblignaut.featherfinder.model.Achievement
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -16,4 +15,12 @@ open class BaseViewModel<T> : ViewModel() {
             _mut.postValue(ioBlock())
         }
     }
+
+
+    protected fun runAsync(ioBlock: suspend () -> Unit) {
+        viewModelScope.launch(Dispatchers.IO) {
+            ioBlock()
+        }
+    }
+
 }

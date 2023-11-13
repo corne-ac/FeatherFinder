@@ -147,6 +147,8 @@
                     android:textAlignment="center" />
             </LinearLayout>
 
+
+
         </LinearLayout>
 
         <LinearLayout
@@ -168,26 +170,81 @@
             android:gravity="center"
             android:orientation="horizontal">
 
-            <ImageView
+            <!--    <ImageView
+                    android:layout_width="90dp"
+                    android:layout_height="90dp"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/badge_"
+                    app:tint="#00FF00" />-->
+            <FrameLayout
                 android:layout_width="90dp"
-                android:layout_height="90dp"
-                android:importantForAccessibility="no"
-                android:src="@drawable/badge_"
-                app:tint="#00FF00" />
+                android:layout_height="90dp">
 
-            <ImageView
-                android:layout_width="90dp"
-                android:layout_height="90dp"
-                android:importantForAccessibility="no"
-                android:src="@drawable/badge_"
-                app:tint="#FF0000" />
 
-            <ImageView
+                <ImageView
+                    android:layout_width="90dp"
+                    android:layout_height="90dp"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/badge_"
+                    app:tint="#00FF00" />
+
+                <TextView
+                    android:id="@+id/dailyAchievementCount"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="100"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="24sp" />
+            </FrameLayout>
+
+            <FrameLayout
                 android:layout_width="90dp"
-                android:layout_height="90dp"
-                android:importantForAccessibility="no"
-                android:src="@drawable/badge_"
-                app:tint="#0000FF" />
+                android:layout_height="90dp">
+
+
+                <ImageView
+                    android:layout_width="90dp"
+                    android:layout_height="90dp"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/badge_"
+                    app:tint="#FF0000" />
+
+                <TextView
+                    android:id="@+id/goalCompletedCount"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="60"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="24sp" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="90dp"
+                android:layout_height="90dp">
+
+
+                <ImageView
+                    android:layout_width="90dp"
+                    android:layout_height="90dp"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/badge_"
+                    app:tint="#0000FF" />
+
+                <TextView
+                    android:id="@+id/birdCaptureCount"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="0"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="24sp" />
+            </FrameLayout>
+
         </LinearLayout>
 
 
