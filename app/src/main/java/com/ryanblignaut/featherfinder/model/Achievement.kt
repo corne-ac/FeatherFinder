@@ -10,13 +10,11 @@ class Achievement(
 */
 
 class UserAchievement(
-    val lastLoginTime: Long,
-    val loginDaysStreak: Int,
-    val totalBirdsSeen: Int,
-    val totalGoalsComp: Int,
-) {
-
-}
+    val lastLoginTime: Long = System.currentTimeMillis(),
+    val loginDaysStreak: Int = 0,
+    val totalBirdsSeen: Int = 0,
+    val totalGoalsComp: Int = 0,
+)
 
 data class Achievement(
     val name: String,
@@ -52,6 +50,8 @@ object AchievementManager {
         if (ua == null) {
             return achievements
         }
+        //Quick and dirty way to do this. Cant un unlock achievements if this is not implemented.
+        achievements.forEach { it.isUnlocked = false }
 
         val unlockingConditions = listOf(
             Pair(ua.totalBirdsSeen, listOf(0, 1, 2)),

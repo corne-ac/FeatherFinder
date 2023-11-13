@@ -1,19 +1,18 @@
 package com.ryanblignaut.featherfinder.ui.goal
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.ryanblignaut.featherfinder.R
 import com.ryanblignaut.featherfinder.databinding.FragmentGoalListBinding
-import com.ryanblignaut.featherfinder.model.Fullgoal
+import com.ryanblignaut.featherfinder.model.FullGoal
 import com.ryanblignaut.featherfinder.ui.helper.PreBindingFragment
 import com.ryanblignaut.featherfinder.viewmodel.goal.AllGoalsViewModel
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
-import java.util.concurrent.TimeUnit
+
 
 /**
  * This class represents the user interface for a user to register.
@@ -21,6 +20,7 @@ import java.util.concurrent.TimeUnit
  */
 class AllGoals : PreBindingFragment<FragmentGoalListBinding>() {
     private val model: AllGoalsViewModel by viewModels()
+
 
     override fun addContentToView(savedInstanceState: Bundle?) {
         // Start the loader.
@@ -31,11 +31,21 @@ class AllGoals : PreBindingFragment<FragmentGoalListBinding>() {
         binding.addGoalAction.setOnClickListener {
 //            findNavController().navigate(R.id.navigation_add_goal)
             findNavController().navigate(R.id.action_all_goals_to_add_goal)
-
         }
+
+        // Had to hack this in to move back else user is stuck on the profile page.
+        val callback: OnBackPressedCallback =
+            object : OnBackPressedCallback(true ) {
+                override fun handleOnBackPressed() {
+                    findNavController().navigate(R.id.navigation_profile)
+                }
+            }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
+
+
     }
 
-    private fun populateGoalList(it: Result<List<Fullgoal>?>) {
+    private fun populateGoalList(it: Result<List<FullGoal>?>) {
         if (it.isFailure) {
             // TODO: Show error message
             println("We have no goals")
@@ -46,13 +56,23 @@ class AllGoals : PreBindingFragment<FragmentGoalListBinding>() {
         if (values.isEmpty()) {
             binding.loadingRecyclerView.showEmptyText()
         }
-        binding.loadingRecyclerView.setAdapter(GoalAdapter(values, ::onGoalClick, findNavController()))
+        binding.loadingRecyclerView.setAdapter(
+            GoalAdapter(
+                values,
+                ::onGoalDeleteClick,
+                ::onGoalTickClick
+            )
+        )
+    }
+    private fun onGoalTickClick(goal: FullGoal) {
+        model.completeGoal(goal.id)
+        model.getGoals()
     }
 
-    private fun onGoalClick(goal: Fullgoal) {
-        println("Clicked on goal")
-        println(goal.id)
-        //TODO: Open the goal view fragment
+    private fun onGoalDeleteClick(goal: FullGoal) {
+        Log.d("AllGoals", "Deleting goal ${goal.id}")
+        model.deleteGoal(goal.selfId)
+        model.getGoals()
     }
 
 

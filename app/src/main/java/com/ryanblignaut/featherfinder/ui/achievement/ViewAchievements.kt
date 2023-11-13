@@ -32,8 +32,8 @@ class ViewAchievements : PreBindingFragment<FragmentAllAchievementsBinding>() {
         val lockedAchievements = usersAchievements.filter { !it.isUnlocked }
 
         // Now we create the adapter with the unlocked achievements first and then the locked achievements.
-        val unlockedAdapter = AchievementAdapter(unlockedAchievements)
-        val lockedAdapter = AchievementAdapter(lockedAchievements)
+        val unlockedAdapter = AchievementAdapter(unlockedAchievements, requireContext())
+        val lockedAdapter = AchievementAdapter(lockedAchievements, requireContext())
 
         // Now we set the adapters to the recycler views.
         binding.achievementsUnlockedRecyclerView.adapter = unlockedAdapter

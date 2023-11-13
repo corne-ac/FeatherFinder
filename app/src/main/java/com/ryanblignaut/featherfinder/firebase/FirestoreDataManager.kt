@@ -10,11 +10,13 @@ import com.ryanblignaut.featherfinder.model.BirdObsDetails
 import com.ryanblignaut.featherfinder.model.BirdObsTitle
 import com.ryanblignaut.featherfinder.model.BirdObservation
 import com.ryanblignaut.featherfinder.model.FullBirdObservation
-import com.ryanblignaut.featherfinder.model.Fullgoal
+import com.ryanblignaut.featherfinder.model.FullGoal
 import com.ryanblignaut.featherfinder.model.Goal
 import com.ryanblignaut.featherfinder.model.GoalTitle
+import com.ryanblignaut.featherfinder.model.SelfId
 import com.ryanblignaut.featherfinder.model.UserAchievement
 import com.ryanblignaut.featherfinder.model.UserSettings
+import com.ryanblignaut.featherfinder.utils.DateTimeConvert
 import kotlinx.coroutines.tasks.await
 
 object FirestoreDataManager {
@@ -116,13 +118,10 @@ object FirestoreDataManager {
         return getDataFirestoreAuth { getDataFirestoreCollection(it.collection("observations_full")) }
     }
 
+    suspend fun requestFullGoalList(): Result<List<FullGoal>?> {
 
-    suspend fun requestGoalTitleList(): Result<List<GoalTitle>?> {
-        return getDataFirestoreAuth { getDataFirestoreCollection(it.collection("goals_titles")) }
-    }
-
-    suspend fun requestFullGoalList(): Result<List<Fullgoal>?> {
-        return getDataFirestoreAuth { getDataFirestoreCollection(it.collection("goals_full")) } // This has to return  a fullgoal list so we can test the Adapter code for the goalsList
+        return getDataFirestoreAuth { getDataFirestoreCollection(it.collection("goals_full")) }
+        // This has to return  a fullgoal list so we can test the Adapter code for the goalsList
     }
 
 
@@ -139,13 +138,17 @@ object FirestoreDataManager {
         }
         return goalIdResult.fold({
             saveGoalTitle(it, goal.goalTitle)
+            // We want the goal to have long for start time and end time so we will convert back.
+            // We night have wanted a custom
+            val start = DateTimeConvert.fromStringToLong(goal.goalDetail.startTime)
+            val end = DateTimeConvert.fromStringToLong(goal.goalDetail.endTime)
             saveGoalFull(
-                it, Fullgoal(
+                it, FullGoal(
                     goalIdResult.toString(),
-                    goal.goalTitle.name.toString(),
+                    goal.goalTitle.name,
                     goal.goalTitle.description,
-                    goal.goalDetail.startTime,
-                    goal.goalDetail.endTime
+                    start,
+                    end
                 )
             )
         }, Result.Companion::failure)
@@ -158,7 +161,7 @@ object FirestoreDataManager {
         }
     }
 
-    private suspend fun saveGoalFull(id: String, goal: Fullgoal): Result<String> {
+    private suspend fun saveGoalFull(id: String, goal: FullGoal): Result<String> {
         return saveDataFirestoreAuth {
             goal.id = id
             it.collection("goals_full").add(goal).await().id
@@ -167,17 +170,21 @@ object FirestoreDataManager {
 
     //This below delete code DOES NOT WORK, fek knows how it should be done
 
-    suspend fun deleteGoal(id: String) {
-        deleteFirestoreAuth {
-            try {
-                database.collection("goals_full").document(id).delete().await()
-                database.collection("goals_titles").document(id).delete().await()
-                database.collection("goals_descriptions").document(id).delete().await()
-                Result.success("Unit")  // Success, return a Result with Unit
-            } catch (e: Exception) {
-                Result.failure(e)  // An error occurred, return a Result with the exception
-            }
+    suspend fun deleteGoal(id: String): Result<String?> {
+        return getDataFirestoreAuth {
+            it.collection("goals_full").document(id).delete().await()
+            return Result.success("Success")
         }
+        /*    deleteFirestoreAuth {
+                try {
+                    database.collection("goals_full").document(id).delete().await()
+                    database.collection("goals_titles").document(id).delete().await()
+                    database.collection("goals_descriptions").document(id).delete().await()
+                    Result.success("Success")  // Success, return a Result with Unit
+                } catch (e: Exception) {
+                    Result.failure(e)  // An error occurred, return a Result with the exception
+                }
+            }*/
     }
 
 
@@ -204,6 +211,7 @@ object FirestoreDataManager {
         } ?: Result.failure(Exception("User not authenticated"))
     }
 
+
     private suspend inline fun <reified T> getDataFirestore(document: DocumentReference): Result<T?> {
         val snapshot = document.get().await()
         if (!snapshot.exists()) return Result.failure(Exception("Document does not exist"))
@@ -214,10 +222,16 @@ object FirestoreDataManager {
 
     private suspend inline fun <reified T> getDataFirestoreCollection(collection: CollectionReference): Result<List<T>?> {
         val snapshot = collection.get().await()
-//        if (snapshot.isEmpty) return Result.failure(Exception("Collection is empty"))
-
         val dataList = mutableListOf<T>()
-        for (document in snapshot) dataList.add(document.toObject(T::class.java))
+
+
+        for (document in snapshot) {
+            val data = document.toObject(T::class.java)
+            if (data is SelfId)
+                data.selfId = document.id
+
+            dataList.add(data)
+        }
         return Result.success(dataList)
     }
 
@@ -228,9 +242,9 @@ object FirestoreDataManager {
         nameSort: Boolean,
     ): Result<List<T>?> {
         var customCollection: Query = collection
-
         if (filterTime.isNotEmpty()) customCollection =
             customCollection.whereEqualTo("date", filterTime)
+
 
         if (nameSort) customCollection = customCollection.orderBy("birdSpecies")
 
@@ -245,7 +259,7 @@ object FirestoreDataManager {
 
     suspend fun requestUserAchievements(): Result<UserAchievement?> {
         return getDataFirestoreAuth { userRef ->
-            val achievementsQuery = userRef.collection("achievements").document()
+            val achievementsQuery = userRef.collection("achievements").document("achievementData")
             val achievementsSnapshot = achievementsQuery.get().await()
             val achievementsData = achievementsSnapshot.toObject(UserAchievement::class.java)
             if (achievementsData != null) {
@@ -253,42 +267,51 @@ object FirestoreDataManager {
             } else {
                 Result.failure(Exception("Failed to parse user achievements"))
             }
-
-            /*  if (!achievementsSnapshot.isEmpty) {
-                  // If a settings document exists, parse and return it
-                  val achievementsData =
-                      achievementsSnapshot.documents[0].toObject(UserAchievement::class.java)
-                  if (achievementsData != null) {
-                      Result.success(achievementsData)
-                  } else {
-                      Result.failure(Exception("Failed to parse user achievements"))
-                  }*/
         }
     }
 
     suspend fun updateDayStreak(loginDaysStreak: Int) {
         saveDataFirestoreAuth {
-            val document = it.collection("achievements").document("achievements")
-            document
-                .update("loginDaysStreak", loginDaysStreak).await()
-            document.update("lastLoginTime", System.currentTimeMillis()).await()
-            ""
-        }
-    }
-
-    suspend fun updateBirdsCaptured() {
-        saveDataFirestoreAuth {
-            val document = it.collection("achievements").document()
-//            document.update("totalBirdsSeen", FieldValue.increment(1)).await()
-
+            val document = it.collection("achievements").document("achievementData")
             document.set(
-                mapOf("totalBirdsSeen" to FieldValue.increment(1)),
-                SetOptions.merge()
+                mapOf(
+                    "loginDaysStreak" to loginDaysStreak,
+                    "lastLoginTime" to System.currentTimeMillis()
+                ), SetOptions.merge()
             ).await()
-
             ""
         }
     }
+
+    private suspend fun updateBirdsCaptured() {
+        saveDataFirestoreAuth {
+            it.collection("achievements").document("achievementData").set(
+                mapOf("totalBirdsSeen" to FieldValue.increment(1)), SetOptions.merge()
+            ).await()
+            ""
+        }
+    }
+
+    private suspend fun updateGoalCompleted(value: Long) {
+        saveDataFirestoreAuth {
+            it.collection("achievements").document("achievementData").set(
+                mapOf("totalGoalsComp" to FieldValue.increment(value)), SetOptions.merge()
+            ).await()
+            ""
+        }
+    }
+
+    suspend fun requestUrgentGoal(): Result<FullGoal?> = getDataFirestoreAuth {
+        Result.success(
+            it.collection("goals_full").orderBy("endTime").limit(1).get()
+                .await()
+                .documents.getOrNull(0)?.toObject(FullGoal::class.java)
+        )
+    }
+
+//    fun requestUrgentGoal(): Result<Goal?>? {
+//
+//    }
 
 
 }
