@@ -46,7 +46,7 @@ class AllGoals : PreBindingFragment<FragmentGoalListBinding>() {
         if (values.isEmpty()) {
             binding.loadingRecyclerView.showEmptyText()
         }
-        binding.loadingRecyclerView.setAdapter(GoalAdapter(values, ::onGoalClick))
+        binding.loadingRecyclerView.setAdapter(GoalAdapter(values, ::onGoalClick, findNavController()))
     }
 
     private fun onGoalClick(goal: Fullgoal) {

@@ -165,6 +165,29 @@ object FirestoreDataManager {
         }
     }
 
+    //This below delete code DOES NOT WORK, fek knows how it should be done
+
+    suspend fun deleteGoal(id: String) {
+        deleteFirestoreAuth {
+            try {
+                database.collection("goals_full").document(id).delete().await()
+                database.collection("goals_titles").document(id).delete().await()
+                database.collection("goals_descriptions").document(id).delete().await()
+                Result.success("Unit")  // Success, return a Result with Unit
+            } catch (e: Exception) {
+                Result.failure(e)  // An error occurred, return a Result with the exception
+            }
+        }
+    }
+
+
+    private inline fun deleteFirestoreAuth(run: (DocumentReference) -> Result<String>) {
+        FirebaseAuthManager.getCurrentUser()?.let { currentUser ->
+            val userRef = database.collection("users").document(currentUser.uid)
+            run(userRef)
+        } ?: Result.failure(Exception("User not authenticated"))
+    }
+
 
     private inline fun <reified T> getDataFirestoreAuth(run: (DocumentReference) -> Result<T?>): Result<T?> {
         return FirebaseAuthManager.getCurrentUser()?.let { currentUser ->

@@ -38,7 +38,8 @@ class MainActivity : AppCompatActivity() {
                 R.id.navigation_nearby_hotspots,
                 R.id.navigation_observation_list,
                 R.id.navigation_profile,
-                R.id.navigation_add_observation
+                R.id.navigation_add_observation,
+                R.id.navigation_all_goals
             )
         )
 
@@ -53,7 +54,7 @@ class MainActivity : AppCompatActivity() {
             val id = destination.id
             val hideBottomList = listOf(
                 R.id.navigation_add_goal, R.id.navigation_add_observation,
-                R.id.navigation_settings, R.id.navigation_all_goals,
+                R.id.navigation_settings,
                 R.id.navigation_achievement, R.id.navigation_observation_detail
             )
             binding.navView.visibility = (if (hideBottomList.contains(id)) View.GONE else View.VISIBLE)

@@ -24,7 +24,7 @@
 
     <item
         android:id="@+id/navigation_profile"
-        android:icon="@drawable/user_mint"
-        android:title="@string/profile" />
+        android:icon="@drawable/more"
+        android:title="Other" />
 
 </menu>

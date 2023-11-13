@@ -1,14 +1,22 @@
 package com.ryanblignaut.featherfinder.ui.goal
 
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.ryanblignaut.featherfinder.R
 import com.ryanblignaut.featherfinder.databinding.FragmentGoalItemBinding
+import com.ryanblignaut.featherfinder.firebase.FirestoreDataManager
 import com.ryanblignaut.featherfinder.model.Fullgoal
 import com.ryanblignaut.featherfinder.model.Goal
 import com.ryanblignaut.featherfinder.model.GoalTitle
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -17,6 +25,7 @@ import java.util.concurrent.TimeUnit
 class GoalAdapter(
     private val values: List<Fullgoal>,
     private val onClick: (Fullgoal) -> Unit,
+    private val navController: NavController,
 ) : RecyclerView.Adapter<GoalAdapter.ViewHolder>() {
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -39,19 +48,38 @@ class GoalAdapter(
 
         holder.name.text = item.name
         holder.detail.text = item.description
-        holder.startDate.text = item.startTime
-        holder.endDate.text = item.endTime
+
+        holder.imgCheck.setOnClickListener {  }
+        holder.imgDelete.setOnClickListener {
+//            GlobalScope.launch(Dispatchers.Main) {
+//                    val result = FirestoreDataManager.deleteGoal(item.id)
+//
+//                    navController.navigate(R.id.navigation_all_goals)
+//            }
+        }
+
+
 
         //Change enddate colour based on how close it is. 1 day = orange, 7 days = yellow, more = green, past = red
 
-        //TODO: Consider saying "X Days Left" rather than showing dates with colour
-
         val todayString = SimpleDateFormat("EEEE, d MMMM yyyy", Locale.ENGLISH).format(Date())
         val inbetween = getDaysBetween(todayString, item.endTime)
-        holder.endDate.setBackgroundColor(getColor(inbetween))
-        holder.endDate.setTextColor(Color.BLACK)
+        holder.daysLeft.text = getDaysLeftText(inbetween)
+        //build text based on days left
+
+        holder.iconDaysLeft.setColorFilter(getColor(inbetween))
+
         holder.container.setOnClickListener { onClick(item) }
     }
+
+    private fun getDaysLeftText(inbetween: Int): String {
+        return when {
+            inbetween < 0 -> "Passed ${-inbetween} days ago"
+            inbetween == 0 -> "Today"
+            else -> "${inbetween} days left"
+        }
+    }
+
 
     private fun getColor(inbetween: Int): Int {
         if (inbetween < 0)
@@ -76,8 +104,10 @@ class GoalAdapter(
         val container : View = binding.goalContainer
         val name = binding.goalName
         val detail = binding.goalDetail
-        val startDate = binding.startDate
-        val endDate = binding.endDate
+        val imgCheck = binding.imgCheck
+        val imgDelete = binding.imgDelete
+        val daysLeft = binding.daysLeft
+        val iconDaysLeft = binding.iconDaysLeft
     }
 
     fun getDaysBetween(startDateString: String, endDateString: String): Int {
