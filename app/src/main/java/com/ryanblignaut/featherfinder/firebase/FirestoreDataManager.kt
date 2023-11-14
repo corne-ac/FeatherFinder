@@ -312,6 +312,7 @@ object FirestoreDataManager {
     }
 
     suspend fun completeGoal(id: String) {
+        updateGoalCompleted(1)
         saveDataFirestoreAuth {
             it.collection("goals_full").document(id).set(
                 mapOf("goalCompleted" to true), SetOptions.merge()

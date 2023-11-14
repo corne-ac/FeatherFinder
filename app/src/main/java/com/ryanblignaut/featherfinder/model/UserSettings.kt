@@ -10,6 +10,10 @@ class UserSettings{
         this.isMetric = isMetric
         this.maxDistance = maxDistance
     }
+
+    fun getMaxDist() : Int {
+        return maxDistance
+    }
     constructor()
 
 }

@@ -14,8 +14,8 @@ object SettingReferences {
     fun getMaxDistance(): Float {
         // Here we will convert the max distance to the correct unit
         if (!userSettings.isMetric)
-            MetricImperialConverter.kilometersToMiles(MaxDist.entries[userSettings.maxDistance].maxDist.toDouble())
-        return MaxDist.entries[userSettings.maxDistance].maxDist
+            MetricImperialConverter.kilometersToMiles(MaxDist.entries[userSettings.getMaxDist()].maxDist.toDouble())
+        return MaxDist.entries[userSettings.getMaxDist()].maxDist
     }
 
 }

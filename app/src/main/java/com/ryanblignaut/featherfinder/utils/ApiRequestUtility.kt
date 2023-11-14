@@ -75,8 +75,8 @@ object ApiRequestUtility {
             val url = URL(apiUrl)
             connection = url.openConnection() as HttpURLConnection
             connection.requestMethod = method.name
-            connection.connectTimeout = 15000
-            connection.readTimeout = 15000
+            connection.connectTimeout = 150000
+            connection.readTimeout = 150000
 
             // Add headers to the request
             headers?.forEach { (key, value) ->

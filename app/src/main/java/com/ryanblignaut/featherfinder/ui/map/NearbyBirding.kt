@@ -155,7 +155,6 @@ class NearbyBirding : PreBindingFragment<FragmentMapBinding>(), OnMapReadyCallba
             if (location != null) {
                 userLocation = LatLng(location.latitude, location.longitude)
                 val userLoc = LatLng(location.latitude, location.longitude)
-                SettingReferences.getMaxDistance()
                 birdingHotspotViewModel.fetchHotspots(
                     userLoc.latitude, userLoc.longitude, SettingReferences.getMaxDistance()
                 )
