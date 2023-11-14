@@ -64,6 +64,7 @@ class AllGoals : PreBindingFragment<FragmentGoalListBinding>() {
         if (!goal.goalCompleted) {
             model.completeGoal(goal.selfId)
             vh.imgCheck.setImageResource(R.drawable.bird_mint)
+
         } else {
             model.removeCompletionOnGoal(goal.selfId)
             vh.imgCheck.setImageResource(R.drawable.check)
@@ -81,6 +82,4 @@ class AllGoals : PreBindingFragment<FragmentGoalListBinding>() {
     ): FragmentGoalListBinding {
         return inflateBinding(inflater, container)
     }
-
-
 }

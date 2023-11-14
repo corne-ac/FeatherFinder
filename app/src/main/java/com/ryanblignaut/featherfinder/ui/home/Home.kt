@@ -17,6 +17,8 @@ import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
+import java.util.Date
+import java.util.concurrent.TimeUnit
 
 class Home : PreBindingFragment<FragmentHomeBinding>() {
 
@@ -33,10 +35,25 @@ class Home : PreBindingFragment<FragmentHomeBinding>() {
 
     private fun populateUrgentGoal(urgentGoal: Result<FullGoal?>) {
         urgentGoal.getOrNull()?.let {
-            binding.upcomingGoal.text = it.name
+            if (it.endTime != -1L) {
+                val durationInMillis = it.endTime - Date().time
+                val daysBetween =
+                    TimeUnit.DAYS.convert(durationInMillis, TimeUnit.MILLISECONDS).toInt()
+                binding.upcomingGoal.text = it.name + "\n" + getDaysLeftText(daysBetween)
+            }
+
+
             return
         }
         binding.upcomingGoal.text = "No upcoming goal"
+    }
+
+    private fun getDaysLeftText(daysBetween: Int): String {
+        return when {
+            daysBetween < 0 -> "Passed ${-daysBetween} days ago"
+            daysBetween == 0 -> "Today"
+            else -> "$daysBetween days left"
+        }
     }
 
     private fun updateDarkTheme(settingsResult: Result<UserSettings?>) {

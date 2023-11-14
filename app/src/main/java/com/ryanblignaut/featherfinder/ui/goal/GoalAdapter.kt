@@ -46,7 +46,7 @@ class GoalAdapter(
             val durationInMillis = item.endTime - Date().time
             // Change end-date colour based on how close it is. 1 day = orange, 7 days = yellow, more = green, past = red.
             val daysBetween =
-                TimeUnit.DAYS.convert(durationInMillis, TimeUnit.MILLISECONDS).toInt();
+                TimeUnit.DAYS.convert(durationInMillis, TimeUnit.MILLISECONDS).toInt()
             holder.daysLeft.text = getDaysLeftText(daysBetween)
             //Change colour based on how close it is. 1 day = orange, 7 days = yellow, more = green, past = red
             holder.iconDaysLeft.setColorFilter(getColor(daysBetween))
