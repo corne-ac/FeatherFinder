@@ -1,6 +1,7 @@
 package com.ryanblignaut.featherfinder.ui.goal
 
 import android.graphics.Color
+import android.graphics.ColorFilter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -33,12 +34,18 @@ class GoalAdapter(
         val item = values[position]
         holder.name.text = item.name
         holder.detail.text = item.description
-        holder.imgCheck.setOnClickListener { onTicClick(item, holder) }
+        holder.imgCheck.setOnClickListener {
+                onTicClick(item, holder)
+                item.goalCompleted = !item.goalCompleted
+            }
         holder.imgDelete.setOnClickListener { onDelClick(item) }
 
         if (item.goalCompleted) {
             // TODO: REal icon
-            holder.imgCheck.setImageResource(R.drawable.bird_mint)
+            holder.imgCheck.setColorFilter(Color.GREEN)
+            holder.imgDelete.setColorFilter(Color.RED)
+        } else {
+            holder.imgCheck.setColorFilter(Color.DKGRAY)
         }
 
         // Added a check to ensure that we have both dates before we try to compare them
