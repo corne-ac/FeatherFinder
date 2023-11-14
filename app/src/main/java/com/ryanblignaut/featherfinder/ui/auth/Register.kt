@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseUser
 import com.ryanblignaut.featherfinder.LoginActivity
 import com.ryanblignaut.featherfinder.MainActivity
@@ -63,7 +64,9 @@ class Register : PreBindingFragment<FragmentRegisterBinding>() {
 
     private fun onRegisterResult(result: Result<FirebaseUser>) {
         if (result.isFailure) {
-            TODO("Error this out " + result.exceptionOrNull()!!.message)
+            MaterialAlertDialogBuilder(requireContext()).setTitle("Error")
+                .setMessage("Invalid credentials").setCancelable(true)
+                .show()
         }
         this.activity?.finish()
         Intent(this.activity, MainActivity::class.java).setAction(Intent.ACTION_VIEW)

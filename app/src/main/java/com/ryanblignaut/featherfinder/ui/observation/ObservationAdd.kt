@@ -120,7 +120,9 @@ class ObservationAdd : PreBindingFragment<FragmentObservationAddBinding>(), OnMa
 
     private fun onSaveObservationResult(result: Result<String>) {
         if (result.isFailure) {
-            TODO("Error message")
+            MaterialAlertDialogBuilder(requireContext()).setTitle("Error")
+                .setMessage("Unable to save observation").setCancelable(true)
+                .show()
         }
 
         findNavController().navigate(R.id.navigation_observation_list)

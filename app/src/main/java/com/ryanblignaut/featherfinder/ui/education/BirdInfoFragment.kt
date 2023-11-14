@@ -63,8 +63,6 @@ class BirdInfoFragment : PreBindingFragment<FragmentBirdInfoListBinding>() {
         val media = mediaPair!!.first
         media.setDataSource(recording.file)
         media.prepareAsync()
-        //TODO: show a loading indicator
-        // Loader.Show()
 
         media.setOnPreparedListener {
             // Loader.End()
