@@ -15,15 +15,14 @@ class SettingsViewModel : BaseViewModel<UserSettings?>() {
         FirestoreDataManager.saveSettings(userSettings)
     }
 
-    private fun updateAllReferences(userSettings: UserSettings) {
-        // TODO: dark mode needs ui thread to update
+/*    private fun updateAllReferences(userSettings: UserSettings) {
         if (userSettings.isDarkMode) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         } else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         }
         SettingReferences.userSettings = userSettings
-    }
+    }*/
 
     fun getUserSettings() = fetchInBackground {
         FirestoreDataManager.getSettings()

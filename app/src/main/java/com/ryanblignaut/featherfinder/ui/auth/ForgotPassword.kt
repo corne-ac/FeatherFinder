@@ -15,7 +15,6 @@ class ForgotPassword : PreBindingFragment<FragmentForgotPasswordBinding>() {
 
     override fun addContentToView(savedInstanceState: Bundle?) {
         /*  binding.register.setOnClickListener {
-              // TODO: Navigate with findNavController and set up graph showing nav
   //            findNavController().navigate(com.ryanblignaut.featherfinder.R.id.mobile_navigation)
               (requireActivity() as SettingsActivity).loadFragment(Register())
           }*/

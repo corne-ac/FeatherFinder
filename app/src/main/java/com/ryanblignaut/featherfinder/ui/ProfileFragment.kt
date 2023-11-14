@@ -18,7 +18,6 @@ class ProfileFragment : PreBindingFragment<FragmentProfileBinding>() {
 
         binding.settingsAction.setOnClickListener {
             findNavController().navigate(R.id.action_navigation_profile_to_settingsFragment)
-            //TODO("Implement settings screen")
         }
         binding.goalsAction.setOnClickListener {
             findNavController().navigate(R.id.navigation_all_goals)

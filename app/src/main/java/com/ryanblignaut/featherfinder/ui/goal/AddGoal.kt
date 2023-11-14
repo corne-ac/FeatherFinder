@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.ryanblignaut.featherfinder.R
 import com.ryanblignaut.featherfinder.databinding.FragmentGoalAddBinding
 import com.ryanblignaut.featherfinder.model.Goal
@@ -33,7 +34,8 @@ class AddGoal : PreBindingFragment<FragmentGoalAddBinding>() {
             findNavController().navigate(R.id.navigation_all_goals)
         } else {
             // Handle error or display an error message
-            TODO("Error message")
+            MaterialAlertDialogBuilder(requireContext()).setTitle("Error")
+                .setMessage("Unable to save goal").setCancelable(true).show()
         }
     }
 

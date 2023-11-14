@@ -96,7 +96,6 @@ class NearbyBirding : PreBindingFragment<FragmentMapBinding>(), OnMapReadyCallba
                 // features are disabled if it's declined. In this UI, include a
                 // "cancel" or "no thanks" button that lets the user continue
                 // using your app without granting the permission.
-//                TODO("Show a dialog explaining why the user should grant the location permission")
 //                MaterialAlertDialogBuilder(requireContext()).setTitle("Error")
 //                    .setMessage("Location permissions are required to use this feature.")
 //                    .setCancelable(true).show()

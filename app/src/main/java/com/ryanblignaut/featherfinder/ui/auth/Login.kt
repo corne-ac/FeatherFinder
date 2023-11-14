@@ -44,7 +44,6 @@ class Login : PreBindingFragment<FragmentLoginBinding>() {
         }
 
         binding.loginAction.setOnClickListener {
-            // TODO: put into a component.
             val spec = CircularProgressIndicatorSpec(
                 requireContext(),  /*attrs=*/
                 null, 0, getSpecStyleResId()
