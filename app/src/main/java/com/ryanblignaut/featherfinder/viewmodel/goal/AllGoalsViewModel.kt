@@ -28,6 +28,12 @@ class AllGoalsViewModel : BaseViewModel<List<FullGoal>?>() {
     }
 
     fun completeGoal(id: String) = runAsync {
+        FirestoreDataManager.completeGoal(id)
     }
+
+    fun removeCompletionOnGoal(id: String) = runAsync {
+        FirestoreDataManager.removeCompletionOnGoal(id)
+    }
+
 
 }

@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.ryanblignaut.featherfinder.R
 import com.ryanblignaut.featherfinder.databinding.FragmentGoalItemBinding
 import com.ryanblignaut.featherfinder.model.FullGoal
 import java.util.Date
@@ -13,7 +14,7 @@ import java.util.concurrent.TimeUnit
 class GoalAdapter(
     private val values: List<FullGoal>,
     private val onDelClick: (FullGoal) -> Unit,
-    private val onTicClick: (FullGoal) -> Unit,
+    private val onTicClick: (FullGoal, ViewHolder) -> Unit,
 ) : RecyclerView.Adapter<GoalAdapter.ViewHolder>() {
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -32,9 +33,13 @@ class GoalAdapter(
         val item = values[position]
         holder.name.text = item.name
         holder.detail.text = item.description
-        holder.imgCheck.setOnClickListener { onTicClick(item) }
+        holder.imgCheck.setOnClickListener { onTicClick(item, holder) }
         holder.imgDelete.setOnClickListener { onDelClick(item) }
 
+        if (item.goalCompleted) {
+            // TODO: REal icon
+            holder.imgCheck.setImageResource(R.drawable.bird_mint)
+        }
 
         // Added a check to ensure that we have both dates before we try to compare them
         if (item.startTime != -1L && item.endTime != -1L) {
@@ -55,7 +60,6 @@ class GoalAdapter(
             else -> "$daysBetween days left"
         }
     }
-
 
     private fun getColor(daysBetween: Int): Int {
         if (daysBetween < 0) return Color.RED

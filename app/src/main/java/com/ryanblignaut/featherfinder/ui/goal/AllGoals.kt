@@ -1,7 +1,6 @@
 package com.ryanblignaut.featherfinder.ui.goal
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
@@ -34,12 +33,11 @@ class AllGoals : PreBindingFragment<FragmentGoalListBinding>() {
         }
 
         // Had to hack this in to move back else user is stuck on the profile page.
-        val callback: OnBackPressedCallback =
-            object : OnBackPressedCallback(true ) {
-                override fun handleOnBackPressed() {
-                    findNavController().navigate(R.id.navigation_profile)
-                }
+        val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                findNavController().navigate(R.id.navigation_profile)
             }
+        }
         requireActivity().onBackPressedDispatcher.addCallback(this, callback)
 
 
@@ -47,7 +45,6 @@ class AllGoals : PreBindingFragment<FragmentGoalListBinding>() {
 
     private fun populateGoalList(it: Result<List<FullGoal>?>) {
         if (it.isFailure) {
-            // TODO: Show error message
             println("We have no goals")
             println(it.exceptionOrNull())
             return
@@ -58,19 +55,22 @@ class AllGoals : PreBindingFragment<FragmentGoalListBinding>() {
         }
         binding.loadingRecyclerView.setAdapter(
             GoalAdapter(
-                values,
-                ::onGoalDeleteClick,
-                ::onGoalTickClick
+                values, ::onGoalDeleteClick, ::onGoalTickClick
             )
         )
     }
-    private fun onGoalTickClick(goal: FullGoal) {
-        model.completeGoal(goal.id)
-        model.getGoals()
+
+    private fun onGoalTickClick(goal: FullGoal, vh: GoalAdapter.ViewHolder) {
+        if (!goal.goalCompleted) {
+            model.completeGoal(goal.selfId)
+            vh.imgCheck.setImageResource(R.drawable.bird_mint)
+        } else {
+            model.removeCompletionOnGoal(goal.selfId)
+            vh.imgCheck.setImageResource(R.drawable.check)
+        }
     }
 
     private fun onGoalDeleteClick(goal: FullGoal) {
-        Log.d("AllGoals", "Deleting goal ${goal.id}")
         model.deleteGoal(goal.selfId)
         model.getGoals()
     }

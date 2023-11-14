@@ -6,6 +6,7 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.SetOptions
+import com.ryanblignaut.featherfinder.R
 import com.ryanblignaut.featherfinder.model.BirdObsDetails
 import com.ryanblignaut.featherfinder.model.BirdObsTitle
 import com.ryanblignaut.featherfinder.model.BirdObservation
@@ -303,11 +304,32 @@ object FirestoreDataManager {
 
     suspend fun requestUrgentGoal(): Result<FullGoal?> = getDataFirestoreAuth {
         Result.success(
-            it.collection("goals_full").orderBy("endTime").limit(1).get()
+            it.collection("goals_full").orderBy("endTime").whereEqualTo("goalCompleted", false)
+                .limit(1).get()
                 .await()
                 .documents.getOrNull(0)?.toObject(FullGoal::class.java)
         )
     }
+
+    suspend fun completeGoal(id: String) {
+        saveDataFirestoreAuth {
+            it.collection("goals_full").document(id).set(
+                mapOf("goalCompleted" to true), SetOptions.merge()
+            ).await()
+            ""
+        }
+    }
+
+    suspend fun removeCompletionOnGoal(id: String) {
+        updateGoalCompleted(-1)
+        saveDataFirestoreAuth {
+            it.collection("goals_full").document(id).set(
+                mapOf("goalCompleted" to false), SetOptions.merge()
+            ).await()
+            ""
+        }
+    }
+
 
 //    fun requestUrgentGoal(): Result<Goal?>? {
 //

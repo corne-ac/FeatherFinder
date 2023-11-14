@@ -30,5 +30,6 @@ class FullGoal(
     var description: String = "",
     var startTime: Long = -1,
     var endTime: Long = -1,
+    var goalCompleted: Boolean = false,
 ) : SelfId()
 

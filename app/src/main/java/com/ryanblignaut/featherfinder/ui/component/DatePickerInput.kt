@@ -35,7 +35,7 @@ class DatePickerInput : TextInput {
 
     private fun showPicker(it: View) {
         picker.addOnPositiveButtonClickListener(::onSaveClicked)
-        picker.show(context, "DatePicker")
+        picker.show(context)
     }
 
     private fun onSaveClicked(it: Long) {

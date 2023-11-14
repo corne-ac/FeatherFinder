@@ -33,9 +33,10 @@ class Home : PreBindingFragment<FragmentHomeBinding>() {
 
     private fun populateUrgentGoal(urgentGoal: Result<FullGoal?>) {
         urgentGoal.getOrNull()?.let {
-//            binding.urgentGoalTitle.text = it.name
-//            binding.urgentGoalDescription.text = it.description
+            binding.upcomingGoal.text = it.name
+            return
         }
+        binding.upcomingGoal.text = "No upcoming goal"
     }
 
     private fun updateDarkTheme(settingsResult: Result<UserSettings?>) {
