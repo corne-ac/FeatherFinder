@@ -1,5 +1,6 @@
 package com.ryanblignaut.featherfinder.ui.goal
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -63,10 +64,20 @@ class AllGoals : PreBindingFragment<FragmentGoalListBinding>() {
     private fun onGoalTickClick(goal: FullGoal, vh: GoalAdapter.ViewHolder) {
         if (!goal.goalCompleted) {
             model.completeGoal(goal.selfId)
-            vh.imgCheck.setImageResource(R.drawable.bird_mint)
+            vh.imgCheck.clearColorFilter()
+            vh.imgCheck.setColorFilter(Color.GREEN)
+            vh.imgDelete.setColorFilter((Color.RED))
+//            model.getGoals()
+//            findNavController().navigate(R.id.navigation_all_goals)
         } else {
             model.removeCompletionOnGoal(goal.selfId)
-            vh.imgCheck.setImageResource(R.drawable.check)
+//            vh.imgCheck.setImageResource(R.drawable.check)
+            vh.imgCheck.clearColorFilter()
+            vh.imgCheck.setColorFilter(Color.DKGRAY)
+            vh.imgDelete.clearColorFilter()
+//            model.getGoals()
+//            findNavController().navigate(R.id.navigation_all_goals)
+
         }
     }
 
